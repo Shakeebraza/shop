@@ -1,0 +1,71 @@
+/* User Info Container */
+.user-info-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* User Dropdown */
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: none; /* Hidden by default */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+    z-index: 1000;
+}
+
+.user-dropdown.show {
+    display: block; /* Show dropdown when .show class is added */
+}
+
+.user-dropdown a {
+    display: block;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+}
+
+.user-dropdown a:hover {
+    background-color: #f1f1f1;
+}
+
+/* User and Balance Containers */
+.user-container,
+.balance-container {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+.user-container {
+    font-weight: bold;
+    color: #ffecb3;
+}
+
+.balance-container {
+    font-weight: bold;
+    color: #76d7c4;
+}
+
+.user-info-container i {
+    cursor: pointer;
+}
+
+/* Section Divider */
+.section-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    margin: 20px 0;
+}
+
+/* Success Message */
+.success-message {
+    color: green;
+    font-weight: bold;
+    margin: 10px 0;
+}

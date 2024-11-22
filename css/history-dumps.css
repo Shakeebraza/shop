@@ -1,0 +1,47 @@
+#dumps-activity-log {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.activity-log-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.activity-log-table th, .activity-log-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.activity-log-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.activity-log-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.activity-log-table tr:hover {
+    background-color: #f1f1f1;
+}
+.check-dump-button {
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.check-dump-button:hover {
+    background-color: #1e7e34;
+}
