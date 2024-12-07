@@ -1,4 +1,5 @@
 <?php
+
 $host = 'localhost';
 $dbname = 'shop_db';
 $username = 'root';
@@ -10,4 +11,5 @@ try {
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
 }
+
 ?>

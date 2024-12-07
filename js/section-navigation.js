@@ -11,13 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Attach event listeners to sidebar links
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            const sectionId = this.getAttribute('href').substring(1);
-            showSection(sectionId);
-        });
-    });
+  
 
     // Dropdown toggle functionality for the user menu
     const userDropdownToggle = document.getElementById('userDropdownToggle');

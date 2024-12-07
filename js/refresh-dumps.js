@@ -39,37 +39,35 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error fetching dumps:', error));
     }
 
-    // Set the refresh interval to 5 seconds
     let refreshInterval = setInterval(refreshDumps, 5000);
 
     const dumpsList = document.querySelector('#dumps-list');
     if (dumpsList) {
-        // Desktop: Pause refresh on mouse hover and resume on mouse leave
+
         dumpsList.addEventListener('mouseover', () => clearInterval(refreshInterval));
         dumpsList.addEventListener('mouseleave', () => refreshInterval = setInterval(refreshDumps, 5000));
 
-        // Mobile: Pause refresh on touch and resume on touch end
-        dumpsList.addEventListener('touchstart', () => clearInterval(refreshInterval)); // Pause on touch start
-        dumpsList.addEventListener('touchend', () => refreshInterval = setInterval(refreshDumps, 5000)); // Resume on touch end
+      
+        dumpsList.addEventListener('touchstart', () => clearInterval(refreshInterval)); 
+        dumpsList.addEventListener('touchend', () => refreshInterval = setInterval(refreshDumps, 5000)); 
 
-        // Pause refresh on scroll (for both desktop and mobile)
+ 
         dumpsList.addEventListener('scroll', () => clearInterval(refreshInterval));
 
-        // Resume refresh after scrolling stops for 1 second
+
         let scrollTimeout;
         dumpsList.addEventListener('scroll', () => {
-            clearInterval(refreshInterval); // Pause on scroll
-            clearTimeout(scrollTimeout); // Reset scroll timeout
-            scrollTimeout = setTimeout(() => refreshInterval = setInterval(refreshDumps, 5000), 1000); // Resume after 1s
+            clearInterval(refreshInterval); 
+            clearTimeout(scrollTimeout); 
+            scrollTimeout = setTimeout(() => refreshInterval = setInterval(refreshDumps, 5000), 1000); 
         });
     }
 
-    // Initial load
     refreshDumps();
 
-    // Add event listener to the filter form to refresh instantly on filter change
+    
     const filterForm = document.querySelector('#dump-filters');
     if (filterForm) {
-        filterForm.addEventListener('input', refreshDumps); // Refresh immediately when any filter changes
+        filterForm.addEventListener('input', refreshDumps); 
     }
 });
