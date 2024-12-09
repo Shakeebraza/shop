@@ -44,7 +44,7 @@ try {
     $expiredStmt = $pdo->prepare("
         UPDATE payment_requests 
         SET status = 'EXPIRED' 
-        WHERE status = 'PENDING' AND TIMESTAMPDIFF(HOUR, created_at, NOW()) > 4
+        WHERE status = 'PENDING' AND TIMESTAMPDIFF(HOUR, created_at, NOW()) > 1
     ");
     $expiredStmt->execute();
 
