@@ -24,19 +24,10 @@ include_once('../../header.php');
             <option value="" disabled selected>Select your payment method</option>
             <option value="btc">Bitcoin (BTC)</option>
         </select>
-        <div id="memo-field">
-        <label for="memo">Memo (Optional for XRP/XLM):</label>
-        <input type="text" id="memo" name="memo" placeholder="Enter memo here" style="width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: border-color 0.3s ease-in-out;">
-    </div>
+  
 
         <label for="amount">Amount to Recharge (Minimum $0.96 USD):</label>
-        <input type="number" id="amount" name="amount" required placeholder="Enter amount in USD">
+        <input type="number" id="amount" name="amount" min="0.96" required placeholder="Enter amount in USD">
 
         <div id="payment-info" style="display: none; margin-top: 20px;">
             <p id="payment-address"></p>
