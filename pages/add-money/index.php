@@ -41,7 +41,7 @@ include_once('../../header.php');
         <thead>
             <tr>
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">ID</th>
-		<th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Username</th>
+		<!-- <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Username</th> -->
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Date</th>
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Amount (USD)</th>
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Amount (BTC)</th>
@@ -127,7 +127,7 @@ $(document).ready(function() {
         },
         "columns": [
             { "data": "id" },
-            { "data": "username" },
+            // { "data": "username" },
             { "data": "created_at" },
             { "data": "amount_usd" },
             { "data": "amount_btc" },
