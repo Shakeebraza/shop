@@ -146,18 +146,18 @@ $(document).ready(function() {
                 "data": "tx_hash",
                 "render": function(data, type, row) {
                     if (data) {
-                      
                         return `<button class="transaction_btn" onclick="window.open('https://blockstream.info/testnet/tx/${data}', '_blank')">Verify Transaction</button>`;
                     } else {
-                      
                         return '<span>Waiting for Transaction</span>';
                     }
                 }
             },
             { "data": "status" }
-        ]
+        ],
+        "order": [[0, 'desc']]
     });
 });
+
 
 
 
