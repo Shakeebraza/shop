@@ -129,6 +129,25 @@ $(document).ready(function() {
         ]
     });
 });
+
+
+function checkPayments() {
+            $.ajax({
+                url: '<?= $urlval?>ajax/getadd.php', 
+                type: 'GET',
+                success: function (response) {
+                    console.log(response); 
+                 
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error:", error);
+                    $("#status").html('<p style="color: red;">An error occurred while checking payments.</p>');
+                }
+            });
+        }
+
+        setInterval(checkPayments, 60000);
+        checkPayments();
 </script>
 </body>
 </html>

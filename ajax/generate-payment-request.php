@@ -73,8 +73,8 @@ if ($btcAddress) {
 
 
     if (isset($transactionResponse['result']['rhash'])) {
-        $tx_hash = $transactionResponse['result']['rhash'];
-        $status = $transactionResponse['result']['status'] == 0 ? 'PENDING' : 'Active';
+        $tx_hash = "";
+        $status = $transactionResponse['result']['status'] == 0 ? 'PENDING' : 'CONFIRMED';
 
         try {
             $stmt = $pdo->prepare("INSERT INTO payment_requests (user_id, btc_address, amount_usd, amount_btc, memo, tx_hash, status, created_at) 
