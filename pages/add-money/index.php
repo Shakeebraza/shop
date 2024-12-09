@@ -27,7 +27,7 @@ include_once('../../header.php');
   
 
         <label for="amount">Amount to Recharge (Minimum $0.96 USD):</label>
-        <input type="number" id="amount" name="amount" min="0.96" required placeholder="Enter amount in USD">
+        <input type="number" id="amount" name="amount" min="0.94" required placeholder="Enter amount in USD">
 
         <div id="payment-info" style="display: none; margin-top: 20px;">
             <p id="payment-address"></p>
