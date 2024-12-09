@@ -1,9 +1,23 @@
 <?php
 include_once('../../header.php');
 ?>
+<style>
+    .transaction_btn{
+        box-shadow: 2px 3px black;
+        background-color: #04AA6D;
+        border: none;
+        color: white;
+        padding: 6px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+    }
+</style>
     <div class="main-content">
 <div id="add-money" class="">
     <h2>Add Money</h2>
+
     <form id="add-money-form" action="#">
         <label for="crypto-method">Choose Payment Method:</label>
         <select id="crypto-method" name="crypto-method" required>
@@ -42,6 +56,7 @@ include_once('../../header.php');
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Amount (BTC)</th>
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">BTC Address</th>
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">TX Hash</th>
+                <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Verified Transition</th>
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Status</th>
             </tr>
         </thead>
@@ -121,16 +136,29 @@ $(document).ready(function() {
         },
         "columns": [
             { "data": "id" },
-	    { "data": "username" },
+            { "data": "username" },
             { "data": "created_at" },
             { "data": "amount_usd" },
             { "data": "amount_btc" },
             { "data": "btc_address" },
             { "data": "tx_hash" },
+            {
+                "data": "tx_hash",
+                "render": function(data, type, row) {
+                    if (data) {
+                      
+                        return `<button class="transaction_btn" onclick="window.open('https://blockstream.info/testnet/tx/${data}', '_blank')">Verify Transaction</button>`;
+                    } else {
+                      
+                        return '<span>Waiting for Transaction</span>';
+                    }
+                }
+            },
             { "data": "status" }
         ]
     });
 });
+
 
 
 function checkPayments() {
