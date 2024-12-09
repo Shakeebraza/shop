@@ -315,8 +315,8 @@ if (!isset($_SESSION['username'])) {
             <span class="arrow" id="dropdownArrow"><i class="fas fa-chevron-down"></i></span>
             <div class="user-dropdown" id="userDropdownMenu">
                 <!-- My Profile Link -->
-                <a href="myprofile.php"><i class="fas fa-user"></i> My Profile</a>
-                <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="<?= $urlval?>myprofile.php"><i class="fas fa-user"></i> My Profile</a>
+                <a href="<?= $urlval?>logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </div>
     </div>

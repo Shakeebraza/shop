@@ -1,5 +1,6 @@
 <?php
 require 'config.php';
+require 'global.php';
 session_start();
 
 $errors = [];
@@ -8,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = trim($_POST['password']);
     $captcha = $_POST['captcha'];
 
-    // Check if CAPTCHA is correct
+  
     if ($captcha !== $_SESSION['captcha_code']) {
         $errors[] = "Invalid CAPTCHA";
     }
@@ -18,16 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->execute([$username]);
         $user = $stmt->fetch();
 
-        // Verify the password and check the banned status
         if ($user && password_verify($password, $user['password'])) {
 
-            // Check if the user is banned
+
             if ($user['banned'] == 1) {
                 $errors[] = "Your account has been banned. Please contact support.";
             } else {
-                // User is not banned, proceed with login
+      
                 $_SESSION['user_id'] = $user['id'];
-                header("Location: dashboard.php"); // Redirect to dashboard.php
+               
+                header("Location: ".$urlval."/pages/news/index.php"); 
                 exit();
             }
         } else {
