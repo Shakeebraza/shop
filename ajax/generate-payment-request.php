@@ -46,7 +46,7 @@ function getBitcoinPrice() {
     $response = file_get_contents($url);
     $data = json_decode($response, true);
 
-    return $data['bitcoin']['usd'] ?? 0; // Return the USD price of Bitcoin, or 0 if not available
+    return $data['bitcoin']['usd'] ?? 0; 
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
@@ -57,41 +57,41 @@ if (!isset($data['amount_btc']) || !isset($data['memo']) || !isset($_SESSION['us
 }
 
 $btcAmount = $data['amount_btc'];
-$usdAmount = $btcAmount * getBitcoinPrice(); // Correct usage of getBitcoinPrice() function
-$memo = $data['memo'];
+$usdAmount = $btcAmount * getBitcoinPrice(); 
+$memo = $data['memo'] ?? 'test';
 $userId = $_SESSION['user_id'];
 
-$btcAddress = "your_btc_address_here"; // Replace with actual BTC address logic, if needed
+$btcAddress = "your_btc_address_here"; 
 
-// Proceed if BTC address is available
+
 if ($btcAddress) {
-    // Call to Electrum RPC to add request
+   
     $transactionResponse = sendElectrumRpcRequest("add_request", [
-        "amount" => $btcAmount, // Amount in BTC
-        "memo" => $memo         // Memo passed from input
+        "amount" => $btcAmount, 
+        "memo" => $memo         
     ]);
 
-    // Check if transaction hash is returned
+
     if (isset($transactionResponse['result']['rhash'])) {
         $tx_hash = $transactionResponse['result']['rhash'];
+        $status = $transactionResponse['result']['status'] == 0 ? 'PENDING' : 'Active';
 
         try {
             $stmt = $pdo->prepare("INSERT INTO payment_requests (user_id, btc_address, amount_usd, amount_btc, memo, tx_hash, status, created_at) 
                                    VALUES (:user_id, :btc_address, :amount_usd, :amount_btc, :memo, :tx_hash, :status, NOW())");
 
             $stmt->bindParam(':user_id', $userId);
-            $stmt->bindParam(':btc_address', $transactionResponse['result']['address']); // Insert the BTC address
+            $stmt->bindParam(':btc_address', $transactionResponse['result']['address']); 
             $stmt->bindParam(':amount_usd', $usdAmount);
             $stmt->bindParam(':amount_btc', $btcAmount);
             $stmt->bindParam(':memo', $memo);
             $stmt->bindParam(':tx_hash', $tx_hash);
             $stmt->bindParam(':status', $status);
 
-            $status = 'PENDING'; // Status of the transaction
 
             $stmt->execute();
 
-            echo json_encode(['success' => true, 'btcAddress' => $btcAddress, 'tx_hash' => $tx_hash]);
+            echo json_encode(['success' => true, 'btcAddress' => $transactionResponse['result']['address'], 'tx_hash' => $tx_hash]);
         } catch (PDOException $e) {
             echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
         }
