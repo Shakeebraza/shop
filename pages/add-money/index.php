@@ -21,7 +21,7 @@ include_once('../../header.php');
     transition: border-color 0.3s ease-in-out;">
     </div>
 
-        <label for="amount">Amount to Recharge (Minimum $5.00 USD):</label>
+        <label for="amount">Amount to Recharge (Minimum $0.96 USD):</label>
         <input type="number" id="amount" name="amount" required placeholder="Enter amount in USD">
 
         <div id="payment-info" style="display: none; margin-top: 20px;">
@@ -36,6 +36,7 @@ include_once('../../header.php');
         <thead>
             <tr>
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">ID</th>
+		<th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Username</th>
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Date</th>
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Amount (USD)</th>
                 <th style="padding: 10px; text-align: left; background-color: rgb(52, 58, 64); border: 1px solid #ddd;">Amount (BTC)</th>
@@ -120,6 +121,7 @@ $(document).ready(function() {
         },
         "columns": [
             { "data": "id" },
+	    { "data": "username" },
             { "data": "created_at" },
             { "data": "amount_usd" },
             { "data": "amount_btc" },
