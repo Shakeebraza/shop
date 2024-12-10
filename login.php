@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
       
                 $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username '] = $user['username'];
                
                 header("Location: ".$urlval."/pages/news/index.php"); 
                 exit();

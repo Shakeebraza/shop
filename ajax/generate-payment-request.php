@@ -60,6 +60,7 @@ $btcAmount = $data['amount_btc'];
 $usdAmount = $btcAmount * getBitcoinPrice(); 
 $memo = $data['memo'] ?? 'test';
 $userId = $_SESSION['user_id'];
+$username = $_SESSION['username'];
 
 $btcAddress = "your_btc_address_here"; 
 
@@ -77,10 +78,11 @@ if ($btcAddress) {
         $status = $transactionResponse['result']['status'] == 0 ? 'PENDING' : 'CONFIRMED';
 
         try {
-            $stmt = $pdo->prepare("INSERT INTO payment_requests (user_id, btc_address, amount_usd, amount_btc, memo, tx_hash, status, created_at) 
-                                   VALUES (:user_id, :btc_address, :amount_usd, :amount_btc, :memo, :tx_hash, :status, NOW())");
+            $stmt = $pdo->prepare("INSERT INTO payment_requests (user_id,username, btc_address, amount_usd, amount_btc, memo, tx_hash, status, created_at) 
+                                   VALUES (:user_id,:username, :btc_address, :amount_usd, :amount_btc, :memo, :tx_hash, :status, NOW())");
 
             $stmt->bindParam(':user_id', $userId);
+            $stmt->bindParam(':username', $username);
             $stmt->bindParam(':btc_address', $transactionResponse['result']['address']); 
             $stmt->bindParam(':amount_usd', $usdAmount);
             $stmt->bindParam(':amount_btc', $btcAmount);
