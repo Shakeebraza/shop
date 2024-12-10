@@ -7,21 +7,16 @@ $rpcPassword = "6w4geWw7LyTVDJFunXSoVQ==";
 $rpcHost = "188.119.149.183";
 $rpcPort = "7777";
 
-function sendElectrumRpcRequestBatch($requests) {
+function sendElectrumRpcRequest($method, $params = []) {
     global $rpcUser, $rpcPassword, $rpcHost, $rpcPort;
 
     $url = "http://$rpcHost:$rpcPort/";
-    $payload = [];
-
-    // Create batch payload
-    foreach ($requests as $id => $request) {
-        $payload[] = [
-            "jsonrpc" => "2.0",
-            "method" => $request['method'],
-            "params" => $request['params'],
-            "id" => $id
-        ];
-    }
+    $payload = [
+        "jsonrpc" => "2.0",
+        "method" => $method,
+        "params" => $params,
+        "id" => 1
+    ];
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -32,82 +27,90 @@ function sendElectrumRpcRequestBatch($requests) {
     curl_setopt($ch, CURLOPT_USERPWD, "$rpcUser:$rpcPassword");
 
     $response = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        error_log("cURL Error: " . curl_error($ch));
+        return ["error" => "Internal server error"];
+    }
+
     curl_close($ch);
 
-    return json_decode($response, true);
+    $responseArray = json_decode($response, true);
+    return $responseArray;
 }
 
 try {
- 
-    $pdo->exec("UPDATE payment_requests 
-                SET status = 'EXPIRED' 
-                WHERE status = 'PENDING' AND TIMESTAMPDIFF(HOUR, created_at, NOW()) > 1");
+
+    $expiredStmt = $pdo->prepare("
+        UPDATE payment_requests 
+        SET status = 'EXPIRED' 
+        WHERE status = 'PENDING' AND TIMESTAMPDIFF(HOUR, created_at, NOW()) > 1
+    ");
+    $expiredStmt->execute();
+
 
   
-    $limit = 10; 
-    $stmt = $pdo->prepare("SELECT id, user_id, amount_btc, btc_address, amount_usd 
-                           FROM payment_requests 
-                           WHERE status = 'PENDING' 
-                           LIMIT :limit");
-    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt = $pdo->prepare("SELECT id, user_id, amount_btc,btc_address, tx_hash, amount_usd, received_payment FROM payment_requests WHERE status = 'PENDING'");
     $stmt->execute();
     $pendingRequests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    if (empty($pendingRequests)) {
-        echo "No pending payment requests.";
-        exit;
-    }
-
-
-    $batchRequests = [];
-    foreach ($pendingRequests as $key => $request) {
-        $batchRequests[$key * 2] = ['method' => 'getaddresshistory', 'params' => [$request['btc_address']]];
-        $batchRequests[$key * 2 + 1] = ['method' => 'getaddressbalance', 'params' => [$request['btc_address']]];
-    }
-
-    $responses = sendElectrumRpcRequestBatch($batchRequests);
-
-  
-    foreach ($pendingRequests as $key => $request) {
+    foreach ($pendingRequests as $request) {
         $address = $request['btc_address'];
         $id = $request['id'];
         $userId = $request['user_id'];
-        $amountBtc = (float)$request['amount_btc'];
-        $amountUsd = (float)$request['amount_usd'];
+        $amountUsd = $request['amount_usd'];
+        $amount_btc = $request['amount_btc'];
+        $receivedPayment = $request['received_payment'] ?? 0;
 
-        $historyResponse = $responses[$key * 2]['result'] ?? [];
-        $balanceResponse = $responses[$key * 2 + 1]['result']['confirmed'] ?? 0;
+    
+        $response = sendElectrumRpcRequest("getaddresshistory", $address);
 
-        $totalReceived = number_format($balanceResponse, 8, '.', '');
-        $amountBtcFormatted = number_format($amountBtc, 8, '.', '');
+        if (isset($response['result']) && !empty($response['result'])) {
+            $transactions = $response['result'];
+            $totalReceived = 0;
 
-        if (!empty($historyResponse) && $totalReceived >= $amountBtcFormatted) {
-          
-            $txHash = $historyResponse[0]['tx_hash']; 
-            $updateStmt = $pdo->prepare("UPDATE payment_requests 
-                                        SET status = 'CONFIRMED', tx_hash = ? 
-                                        WHERE id = ?");
-            $updateStmt->execute([$txHash, $id]);
+   
+            foreach ($transactions as $tx) {
+                $txHash = $tx['tx_hash'];
+                $height = $tx['height'];
+                if ($height > 0) {
+                    $bal = sendElectrumRpcRequest("getaddressbalance", [$address]);
+                   
+                    $totalReceived += $bal['result']["confirmed"];
+                    $precision = 8;
 
-      
-            $balanceUpdateStmt = $pdo->prepare("UPDATE users 
-                                               SET balance = balance + ? 
-                                               WHERE id = ?");
-            $balanceUpdateStmt->execute([$amountUsd, $userId]);
+                $totalReceivedFormatted = number_format($totalReceived, $precision, '.', '');
+                $amountBtcFormatted = number_format($amount_btc, $precision, '.', '');
+                }
+            }
+            
+    
+            
+            if ($totalReceivedFormatted >= $amountBtcFormatted) {
+               
+                $updateStmt = $pdo->prepare("UPDATE payment_requests SET status = 'CONFIRMED', tx_hash = ? WHERE id = ?");
+                    $updateStmt->execute([$txHash, $id]);
 
-            echo "Payment confirmed for address $address.\n";
+                
+                $balanceUpdateStmt = $pdo->prepare("UPDATE users SET balance = balance + ? WHERE id = ?");
+                $balanceUpdateStmt->execute([$amountUsd, $userId]);
+
+                echo "Payment received for address $address (TX: $txHash), updated status to 'INSUFFICIENT', balance updated for user ID: $userId\n";
+            } else {
+                
+                $updateStmt = $pdo->prepare("UPDATE payment_requests SET status = 'INSUFFICIENT',received_payment=?, tx_hash = ? WHERE id = ?");
+                    $updateStmt->execute([$totalReceivedFormatted,$txHash,$id]);
+
+                echo "Insufficient payment for address: $address, updated status to 'INSUFFICIENT'\n";
+            }
         } else {
-       
-            $status = empty($historyResponse) ? 'NO_TRANSACTION' : 'INSUFFICIENT';
-            $updateStmt = $pdo->prepare("UPDATE payment_requests 
-                                        SET status = ?, received_payment = ? 
-                                        WHERE id = ?");
-            $updateStmt->execute([$status, $totalReceived, $id]);
-
-            echo "Payment status updated to '$status' for address $address.\n";
+      
+            echo "No transactions found for address: $address\n";
         }
     }
+
 } catch (PDOException $e) {
     echo "Database error: " . $e->getMessage();
 }
+
 ?>
