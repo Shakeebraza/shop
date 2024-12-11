@@ -108,6 +108,7 @@ document.getElementById('add-money-form').addEventListener('submit', async funct
                 <strong>Amount to Send:</strong> ${btcAmount.toFixed(8)} BTC
                 <button onclick="navigator.clipboard.writeText('${requestData.btcAddress}')">Copy Address</button>
             `;
+            $('#transaction-table').DataTable().ajax.reload();
         } else {
             alert('Error generating payment request. Please try again.');
         }

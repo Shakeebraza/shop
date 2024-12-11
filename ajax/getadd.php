@@ -63,7 +63,7 @@ try {
         $receivedPayment = $request['received_payment'] ?? 0;
 
     
-        $response = sendElectrumRpcRequest("getaddresshistory", $address);
+        $response = sendElectrumRpcRequest("getaddresshistory", [$address]);
 
         if (isset($response['result']) && !empty($response['result'])) {
             $transactions = $response['result'];
@@ -95,7 +95,7 @@ try {
                 $balanceUpdateStmt = $pdo->prepare("UPDATE users SET balance = balance + ? WHERE id = ?");
                 $balanceUpdateStmt->execute([$amountUsd, $userId]);
 
-                echo "Payment received for address $address (TX: $txHash), updated status to 'INSUFFICIENT', balance updated for user ID: $userId\n";
+                echo "Payment received for address $address (TX: $txHash), updated status to 'INFLUXION', balance updated for user ID: $userId\n";
             } else {
                 
                 $updateStmt = $pdo->prepare("UPDATE payment_requests SET status = 'INSUFFICIENT',received_payment=?, tx_hash = ? WHERE id = ?");
