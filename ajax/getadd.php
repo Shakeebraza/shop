@@ -39,40 +39,35 @@ function sendElectrumRpcRequest($method, $params = []) {
     $responseArray = json_decode($response, true);
     return $responseArray;
 }
+      function getRequestDataForAddress($address, $list_tra) {
+            if (!is_array($list_tra)) {
+                throw new Exception("list_requests data must be an array.");
+            }
+        
+            foreach ($list_tra["result"] as $request) {
+                if (isset($request['address']) && trim($request['address']) == trim($address)) {
+              
+                    if (!empty($request['tx_hashes'])) {
+                        $request['status_str'] = "Paid";
+                    }
+        
+                 
+                    $currentTimestamp = time();
+                    $expiryTime = $request['timestamp'] + $request['expiry'];
+                    if ($currentTimestamp > $expiryTime && empty($request['tx_hashes'])) {
+                        $request['status_str'] = "Expired";
+                    }
+        
+                    return $request;
+                }
+            }
+        
+            return null; 
+        }
 
 try {
-//     function getRequestDataForAddress($address, $list_tra) {
-//         if (!is_array($list_tra)) {
-//             throw new Exception("list_requests data must be an array.");
-//         }
-    
-//         foreach ($list_tra["result"] as $request) {
-//             if (isset($request['address']) && trim($request['address']) == trim($address)) {
-//                 // Manually override the status if tx_hashes is not empty
-//                 if (!empty($request['tx_hashes'])) {
-//                     $request['status_str'] = "Paid";
-//                 }
-    
-//                 // Check expiry logic
-//                 $currentTimestamp = time();
-//                 $expiryTime = $request['timestamp'] + $request['expiry'];
-//                 if ($currentTimestamp > $expiryTime && empty($request['tx_hashes'])) {
-//                     $request['status_str'] = "Expired";
-//                 }
-    
-//                 return $request;
-//             }
-//         }
-    
-//         return null; // Address not found
-//     }
-//     $list_tra = sendElectrumRpcRequest("list_requests");
-// $address = 'bc1qx3spr5vjfssjv8r749ylcklaql3dcuuyxhe40f';
-// $data = getRequestDataForAddress($address, $list_tra);
 
-// // Debug Output
-// var_dump($data);
-//     exit();
+
     $expiredStmt = $pdo->prepare("
         UPDATE payment_requests 
         SET status = 'EXPIRED' 
@@ -103,8 +98,14 @@ try {
         $receivedPayment = $request['received_payment'] ?? 0;
 
      
+       
+  
+        $list_tra = sendElectrumRpcRequest("list_requests");
+        $responseTableData=getRequestDataForAddress($address, $list_tra);
+        
+       
+        if($responseTableData['status_str'] == 'Paid' && $responseTableData['confirmations'] > 2){
         $response = sendElectrumRpcRequest("getaddresshistory", [$address]);
-
         if (isset($response['result']) && !empty($response['result'])) {
             $transactions = $response['result'];
             $totalReceived = 0;
@@ -117,7 +118,7 @@ try {
                 if ($height > 0) {
                     $balResponse = sendElectrumRpcRequest("getaddressbalance", [$address]);
                     if (isset($balResponse['result']['confirmed'])) {
-                        $totalReceived += $balResponse['result']['confirmed'];
+                        $totalReceived = $balResponse['result']['confirmed'];
            
                     }
                     if (isset($balResponse['result']['unconfirmed']) && $balResponse['result']['unconfirmed'] > 0) {
@@ -127,13 +128,11 @@ try {
                     }
                 }
             }
-
-            $precision = 8;
-            $totalReceivedFormatted = number_format($totalReceived, $precision, '.', '');
-            $amountBtcFormatted = number_format($amount_btc, $precision, '.', '');
+  
+          
 
    
-            if ($totalReceivedFormatted >= $amountBtcFormatted) {
+            if ($totalReceived >= $amount_btc) {
            
                 $updateStmt = $pdo->prepare("
                     UPDATE payment_requests 
@@ -165,6 +164,9 @@ try {
         } else {
             echo "No transactions found for address: $address\n";
         }
+    }else{
+        echo "Your transactions Expried found for address: $address\n";
+    }
     }
 
 } catch (PDOException $e) {

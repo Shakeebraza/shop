@@ -192,7 +192,7 @@ $(document).ready(function () {
 
                         return `<a class="transaction_btn" style="background-color:red;" href="<?= $urlval?>pages/support/index.php">Contact Support</a>`;
                     } 
-                    else if (data) {
+                    else if (row.status === 'CONFIRMED') {
                         return `<button class="transaction_btn" onclick="window.open('https://www.blockchain.com/explorer/transactions/btc/${data}', '_blank')">Verify Transaction</button>`;
                     }
                     else {
