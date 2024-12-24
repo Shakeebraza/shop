@@ -1,5 +1,4 @@
 <?php
-require 'config.php';
 require 'global.php';
 session_start();
 
@@ -50,42 +49,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="container">
-	
-    <h2>Login</h2>
-    <!-- Error container -->
-    <?php if (!empty($errors)) : ?>
-        <div class="error-container">
-            <ul>
-                <?php foreach ($errors as $error) : ?>
-                    <li class="error-message"><?php echo $error; ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    <?php endif; ?>
+    <div class="container">
+        <h2>Login</h2>
+        <!-- Error container -->
+        <?php if (!empty($errors)) : ?>
+            <div class="error-container">
+                <ul>
+                    <?php foreach ($errors as $error) : ?>
+                        <li class="error-message"><?php echo $error; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
 
-    <form method="POST" action="login.php">
-        <label for="username">Username</label>
-        <input type="text" name="username" required>
+        <form method="POST" action="login.php">
+            <label for="username">Username</label>
+            <input type="text" name="username" required>
 
-        <label for="password">Password</label>
-        <input type="password" name="password" required>
+            <label for="password">Password</label>
+            <input type="password" name="password" required>
 
-        <!-- CAPTCHA Section -->
-        <div class="captcha-row">
-            <label for="captcha">Enter CAPTCHA:</label>
-            <img src="captcha.php" alt="CAPTCHA" class="captcha-image">
-        </div>
-        <input type="text" name="captcha" class="captcha-input" required>
+            <!-- CAPTCHA Section -->
+            <div class="captcha-row">
+                <label for="captcha">Enter CAPTCHA:</label>
+                <img src="captcha.php" alt="CAPTCHA" class="captcha-image">
+            </div>
+            <input type="text" name="captcha" class="captcha-input" required>
 
-        <input type="submit" value="Login">
+            <input type="submit" value="Login">
 
-        <a href="register.php">Don't have an account? Register here</a>
-    </form>
+            <a href="register.php">Don't have an account? Register here</a>
+        </form>
+    </div>
 
-</div>
-
-<script src="js/catpcha.js"></script>
-
+    <script src="js/captcha.js"></script>
 </body>
+
 </html>
