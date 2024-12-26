@@ -75,7 +75,9 @@ include_once('../../header.php');
 ?>
     <div style="display: flex; gap: 20px; padding: 20px; flex-wrap: wrap; justify-content: center;">
     <?php if (!empty($creditCards)): ?>
-    <?php foreach ($creditCards as $card): ?>
+    <?php foreach ($creditCards as $card): 
+        $zip = $card['zip'];
+        $displayZip = substr($zip, 0, 3) . '****';?>
         <div style="width: 420px; height: 265px; 
             background-image: url(https://wallpapers.com/images/hd/mastercard-logo-black-background-6ud73xlg936woct6.jpg); 
             background-size: cover; 
@@ -91,8 +93,8 @@ include_once('../../header.php');
             </div>
             <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
                 <div style="color: #888; font-size: 12px;">
-                    VALID FROM<br>
-                    <span style="color: white;"><?php echo $card['mm_exp']; ?>/<?php echo $card['yyyy_exp']; ?></span>
+                    STATE<br>
+                    <span style="color: white;"><?php echo $card['country']; ?>/<?php echo $card['city']; ?></span>
                 </div>
                 <div style="color: #888; font-size: 12px;">
                     EXPIRES END<br>
@@ -100,12 +102,13 @@ include_once('../../header.php');
                 </div>
             </div>
             <div style="color: white; font-size: 16px; margin-bottom: 5px;"><?php echo $card['name_on_card']; ?></div>
-            <div style="color: white; font-size: 16px;">BUSINESS NAME</div>
+            <div style="color: white; font-size: 16px;"><?php echo $displayZip ?></div>
             <div style="position: absolute; bottom: 25px; right: 25px;">
             <a href="buy_card.php?id=<?php echo htmlspecialchars($card['id']); ?>" 
                 class="buy-button" 
                 onclick="return confirm('Are you sure you want to buy this card?');">
-                    Buy Now
+                <span class="price">$<?php echo $card['price']; ?></span>
+                <span class="buy-now">Buy Now</span>
                 </a>
             </div>
             <div style="position: absolute; top: 25px; right: 25px; color: white; transform: rotate(90deg);"></div>
