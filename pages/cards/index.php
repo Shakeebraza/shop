@@ -1,12 +1,26 @@
 <?php
 include_once('../../header.php');
 ?>
-    <!-- Main Content Area -->
+<style>
+    .message-success {
+    color: green;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+.message-error {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
+</style>
+
     <div class="main-content">
     <div id="credit-cards" class="uuper">
     <h2>Credit Cards Section</h2>
 
-    <!-- Filter Form -->
+
     <div class="filter-container-cards">
         <form id="credit-card-filters" method="post" action="#credit-cards">
             <label for="credit-card-bin">BIN</label>
@@ -45,31 +59,7 @@ include_once('../../header.php');
     </div>
 
 
-    <!-- <div id="credit-card-list">
-        <?php if (!empty($creditCards)): ?>
-            <?php foreach ($creditCards as $card): ?>
-                <div class="credit-card-container">
-                    <div class="credit-card-info">
-                        <div><span class="label">Type:</span> <?php echo htmlspecialchars($card['card_type']); ?></div>
-                        <div><span class="label">BIN:</span> <?php echo htmlspecialchars(substr($card['card_number'], 0, 6)); ?></div>
-                        <div><span class="label">Exp Date:</span> <?php echo htmlspecialchars($card['mm_exp'] . '/' . $card['yyyy_exp']); ?></div>
-                        <div><span class="label">Country:</span> <?php echo htmlspecialchars($card['country']); ?></div>
-                        <div><span class="label">State:</span> <?php echo htmlspecialchars($card['state'] ?: 'N/A'); ?></div>
-                        <div><span class="label">City:</span> <?php echo htmlspecialchars($card['city'] ?: 'N/A'); ?></div>
-                        <div><span class="label">Zip:</span> <?php echo htmlspecialchars(substr($card['zip'], 0, 3)) . '***'; ?></div>
-                        <div><span class="label">Price:</span> $<?php echo htmlspecialchars($card['price']); ?></div>
-                        <div>
-                            <a href="buy_card.php?id=<?php echo htmlspecialchars($card['id']); ?>" 
-                               class="buy-button" 
-                               onclick="return confirm('Are you sure you want to buy this card?');">Buy</a>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>No credit cards available.</p>
-        <?php endif; ?>
-    </div> -->
+ 
 <?php
 // var_dump($creditCards);
 ?>
@@ -79,6 +69,7 @@ include_once('../../header.php');
     if ($card['card_type'] == 'Mastercard') {
         $background = 'background-image: url(https://wallpapers.com/images/hd/mastercard-logo-black-background-6ud73xlg936woct6.jpg); background-size: cover; background-position: center;';
     } elseif ($card['card_type'] == 'Amex') {
+       
         $background = 'background: linear-gradient(45deg, #b8860b, #000000);';
     } elseif ($card['card_type'] == 'Visa') {
         $background = 'background: linear-gradient(45deg, #2E4053, #000000);';
@@ -114,9 +105,9 @@ include_once('../../header.php');
             <div style="color: white; font-size: 16px; margin-bottom: 5px;"><?php echo $card['name_on_card']; ?></div>
             <div style="color: white; font-size: 16px;"><?php echo $displayZip ?></div>
             <div style="position: absolute; bottom: 25px; right: 25px;">
-            <a href="buy_card.php?id=<?php echo htmlspecialchars($card['id']); ?>" 
+            <a href="javascript:void(0);" 
                 class="buy-button" 
-                onclick="return confirm('Are you sure you want to buy this card?');">
+                onclick="return showConfirm(<?php echo htmlspecialchars($card['id']); ?>, <?php echo htmlspecialchars($card['price']); ?>);">
                 <span class="price">$<?php echo $card['price']; ?></span>
                 <span class="buy-now">Buy Now</span>
                 </a>
@@ -135,10 +126,87 @@ include_once('../../header.php');
 
     </div>
 </div>
+
+<div id="rules-popup" class="popup-modal" style="display: none;">
+    <div class="popup-content" style="position: absolute;top: 50%;right: 20%;">
+        <span class="close" onclick="closeRulesPopup()">
+            <i class="fas fa-times"></i>
+        </span>
+        <p class="message"></p>  <!-- This will be dynamically replaced by success/error message -->
+    </div>
+</div>
 <?php
 include_once('../../footer.php');
 ?>
+
+
+
 <script>
-    
+function showConfirm(cardId, price) {
+    alertify.confirm(
+        'Confirm Purchase',
+        `Are you sure you want to buy this card for $${price}?`,
+        function() {
+            $.ajax({
+                url: 'buy_card.php',
+                type: 'POST',
+                data: { card_id: cardId },
+                success: function(response) {
+                    try {
+                       
+                        const result = typeof response === 'string' ? JSON.parse(response) : response;
+
+              
+                        if (result.success) {
+                            showPopupMessage('success', result.message || 'Purchase successful.');
+                            setTimeout(() => {
+                                window.location.reload(); 
+                            }, 2000);
+                        } else {
+                            showPopupMessage('error', result.message || 'An error occurred.');
+                        }
+                    } catch (error) {
+                   
+                        console.error('JSON parse error:', error);
+                        showPopupMessage('error', 'Unexpected server response. Please try again.');
+                    }
+                },
+                error: function() {
+               
+                    showPopupMessage('error', 'Transaction failed. Please try again.');
+                }
+            });
+        },
+        function() {
+          n
+            alertify.error('Purchase cancelled.');
+        }
+    ).set('labels', { ok: 'Confirm', cancel: 'Cancel' });
+
+    return false;
+}
+
+
+function showPopupMessage(type, message) {
+    const popup = document.getElementById('rules-popup');
+    const popupContent = popup.querySelector('.popup-content');
+
+
+    popupContent.innerHTML = `
+        <span class="close" onclick="closeRulesPopup()">
+            <i class="fas fa-times"></i>
+        </span>
+        <p class="${type === 'success' ? 'message-success' : 'message-error'}">${message}</p>
+    `;
+
+    popup.style.display = 'block';
+}
+
+
+function closeRulesPopup() {
+    const popup = document.getElementById('rules-popup');
+    popup.style.display = 'none';
+}
+
 
 </script>

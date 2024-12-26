@@ -22,32 +22,32 @@
         }
     });
 
-   function showMessage(message) {
-    const messageBox = document.getElementById('messageBox');
-    const messageText = document.getElementById('messageText');
-    const overlay = document.getElementById('overlay');
+//    function showMessage(message) {
+//     const messageBox = document.getElementById('messageBox');
+//     const messageText = document.getElementById('messageText');
+//     const overlay = document.getElementById('overlay');
 
-    messageText.textContent = message;
-    messageBox.style.display = 'block';
-    overlay.style.display = 'block';
+//     messageText.textContent = message;
+//     messageBox.style.display = 'block';
+//     overlay.style.display = 'block';
 
-    // Lock the scroll position
-    const scrollY = window.scrollY; // Capture the current scroll position
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = '100%';
+//     // Lock the scroll position
+//     const scrollY = window.scrollY; // Capture the current scroll position
+//     document.body.style.position = 'fixed';
+//     document.body.style.top = `-${scrollY}px`;
+//     document.body.style.width = '100%';
 
-    // Auto-hide after 3 seconds and release the scroll lock
-    setTimeout(() => {
-        messageBox.style.display = 'none';
-        overlay.style.display = 'none';
+//     // Auto-hide after 3 seconds and release the scroll lock
+//     setTimeout(() => {
+//         messageBox.style.display = 'none';
+//         overlay.style.display = 'none';
 
-        // Re-enable scrolling
-        document.body.style.position = '';
-        document.body.style.top = '';
-        window.scrollTo(0, scrollY); // Return to the original scroll position
-    }, 3000);
-}
+//         // Re-enable scrolling
+//         document.body.style.position = '';
+//         document.body.style.top = '';
+//         window.scrollTo(0, scrollY); // Return to the original scroll position
+//     }, 3000);
+// }
 
     function showSection(sectionId) {
         document.querySelectorAll('.section').forEach(section => {

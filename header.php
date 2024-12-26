@@ -3,31 +3,30 @@ session_start();
 require 'config.php';
 require 'global.php';
 
-// Check if user is logged in, if not redirect to login page
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-// Fetch the logged-in user's information
+
 $user_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT username, balance, seller, credit_cards_balance, dumps_balance, credit_cards_total_earned, dumps_total_earned, status, seller_percentage FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
 
-// Check if the user is banned
+
 if ($user['status'] === 'banned') {
     session_destroy();
     header("Location: login.php?error=You are banned.");
     exit();
 }
 
-// Check if there are any unread support tickets for this user
+
 $stmt = $pdo->prepare("SELECT COUNT(*) FROM support_tickets WHERE user_id = ? AND user_unread = 1");
 $stmt->execute([$user_id]);
 $unreadCount = $stmt->fetchColumn() > 0;
 
-// Default visibility (all sections visible)
+
 $defaultVisibility = [
     'Tools' => 1,
     'Leads' => 1,
@@ -38,17 +37,17 @@ $defaultVisibility = [
     'My Cards' => 1,
     'My Dumps' => 1,
 ];
-// Fetch section visibility from the "sections" table
+
 $stmt = $pdo->query("SELECT section_name, section_view FROM sections");
 $sectionsVisibility = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Convert section visibility to an associative array
+
 $visibility = [];
 foreach ($sectionsVisibility as $section) {
     $visibility[$section['section_name']] = (int)$section['section_view'];
 }
 
-// Retrieve available countries for dropdowns, eliminating duplicates and ensuring current entries for credit cards
+
 $creditCardCountries = $pdo->query("
     SELECT DISTINCT UPPER(TRIM(REPLACE(REPLACE(country, CHAR(160), ''), CHAR(9), ''))) AS country 
     FROM credit_cards 
@@ -273,6 +272,7 @@ endif;
     <link rel="stylesheet" href="<?= $urlval?>css/tools-message.css">
     <link rel="stylesheet" href="<?= $urlval?>css/history-cc.css">
     <link rel="stylesheet" href="<?= $urlval?>css/history-dumps.css">
+    <link rel="stylesheet" href="<?= $urlval?>css/popup.css">
 
     <!--<script src="js/section-navigation.js" defer></script> -->
      <script src="<?= $urlval?>js/support.js" defer></script>
