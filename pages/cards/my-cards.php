@@ -75,8 +75,7 @@ include_once('../../header.php');
 
             
                 <div class="card-back" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #006747; border-radius: 15px; padding: 25px; color: white; transform: rotateY(180deg); backface-visibility: hidden;">
-                <h2 style="font-size: 18px; margin-bottom: 15px;">Security Code</h2>
-                <p style="font-size: 20px;"><?php echo htmlspecialchars($card['security_code']); ?></p>
+               
 
                 <button class="copy-button" onclick="copyCardInfo(<?php echo htmlspecialchars($card['id']); ?>)">Copy</button>
                 <button class="check-card-button" onclick="checkCard(<?php echo htmlspecialchars($card['id']); ?>)">Check</button>
