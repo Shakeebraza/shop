@@ -74,7 +74,7 @@ $ccType = isset($_POST['cc_type']) ? trim($_POST['cc_type']) : 'all';
 $cardsPerPage = isset($_POST['cards_per_page']) ? (int)$_POST['cards_per_page'] : 10;
 
 // Build SQL query for credit cards based on filters
-$sql = "SELECT id, card_type, card_number, mm_exp, yyyy_exp, country, state, city, zip, price 
+$sql = "SELECT id, card_type,name_on_card, card_number, mm_exp, yyyy_exp, country, state, city, zip, price 
         FROM credit_cards 
         WHERE buyer_id IS NULL AND status = 'unsold'";
 $params = [];
