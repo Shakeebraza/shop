@@ -4,7 +4,7 @@ include_once('../../header.php');
     <!-- Main Content Area -->
     <div class="main-content">
 
-    <div id="my-orders" class="">
+    <div id="my-orders" class="uuper">
             <h2>My Orders</h2>
             <?php if (empty($orders)): ?>
                 <p>You haven't made any purchases yet.</p>

@@ -5,13 +5,13 @@ include_once('../../header.php');
     <div class="main-content">
 
 
-    <div id="leads" class="">
+    <div id="leads" class="uuper">
             <h2>Leads Section</h2>
             <?php if (empty($files['Leads'])): ?>
                 <p>No files available in the Leads section.</p>
             <?php else: ?>
                 <?php foreach ($files['Leads'] as $file): ?>
-                    <div class="tool-item">
+                    <div class="tool-item ">
                         <h3><?php echo htmlspecialchars($file['name']); ?></h3>
                         <p><?php echo nl2br(htmlspecialchars($file['description'])); ?></p>
                         <p>Price: $<?php echo number_format($file['price'], 2); ?></p>
