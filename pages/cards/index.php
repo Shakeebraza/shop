@@ -75,11 +75,21 @@ include_once('../../header.php');
 ?>
     <div style="display: flex; gap: 20px; padding: 20px; flex-wrap: wrap; justify-content: center;">
     <?php if (!empty($creditCards)): ?>
-    <?php foreach ($creditCards as $card): 
+    <?php foreach ($creditCards as $card):
+    if ($card['card_type'] == 'Mastercard') {
+        $background = 'background-image: url(https://wallpapers.com/images/hd/mastercard-logo-black-background-6ud73xlg936woct6.jpg); background-size: cover; background-position: center;';
+    } elseif ($card['card_type'] == 'Amex') {
+        $background = 'background: linear-gradient(45deg, #b8860b, #000000);';
+    } elseif ($card['card_type'] == 'Visa') {
+        $background = 'background: linear-gradient(45deg, #2E4053, #000000);';
+    }else{
+        $background = 'background: linear-gradient(45deg,rgb(48, 46, 83),rgb(46, 43, 43));';
+        
+    }
         $zip = $card['zip'];
         $displayZip = substr($zip, 0, 3) . '****';?>
         <div style="width: 420px; height: 265px; 
-            background-image: url(https://wallpapers.com/images/hd/mastercard-logo-black-background-6ud73xlg936woct6.jpg); 
+            <?= $background ?> 
             background-size: cover; 
             background-position: center; 
             border-radius: 15px; 
