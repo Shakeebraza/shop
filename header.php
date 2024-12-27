@@ -391,7 +391,7 @@ endif;
 
 <div class="dashboard-container">
 
-    <nav class="sidebar">
+    <nav class="sidebar uuper">
         <ul>
             <li><a href="<?= $urlval?>pages/news/index.php" id="news-nav"><i class="fas fa-newspaper"></i> News</a></li>
             <?php if ($visibility['Tools'] === 1): ?>
