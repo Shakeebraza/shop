@@ -74,7 +74,7 @@ include_once('../../header.php');
                 </div>
 
             
-                <div class="card-back" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #006747; border-radius: 15px; padding: 25px; color: white; transform: rotateY(180deg); backface-visibility: hidden;">
+                <div class="card-back" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0c182f; border-radius: 15px; padding: 25px; color: white; transform: rotateY(180deg); backface-visibility: hidden;">
                
 
                 <button class="copy-button" onclick="copyCardInfo(<?php echo htmlspecialchars($card['id']); ?>)">Copy</button>
