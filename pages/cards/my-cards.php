@@ -1,6 +1,11 @@
 <?php
 include_once('../../header.php');
 ?>
+<style>
+    .credit-card-item {
+    transition: transform 0.6s ease-in-out; /* Apply a smooth transition to the transform */
+}
+</style>
     <!-- Main Content Area -->
     <div class="main-content">
     <div id="my-cards" class="uuper">
