@@ -153,32 +153,27 @@ function showConfirm(cardId, price) {
                 data: { card_id: cardId },
                 success: function(response) {
                     try {
-                       
                         const result = typeof response === 'string' ? JSON.parse(response) : response;
 
-              
                         if (result.success) {
                             showPopupMessage('success', result.message || 'Purchase successful.');
                             setTimeout(() => {
-                                window.location.reload(); 
+                                window.location.reload();
                             }, 2000);
                         } else {
                             showPopupMessage('error', result.message || 'An error occurred.');
                         }
                     } catch (error) {
-                   
                         console.error('JSON parse error:', error);
                         showPopupMessage('error', 'Unexpected server response. Please try again.');
                     }
                 },
                 error: function() {
-               
                     showPopupMessage('error', 'Transaction failed. Please try again.');
                 }
             });
         },
         function() {
-          n
             alertify.error('Purchase cancelled.');
         }
     ).set('labels', { ok: 'Confirm', cancel: 'Cancel' });
