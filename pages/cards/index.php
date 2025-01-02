@@ -173,13 +173,23 @@ td{
     
 
     <div class="inpt-dmps-bx">
-        <label for="dumps_per_page">Base name</label>
-        <select name="dumps_per_page" id="dumps_per_page">
-            <option value="No">No</option>
-            <option value="yes">Yes</option>
-           
-        </select>
-    </div>
+    <label for="dumps_per_page">Base name</label>
+    <select name="basename" id="basename">
+        <option value="all">All</option>
+        
+        <?php
+        $baseNames = $settings->getCreditCardBaseNames();
+             
+        foreach ($baseNames as $baseName) {
+            if($baseName['base_name'] != NULL){
+
+                echo '<option value="' . htmlspecialchars($baseName['base_name']) . '">' . htmlspecialchars($baseName['base_name']) . '</option>';
+            }
+        }
+        ?>
+    </select>
+</div>
+
     <div class="inpt-dmps-bx">
         <label for="dumps_per_page">All</label>
         <select name="dumps_per_page" id="dumps_per_page">
@@ -188,7 +198,7 @@ td{
            
         </select>
     </div>
-</form>
+    </form>
 
     </div>
 
@@ -364,40 +374,43 @@ function closeRulesPopup() {
 }
 
 $(document).ready(function () {
-        $('#creditCardsTable').DataTable({
-            processing: true,
-            serverSide: true,
-            searching: false,
-            ajax: {
-                url: '<?= $urlval?>ajax/carddata.php',
-                type: 'POST',
-                data: function (d) {
-                   
-                    d.cc_bin = $('#cc_bin').val();
-                    d.cc_country = $('#cc_country').val();
-                    d.cc_state = $('#cc_state').val();
-                    d.cc_city = $('#cc_city').val();
-                    d.cc_zip = $('#cc_zip').val();
-                    d.cc_type = $('#cc_type').val();
-                    d.cards_per_page = $('#cards_per_page').val();
-                }
-            },
-            columns: [
-                { data: 'card_logo' },
-                { data: 'card_number' },
-                { data: 'expiry' },
-                { data: 'country' },
-                { data: 'state' },
-                { data: 'city' },
-                { data: 'zip' },
-                { data: 'price' },
-                { data: 'actions' }
-            ]
-        });
-
-       
-        $('#filter-form input, #filter-form select').on('change', function () {
-            $('#creditCardsTable').DataTable().ajax.reload();
-        });
+ 
+    $('#creditCardsTable').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: false, 
+        ajax: {
+            url: '<?= $urlval ?>ajax/carddata.php',
+            type: 'POST',
+            data: function (d) {
+             
+                d.cc_bin = $('#credit-card-bin').val();
+                d.cc_country = $('#credit-card-country').val();
+                d.cc_state = $('#state').val();
+                d.cc_city = $('#city').val();
+                d.cc_zip = $('#zip').val();
+                d.cc_type = $('#type').val();
+                d.basename = $('#basename').val();  
+                d.dumps_per_page = $('#dumps_per_page').val(); 
+            }
+        },
+        columns: [
+            { data: 'card_logo' },
+            { data: 'card_number' },
+            { data: 'expiry' },
+            { data: 'country' },
+            { data: 'state' },
+            { data: 'city' },
+            { data: 'zip' },
+            { data: 'price' },
+            { data: 'actions' }
+        ]
     });
+
+    
+    $('#credit-card-filters input, #credit-card-filters select').on('change', function () {
+        $('#creditCardsTable').DataTable().ajax.reload();  
+    });
+});
+
 </script>

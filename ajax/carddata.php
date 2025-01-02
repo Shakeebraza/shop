@@ -13,6 +13,7 @@ $ccState = isset($_POST['cc_state']) ? trim($_POST['cc_state']) : '';
 $ccCity = isset($_POST['cc_city']) ? trim($_POST['cc_city']) : '';
 $ccZip = isset($_POST['cc_zip']) ? trim($_POST['cc_zip']) : '';
 $ccType = isset($_POST['cc_type']) ? trim($_POST['cc_type']) : 'all';
+$basename = isset($_POST['basename']) ? trim($_POST['basename']) : 'all';
 
 $sql = "SELECT SQL_CALC_FOUND_ROWS id, card_type, card_number, mm_exp, yyyy_exp, country, state, city, zip, price 
         FROM credit_cards 
@@ -47,6 +48,10 @@ if (!empty($ccZip)) {
 if ($ccType !== 'all') {
     $sql .= " AND card_type = ?";
     $params[] = $ccType;
+}
+if ($basename !== 'all') {
+    $sql .= " AND base_name = ?";
+    $params[] = $basename;
 }
 
 
