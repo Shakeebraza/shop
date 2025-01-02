@@ -156,7 +156,7 @@ form#dump-filters {
     <div class="inpt-dmps-bx">
     <button type="submit" id="search-btn" class="btn" style="background-color: #0c182f; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">Search</button>
     <a type="button" id="clear-btn" class="btn" style="background-color: #f44336; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">Clear</a>
-</div>
+    </div>  
 
 </form>
 

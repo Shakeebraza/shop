@@ -198,6 +198,17 @@ td{
            
         </select>
     </div>
+    <div class="inpt-dmps-bx" style="display: flex; gap: 9px; margin-top: 20px;">
+        <button type="submit" id="search-btn" class="btn btn-with-icon" style="background-color: #0c182f; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">
+            <i class="fa fa-search"></i>
+            <span class="btn-text">Search</span>
+        </button>
+        <a type="button" id="clear-btn" class="btn btn-with-icon" style="background-color: #f44336; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">
+            <i class="fa fa-times"></i>
+            <span class="btn-text">Clear</span>
+        </a>
+    </div>
+
     </form>
 
     </div>
@@ -408,8 +419,21 @@ $(document).ready(function () {
     });
 
     
-    $('#credit-card-filters input, #credit-card-filters select').on('change', function () {
+    $('#credit-card-filters select').on('change', function () {
         $('#creditCardsTable').DataTable().ajax.reload();  
+    });
+
+    $('#search-btn').on('click', function(event) {
+        event.preventDefault();
+        $('#creditCardsTable').DataTable().ajax.reload(); 
+    });
+
+ 
+    $('#clear-btn').on('click', function(event) {
+        event.preventDefault();
+        document.getElementById('credit-card-filters').reset();
+        
+        $('#creditCardsTable').DataTable().ajax.reload(); 
     });
 });
 

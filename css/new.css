@@ -1124,3 +1124,33 @@ body {
 .dataTables_length select:hover {
     background-color: #f0f0f0;
 }
+
+.btn-with-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.btn-with-icon .btn-text {
+    opacity: 0;
+    position: absolute;
+    transition: opacity 0.3s ease-in-out;
+    font-size: 14px;
+    left: 8px;
+}
+
+.btn-with-icon:hover .btn-text {
+    opacity: 1;
+}
+
+.btn-with-icon i {
+    font-size: 16px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.btn-with-icon:hover i {
+    opacity: 0;
+}
