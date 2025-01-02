@@ -6,6 +6,7 @@ $dumpCountry = isset($_POST['dump_country']) ? trim($_POST['dump_country']) : ''
 $dumpType = isset($_POST['dump_type']) ? trim($_POST['dump_type']) : 'all';
 $dumpPin = isset($_POST['dump_pin']) ? trim($_POST['dump_pin']) : 'all';
 $base_name = isset($_POST['base_name']) ? trim($_POST['base_name']) : 'all';
+$track_pin = isset($_POST['track_pin']) ? trim($_POST['track_pin']) : 'all';
 
 
 $start = isset($_POST['start']) ? intval($_POST['start']) : 0;
@@ -40,6 +41,13 @@ if ($dumpPin === 'yes') {
 if ($base_name !== 'all') {
     $sql .= " AND base_name = ?";
     $params[] = $base_name;
+}
+if ($track_pin !== 'all') {
+    if ($track_pin === 'no') {
+        $sql .= " AND track1 IS NULL"; 
+    } elseif ($track_pin === 'yes') {
+        $sql .= " AND (track1 IS NOT NULL AND track1 != '')";
+    }
 }
 
 
@@ -90,6 +98,7 @@ foreach ($dumps as $dump) {
         'track2' => htmlspecialchars(substr($dump['track2'], 0, 6)),
         'expiry' => htmlspecialchars($dump['monthexp'] . '/' . $dump['yearexp']),
         'pin' => !empty($dump['pin']) ? 'Yes' : 'No',
+        'track' => !empty($dump['track1']) ? 'Yes' : 'No',
         'country' => htmlspecialchars($dump['country']),
         'price' => '$' . htmlspecialchars($dump['price']),
         // 'actions' => '<a href="buy_dump.php?dump_id=' . htmlspecialchars($dump['id']) . '" class="buy-button-dump" style="background-color:#0c182f;" onclick="return confirm(\'Are you sure you want to buy this dump?\');">

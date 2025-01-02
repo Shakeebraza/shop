@@ -203,6 +203,7 @@ form#dump-filters {
                 <th>BIN</th>
                 <th>Exp Date</th>
                 <th>PIN</th>
+                <th>Track 1 Title</th>
                 <th>Country</th>
                 <th>Price</th>
                 <th>Buy</th>
@@ -246,6 +247,7 @@ $(document).ready(function() {
                 d.dump_type = $('#dump-type').val();
                 d.dump_pin = $('#dump-pin').val();
                 d.base_name = $('#base_name').val();
+                d.track_pin = $('#track-pin').val();
             }
         },
         columns: [
@@ -253,6 +255,7 @@ $(document).ready(function() {
             { data: 'track2' },
             { data: 'expiry' },
             { data: 'pin' },
+            { data: 'track' },
             { data: 'country' },
             { data: 'price' },
             { data: 'actions' }

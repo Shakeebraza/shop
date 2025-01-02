@@ -95,7 +95,11 @@ include_once('../../header.php');
                     <td>
                         <button  class="copy-button" onclick="copyDumpInfo(<?php echo htmlspecialchars($dump['id']); ?>)">Copy</button>
                         <button class="check-dump-button" onclick="checkDump(<?php echo htmlspecialchars($dump['id']); ?>)">Check</button>
-                        <button class="check-dump-button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)">Delete</button>
+                        
+                        <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)" id="clear-btn" class="btn btn-with-icon" style="background-color: #f44336; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">
+                            <i class="fa fa-times"></i>
+                            <span class="btn-text">Delete</span>
+                        </a>
                     </td>
                 </tr>
             <?php endforeach; ?>
