@@ -141,6 +141,14 @@ form#dump-filters {
             <option value="no">No</option>
         </select>
     </div>
+    <div class="inpt-dmps-bx">
+        <label for="dump-pin">Track</label>
+        <select name="dump_pin" id="dump-pin">
+            <option value="all">All</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+    </div>
     
     <div class="inpt-dmps-bx">
     <label for="dumps_per_page">Base name</label>
