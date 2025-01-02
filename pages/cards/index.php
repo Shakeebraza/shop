@@ -228,9 +228,15 @@ a.buy-button {
                     <td style="padding: 10px; border: 1px solid #ddd;"><?= htmlspecialchars($card['city']); ?></td>
                     <td style="padding: 10px; border: 1px solid #ddd;"><?= $displayZip; ?></td>
                     <td style="padding: 10px; border: 1px solid #ddd;">$<?= htmlspecialchars($card['price']); ?></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;text-align:center;" >
-                        
+                    <td style="text-align:center;">
+                        <a href="#" 
+                        class="buy-button" style="background-color:#0c182f;"
+                        onclick="showConfirm('<?php echo $card['id']; ?>', '<?php echo $card['price']; ?>')">
+                        <span class="price">$<?php echo $card['price']; ?></span>
+                        <span class="buy-now">Buy Now</span>
+                        </a>
                     </td>
+
                 </tr>
             <?php endforeach; ?>
         </tbody>
