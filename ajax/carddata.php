@@ -1,11 +1,8 @@
 <?php
 include_once('../global.php'); 
 
-
 $start = isset($_POST['start']) ? intval($_POST['start']) : 0;
 $length = isset($_POST['length']) ? intval($_POST['length']) : 10;
-$searchValue = isset($_POST['search']['value']) ? trim($_POST['search']['value']) : '';
-
 
 $ccBin = isset($_POST['cc_bin']) ? trim($_POST['cc_bin']) : '';
 $ccCountry = isset($_POST['cc_country']) ? trim($_POST['cc_country']) : '';
@@ -21,7 +18,6 @@ $sql = "SELECT SQL_CALC_FOUND_ROWS id, card_type, card_number, mm_exp, yyyy_exp,
 
 $params = [];
 
-
 if (!empty($ccBin)) {
     $bins = array_map('trim', explode(',', $ccBin));
     $sql .= " AND (" . implode(" OR ", array_fill(0, count($bins), "card_number LIKE ?")) . ")";
@@ -34,16 +30,16 @@ if (!empty($ccCountry)) {
     $params[] = strtoupper(trim($ccCountry));
 }
 if (!empty($ccState)) {
-    $sql .= " AND state = ?";
-    $params[] = $ccState;
+    $sql .= " AND state LIKE ?";
+    $params[] = "%$ccState%";
 }
 if (!empty($ccCity)) {
-    $sql .= " AND city = ?";
-    $params[] = $ccCity;
+    $sql .= " AND city LIKE ?";
+    $params[] = "%$ccCity%";
 }
 if (!empty($ccZip)) {
-    $sql .= " AND zip = ?";
-    $params[] = $ccZip;
+    $sql .= " AND zip LIKE ?";
+    $params[] = "%$ccZip%";
 }
 if ($ccType !== 'all') {
     $sql .= " AND card_type = ?";
@@ -55,35 +51,20 @@ if ($basename !== 'all') {
 }
 
 
-if (!empty($searchValue)) {
-    $sql .= " AND (card_number LIKE ? OR country LIKE ? OR state LIKE ?)";
-    $params[] = "%$searchValue%";
-    $params[] = "%$searchValue%";
-    $params[] = "%$searchValue%";
-}
-
-
 $sql .= " ORDER BY id DESC LIMIT " . intval($start) . ", " . intval($length);
 
 // var_dump($pdo);
 // exit();
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
-$creditCards = $stmt->fetchAll(PDO::FETCH_ASSOC);;
-
+$creditCards = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $totalStmt = $pdo->query("SELECT FOUND_ROWS()");
 $totalRecords = $totalStmt->fetchColumn();
 
-
 $data = [];
 foreach ($creditCards as $card) {
     $data[] = [
-        
-
-
-   
-
         'card_logo' => '<img src="/shop/images/cards/' . strtolower($card['card_type']) . '.png" alt="Card Logo" class="card-logo">',
         'card_number' => htmlspecialchars($card['card_number']),
         'expiry' => htmlspecialchars($card['mm_exp']) . '/' . htmlspecialchars($card['yyyy_exp']),
@@ -98,7 +79,6 @@ foreach ($creditCards as $card) {
       </a>'
     ];
 }
-
 
 echo json_encode([
     'draw' => isset($_POST['draw']) ? intval($_POST['draw']) : 0,
