@@ -143,13 +143,21 @@ form#dump-filters {
     </div>
     
     <div class="inpt-dmps-bx">
-        <label for="dumps-per-page">Dumps per Page</label>
-        <select name="dumps_per_page" id="dumps-per-page">
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select>
+    <label for="dumps_per_page">Base name</label>
+    <select name="basename" id="basename">
+        <option value="all">All</option>
+        
+        <?php
+        $baseNames = $settings->getDumpBaseNames();
+             
+        foreach ($baseNames as $baseName) {
+            if($baseName['base_name'] != NULL){
+
+                echo '<option value="' . htmlspecialchars($baseName['base_name']) . '">' . htmlspecialchars($baseName['base_name']) . '</option>';
+            }
+        }
+        ?>
+    </select>
     </div>
     
 

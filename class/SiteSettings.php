@@ -19,8 +19,15 @@ class SiteSettings {
         }
     }
     function getCreditCardBaseNames() {
-        // Corrected SQL query to exclude 'NA' and NULL base names
+        // s
         $sql = "SELECT base_name FROM credit_cards WHERE base_name != 'NA' AND base_name IS NOT NULL";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $baseNames = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $baseNames;
+    }
+    function getDumpBaseNames() {
+        $sql = "SELECT base_name FROM dumps WHERE base_name != 'NA' AND base_name IS NOT NULL";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         $baseNames = $stmt->fetchAll(PDO::FETCH_ASSOC);

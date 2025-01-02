@@ -188,16 +188,9 @@ td{
         }
         ?>
     </select>
-</div>
-
-    <div class="inpt-dmps-bx">
-        <label for="dumps_per_page">All</label>
-        <select name="dumps_per_page" id="dumps_per_page">
-            <option value="yes">Yes</option>
-            <option value="No">No</option>
-           
-        </select>
     </div>
+
+
     <div class="inpt-dmps-bx" style="display: flex; gap: 9px; margin-top: 20px;">
         <button type="submit" id="search-btn" class="btn btn-with-icon" style="background-color: #0c182f; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">
             <i class="fa fa-search"></i>
