@@ -63,7 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $details = explode('|', $line);
 
             if (count($details) >= max($pos_track1, $pos_track2, $pos_pin, $pos_country)) {
-                $track1 = $details[$pos_track1 - 1];
+                if($details[$pos_track1] == 0){
+                    
+                    $track1 = "No";
+                }else{
+
+                    $track1 = $details[$pos_track1 - 1] ;
+                }
                 $track2 = $details[$pos_track2 - 1];
                 $pin = isset($details[$pos_pin - 1]) ? $details[$pos_pin - 1] : '0';
                 $country = isset($details[$pos_country - 1]) ? strtoupper(trim(preg_replace('/\s+/', ' ', $details[$pos_country - 1]))) : 'Unknown';
