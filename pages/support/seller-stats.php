@@ -1,6 +1,6 @@
 <?php
 include_once('../../header.php');
-
+$balance_saller = $user['credit_cards_balance'] + $user['dumps_balance'];
 ?>
 <style>
     #seller-stats{
@@ -147,7 +147,7 @@ border:1px solid #e6e6e7 !important;
     <input type="text" class="withdrawal_amount" name="Secret_Code" placeholder="Secret Code" required>
     <p class="withdrawal_amount readonly" 
        style="background-color: #f5f5f5; color: #333; font-weight: bold; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-       Your balance is: $<?php echo number_format($user['balance'], 2); ?>
+       Your balance is: $<?php echo number_format($balance_saller, 2); ?>
     </p>
     <input type="button" value="Submit" class="btw-sbm">
 </div>
