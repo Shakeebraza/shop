@@ -123,8 +123,8 @@ form#dump-filters {
     </div>
     
     <div class="inpt-dmps-bx">
-        <label for="type">Type</label>
-        <select name="dump_type" id="type">
+        <label for="dump-type">Type</label>
+        <select name="dump_type" id="dump-type">
             <option value="all">All</option>
             <option value="visa">Visa</option>
             <option value="mastercard">Mastercard</option>
@@ -134,8 +134,8 @@ form#dump-filters {
     </div>
     
     <div class="inpt-dmps-bx">
-        <label for="pin">PIN</label>
-        <select name="dump_pin" id="pin">
+        <label for="dump-pin">PIN</label>
+        <select name="dump_pin" id="dump-pin">
             <option value="all">All</option>
             <option value="yes">Yes</option>
             <option value="no">No</option>
@@ -143,30 +143,23 @@ form#dump-filters {
     </div>
     
     <div class="inpt-dmps-bx">
-        <label for="dumps_per_page">Dumps per Page</label>
-        <select name="dumps_per_page" id="dumps_per_page">
+        <label for="dumps-per-page">Dumps per Page</label>
+        <select name="dumps_per_page" id="dumps-per-page">
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
             <option value="100">100</option>
         </select>
     </div>
-    <div class="inpt-dmps-bx">
-        <label for="dumps_per_page">All</label>
-        <select name="dumps_per_page" id="dumps_per_page">
-            <option value="No">No</option>
-            <option value="yes">Yes</option>
-           
-        </select>
-    </div>
 </form>
+
 
     </div>
     
-     <!-- Dumps List (this will be dynamically updated) -->
+
     <div id="dumps-list" class="main-tbl321">
     <?php if (!empty($dumps)): ?>
-    <table class="dumps-table">
+    <table id="dumpsTable"  class="dumps-table">
         <thead>
             <tr>
                 <th>Type</th>
@@ -178,33 +171,7 @@ form#dump-filters {
                 <th>Buy</th>
             </tr>
         </thead>
-        <tbody>
-            <?php foreach ($dumps as $dump): ?>
-                <tr>
-                    <td>
-                   
-                    <img src="/shop/images/cards/<?php echo strtolower($dump['card_type']); ?>.png" 
-     alt="<?php echo htmlspecialchars($dump['card_type']); ?> logo" 
-     class="card-logo">
-
-                    </td>
-                    <td><?php echo htmlspecialchars(substr($dump['track2'], 0, 6)); ?></td>
-                    <td><?php echo htmlspecialchars($dump['monthexp'] . '/' . $dump['yearexp']); ?></td>
-                    <td><?php echo !empty($dump['pin']) ? 'Yes' : 'No'; ?></td>
-                    <td><?php echo htmlspecialchars($dump['country']); ?></td>
-                    <td>$<?php echo htmlspecialchars($dump['price']); ?></td>
-                    <td style="text-align:center;">
-                        <a href="buy_dump.php?dump_id=<?php echo htmlspecialchars($dump['id']); ?> javascript:void(0);" 
-                           class="buy-button-dump"  style="background-color:#0c182f;"
-                           onclick="return confirm('Are you sure you want to buy this dump?');">
-                           <span class="price">$<?php echo $dump['price']; ?></span>
-                           <span class="buy-now">Buy Now</span>
-                        
-                        </a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
+        <tbody></tbody>
     </table>
 <?php else: ?>
     <p>No dumps available.</p>
@@ -218,3 +185,42 @@ form#dump-filters {
 <?php
 include_once('../../footer.php');
 ?>
+<script type="text/javascript">
+$(document).ready(function() {
+    var table = $('#dumpsTable').DataTable({
+        processing: true,
+        serverSide: true,
+        searching:false,
+        ajax: {
+            url: '<?= $urlval ?>ajax/dumpdata.php', 
+            type: 'POST',
+            data: function(d) {
+                d.dump_bin = $('#dump-bin').val();
+                d.dump_country = $('#dump-country').val();
+                d.dump_type = $('#dump-type').val();
+                d.dump_pin = $('#dump-pin').val();
+                d.dumps_per_page = $('#dumps-per-page').val();
+            }
+        },
+        columns: [
+            { data: 'card_logo' },
+            { data: 'track2' },
+            { data: 'expiry' },
+            { data: 'pin' },
+            { data: 'country' },
+            { data: 'price' },
+            { data: 'actions' }
+        ]
+    });
+
+    // Reload the DataTable on any filter change
+    $('#dump-filters input, #dump-filters select').on('change', function() {
+        table.ajax.reload();
+    });
+});
+
+</script>
+
+
+</body>
+</html>
