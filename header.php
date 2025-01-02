@@ -304,11 +304,40 @@ endif;
     background-color: transparent;
     /* pointer-events: none;  */
 }
+.see-all{
+    display: none;
+}
 
+@media (min-width: 300px) and (max-width: 767.98px) {
+    .dashboard-container{
+        display:block !important;
+        overflow:hidden !important;
+    }
+    .sidebar{
+        width: 100% !important;
+        overflow:hidden !important;
+    }
+    .sidebar ul{
+        display: flex;
+        overflow-x:scroll !important;
+        scroll-behavior: smooth;
+    }
+    .sidebar ul li a{
+        text-wrap:nowrap !important;
+        padding:0px 15px !important;
+    }
+    .balance-container .balance ,.username-container .username{
+        font-size:12px !important;
+    }
+    .see-all{
+        display: block;
+    }
+}
+</style>
 
-    </style>
+</head>
     <div id="particles-js"></div>
-    <body >
+    <body>
 
   
     <div id="messageBox" tabindex="-1" style="display: none;">
@@ -391,8 +420,8 @@ endif;
 
 <div class="dashboard-container">
 
-    <nav class="sidebar">
-        <ul>
+    <nav class="sidebar uuper">
+        <ul class="sdbr-ct32">
             <li><a href="<?= $urlval?>pages/news/index.php" id="news-nav"><i class="fas fa-newspaper"></i> News</a></li>
             <?php if ($visibility['Tools'] === 1): ?>
                 <li><a href="<?= $urlval?>pages/tools/index.php" id="tools-nav"><i class="fas fa-wrench"></i> Tools</a></li>
@@ -432,6 +461,31 @@ endif;
                 <li><a href="<?= $urlval?>pages/support/seller-stats.php" id="seller-stats-nav"><i class="fas fa-chart-bar"></i> Seller Stats</a></li>
             <?php endif; ?>
         </ul>
+        <div class="d-flex justify-content-center">
+            <a href="" class="see-all" style="color:#fff;">See all</a>
+        </div>
     </nav>
+   
 
 
+        <script>
+document.querySelector('.see-all').addEventListener('click', function (event) {
+    const hiddenContent = document.querySelector('.sdbr-ct32');
+    const button = this;
+
+    event.preventDefault();
+
+    // Get the current display style of the hiddenContent element
+    const currentDisplay = window.getComputedStyle(hiddenContent).display;
+
+    if (currentDisplay === 'flex') {
+        // Hide the content
+        hiddenContent.style.display = 'block'; 
+        button.textContent = 'Hide All';
+    } else {
+        // Show the content
+        hiddenContent.style.display = 'flex'; 
+        button.textContent = 'See All';
+    }
+});
+</script>

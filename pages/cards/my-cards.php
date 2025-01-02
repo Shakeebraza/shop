@@ -5,32 +5,133 @@ include_once('../../header.php');
     .credit-card-item {
     transition: transform 0.6s ease-in-out; /* Apply a smooth transition to the transform */
 }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+}
+
+thead tr {
+    background-color:#0c182f !important; /* Nice blue color */
+    color: white;
+    text-align: left;
+    font-weight: bold;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+table button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.copy-button {
+    background-color: #0c182f;
+    color: white;
+}
+
+.copy-button:hover {
+    background-color: #218838;
+}
+
+.check-card-button {
+    background-color:#0c182f;
+    color: white;
+}
+
+.check-card-button:hover {
+    background-color: #e0a800;
+}
+.activity-log-table th{
+    background-color:#0c182f !important;
+}
+.copy-button {
+    margin-bottom: 5px !important;
+}
+
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+    td, th {
+        padding: 8px 15px;
+        text-wrap:nowrap !important;
+    }
+    
+    .main-tbl321{
+    width: 100% !important;
+    overflow-x:scroll !important;}
+    a.buy-button {
+    height: 30px !important;
+ 
+}
+}
 </style>
     <!-- Main Content Area -->
     <div class="main-content">
     <div id="my-cards" class="uuper">
     <h2>My Cards Section</h2>
-<!-- <?php if (empty($soldCards)): ?>
+ <?php if (empty($soldCards)): ?>
         <p>No purchased cards available.</p>
     <?php else: ?>
-        <?php foreach ($soldCards as $card): ?>
-            <div id="card-<?php echo htmlspecialchars($card['id']); ?>" class="credit-card-item">
-                <div class="info-field"><strong>Card Number:</strong> <?php echo htmlspecialchars($card['card_number']); ?></div>
-                <div class="info-field"><strong>Expiration:</strong> <?php echo htmlspecialchars($card['mm_exp'] . '/' . $card['yyyy_exp']); ?></div>
-                <div class="info-field"><strong>CVV:</strong> <?php echo htmlspecialchars($card['cvv']); ?></div>
-                <div class="info-field"><strong>Name on Card:</strong> <?php echo htmlspecialchars($card['name_on_card']); ?></div>
-                <div class="info-field"><strong>Address:</strong> <?php echo htmlspecialchars($card['address']); ?></div>
-                <div class="info-field"><strong>City:</strong> <?php echo htmlspecialchars($card['city']); ?></div>
-                <div class="info-field"><strong>ZIP:</strong> <?php echo htmlspecialchars($card['zip']); ?></div>
-                <div class="info-field"><strong>Country:</strong> <?php echo htmlspecialchars($card['country']); ?></div>
-                <div class="info-field"><strong>Phone Number:</strong> <?php echo htmlspecialchars($card['phone_number']); ?></div>
-                <div class="info-field"><strong>Date of Birth:</strong> <?php echo htmlspecialchars($card['date_of_birth']); ?></div>
-                <button class="copy-button" onclick="copyCardInfo(<?php echo htmlspecialchars($card['id']); ?>)">Copy</button>
-                <button class="check-card-button" onclick="checkCard(<?php echo htmlspecialchars($card['id']); ?>)">Check</button>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>  -->
-    <div style="display: flex; gap: 20px; padding: 20px; flex-wrap: wrap; justify-content: center;">
+        <div class="main-tbl321">
+    <table>
+        <thead>
+            <tr>
+                <th>Card Number</th>
+                <th>Expiration</th>
+                <th>CVV</th>
+                <th>Name on Card</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>ZIP</th>
+                <th>Country</th>
+                <th>Phone Number</th>
+                <th>Date of Birth</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($soldCards as $card): ?>
+                <tr id="card-<?php echo htmlspecialchars($card['id']); ?>">
+                    <td><?php echo htmlspecialchars($card['card_number']); ?></td>
+                    <td><?php echo htmlspecialchars($card['mm_exp'] . '/' . $card['yyyy_exp']); ?></td>
+                    <td><?php echo htmlspecialchars($card['cvv']); ?></td>
+                    <td><?php echo htmlspecialchars($card['name_on_card']); ?></td>
+                    <td><?php echo htmlspecialchars($card['address']); ?></td>
+                    <td><?php echo htmlspecialchars($card['city']); ?></td>
+                    <td><?php echo htmlspecialchars($card['zip']); ?></td>
+                    <td><?php echo htmlspecialchars($card['country']); ?></td>
+                    <td><?php echo htmlspecialchars($card['phone_number']); ?></td>
+                    <td><?php echo htmlspecialchars($card['date_of_birth']); ?></td>
+                    <td>
+                        <button class="copy-button" onclick="copyCardInfo(<?php echo htmlspecialchars($card['id']); ?>)">Copy</button>
+                        <button class="check-card-button" onclick="checkCard(<?php echo htmlspecialchars($card['id']); ?>)">Check</button>
+                        <button class="delete-card-button" onclick="deleteRow(<?php echo htmlspecialchars($card['id']); ?>)">Delete</button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+    <?php endif; ?>  
+    <div style="display: none; gap: 20px; padding: 20px; flex-wrap: wrap; justify-content: center;">
 
 <?php if (empty($soldCards)): ?>
     <p>No purchased cards available.</p>
@@ -112,6 +213,7 @@ include_once('../../header.php');
     <!-- Card Activity Log Section -->
     <div id="card-activity-log">
         <h2>Card Activity Log</h2>
+        <div class="main-tbl321">
         <table id="activity-log-table" class="activity-log-table">
             <thead>
                 <tr>
@@ -138,6 +240,7 @@ include_once('../../header.php');
                 <?php endif; ?>
             </tbody>
         </table>
+        </div>
     </div>
 </div>
 
@@ -147,7 +250,7 @@ include_once('../../header.php');
 include_once('../../footer.php');
 ?>
 
-<script>
+<!-- <script>
     const cards = document.querySelectorAll('.credit-card-item');
     cards.forEach(card => {
         card.addEventListener('mouseenter', () => {
@@ -157,4 +260,40 @@ include_once('../../footer.php');
             card.style.transform = 'rotateY(0deg)';
         });
     });
+</script> -->
+
+<script>
+    // Check for hidden rows on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get deleted IDs from localStorage
+        const deletedIds = JSON.parse(localStorage.getItem('deletedRows')) || [];
+
+        // Hide rows that are marked as deleted
+        deletedIds.forEach(id => {
+            const row = document.getElementById(`card-${id}`);
+            if (row) {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    // Delete row function
+    function deleteRow(cardId) {
+        if (confirm('Are you sure you want to delete this row?')) {
+            // Hide the row
+            const row = document.getElementById(`card-${cardId}`);
+            if (row) {
+                row.style.display = 'none';
+            }
+
+            // Save the deleted ID to localStorage
+            const deletedIds = JSON.parse(localStorage.getItem('deletedRows')) || [];
+            if (!deletedIds.includes(cardId)) {
+                deletedIds.push(cardId);
+                localStorage.setItem('deletedRows', JSON.stringify(deletedIds));
+            }
+        }
+    }
 </script>
+
+

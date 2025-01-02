@@ -1030,3 +1030,7 @@ body {
     position: relative;
     z-index: 1;
 }
+
+.copy-button {
+    margin-bottom: 5px !important;
+}

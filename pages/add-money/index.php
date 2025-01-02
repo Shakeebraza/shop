@@ -6,7 +6,34 @@ include_once('../../header.php');
 include_once('popup.php');
 ?>
 <?php include_once('style.php')?>
+<style>
+    div#transaction-table_wrapper {
+    overflow-x: scroll;
 
+}
+@media(min-width: 300px) and (max-width: 767.98px) {
+    .payment-modal {
+   
+    top: 20px;
+    left: 50%;
+    transform: none;
+    z-index: 1050;
+    width: 100%;
+    max-width: 100% !important;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+.modal-backdrop {
+    padding: 20px;
+}
+.popup-content {
+width: 100% !important;
+}
+}
+</style>
 <div class="main-content">
 <div class="breadcrumb-container uuper" style="margin-top: 20px; font-family: Arial, sans-serif; background-color: #0c182f; padding: 10px; border-radius: 5px;">
     <nav aria-label="breadcrumb">

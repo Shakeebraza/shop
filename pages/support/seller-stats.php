@@ -2,11 +2,110 @@
 include_once('../../header.php');
 
 ?>
+<style>
+    #seller-stats{
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        margin:0px !important;
+        box-shadow:none !important;
+    }
+    .stats-container{
+        box-shadow:none !important;
+background-color: #f9f9f94a !important;
+border-radius:0px;
+border:1px solid #e6e6e7 !important;
+    }
+    .stats-container h3{
+     font-size:32px !important;
+     font: weight 400px;;
+     color:#0c182f !important;
+     margin-bottom:10px !important;
+     padding-bottom:10px !important;
+     border-bottom:1px solid #e6e6e7 !important;
+    }
+    .stat-item strong{
+     font-size:18px !important;
+     font: weight 400px;;
+     color:#0c182f !important;
+    
+    }
+        /* Styling for input fields */
+        .inpt-wtdr {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 300px;
+        margin: auto;
+        margin-top: 20px;
+    }
+
+    .withdrawal_amount {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    /* Styling for buttons */
+    #withdrawal_amount3 {
+        padding: 10px 20px;
+        border: none;
+        background-color: #0c182f;
+        color: white;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .btw-sbm{
+        display:block;
+        padding: 10px 20px;
+        border: none;
+        background-color: #0c182f;
+        color: white;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #withdrawal_amount3:hover {
+        background-color: #0c182f;
+    }
+
+    #withdrawal_amount3:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+    }
+
+    /* Loader styling */
+    .loader {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid #0c182f;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-left: 5px;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+</style>
     <!-- Main Content Area -->
     <div class="main-content">
 
     <?php if ($user['seller'] == 1): ?>
-    <div id="seller-stats" class="section">
+    <div id="seller-stats" class="section uuper">
         <h2><i class="fas fa-chart-bar"></i> Seller Stats</h2> <!-- Main title -->
 
         <!-- Seller Percentage -->
@@ -38,11 +137,52 @@ include_once('../../header.php');
             <div class="stat-item">Unsold Dumps: <strong><?php echo $unsoldDumps; ?></strong></div>
             <div class="stat-item">Sold Dumps: <strong><?php echo $soldDumpsCount; ?></strong></div>
         </div>
+        <div class="stats-container">
+            <h3>Do you want to Withdraw</h3>
+            <div>
+    <button id="withdrawal_amount3" onclick="toggleInputForm(this)">Withdraw Balance</button>
+</div>
+<div class="inpt-wtdr" style="display: none;">
+    <input type="text" class="withdrawal_amount" name="BTC_Address" placeholder="BTC Address" required>
+    <input type="text" class="withdrawal_amount" name="Secret_Code" placeholder="Secret Code" required>
+    <p class="withdrawal_amount readonly" 
+       style="background-color: #f5f5f5; color: #333; font-weight: bold; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+       Your balance is: $<?php echo number_format($user['balance'], 2); ?>
+    </p>
+    <input type="button" value="Submit" class="btw-sbm">
+</div>
+
+
+        </div>
     </div>
 <?php endif; ?>
 
     </div>
 </div>
+<script>
+    function toggleInputForm(button) {
+        // Show loader and disable button
+        button.disabled = true;
+        button.innerHTML = 'Loading <span class="loader"></span>';
+
+        // Simulate a delay of 2 seconds
+        setTimeout(() => {
+            // Toggle the visibility of the input form
+            const form = document.querySelector('.inpt-wtdr');
+            if (form.style.display === 'none') {
+                form.style.display = 'flex';
+                button.innerHTML = 'Hide Form';
+            } else {
+                form.style.display = 'none';
+                button.innerHTML = 'Withdraw Balance';
+            }
+
+            // Re-enable the button
+            button.disabled = false;
+        }, 2000);
+    }
+</script>
+
 <?php
 include_once('../../footer.php');
 ?>

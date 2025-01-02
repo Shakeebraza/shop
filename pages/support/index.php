@@ -11,7 +11,7 @@ foreach ($tickets as $ticket) {
     <!-- Main Content Area -->
     <div class="main-content">
 
-    <div id="support" class="">
+    <div id="support" class="uuper">
     <h2>Support</h2>
 
     <!-- Always show the ticket form, but disable if there is an open ticket -->

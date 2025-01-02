@@ -21,7 +21,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
     header("Location: login.php");
-    exit;
+    exit;   
 }
 
 // Initialize newJabberValue and newTelegramValue for immediate field update
