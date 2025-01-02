@@ -20,18 +20,26 @@ include_once('../../header.php');
         border: 1px solid #ddd;
     }
 
-    .buy-button-dump {
-        display: inline-block;
-        background-color: #007bff;
-        color: white;
-        padding: 5px 10px;
-        text-decoration: none;
-        border-radius: 4px;
-    }
-
-    .buy-button-dump:hover {
-        background-color: #0056b3;
-    }
+    a.buy-button {
+    display: inline-block;
+    background-color: #28a745;
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+a.buy-button {
+    height: 38px !important;
+    width: 100px !important;
+    text-align: center !important;
+}
+a.buy-button:hover {
+    background-color: #218838;
+    cursor: pointer;
+}
 
     .card-logo {
         height: 20px;
@@ -142,8 +150,8 @@ form#dump-filters {
         </select>
     </div>
     <div class="inpt-dmps-bx">
-        <label for="dump-pin">Track</label>
-        <select name="dump_pin" id="dump-pin">
+        <label for="track-pin">Track</label>
+        <select name="track-pin" id="track-pin">
             <option value="all">All</option>
             <option value="yes">Yes</option>
             <option value="no">No</option>
@@ -151,8 +159,8 @@ form#dump-filters {
     </div>
     
     <div class="inpt-dmps-bx">
-    <label for="dumps_per_page">Base name</label>
-    <select name="basename" id="basename">
+    <label for="base_name">Base name</label>
+    <select name="base_name" id="base_name">
         <option value="all">All</option>
         
         <?php
@@ -180,7 +188,7 @@ form#dump-filters {
         </a>
     </div> 
 
-</form>
+    </form>
 
 
     </div>
@@ -211,6 +219,15 @@ form#dump-filters {
 
     </div>
 </div>
+
+<div id="rules-popup" class="popup-modal" style="display: none;">
+    <div class="popup-content" style="position: absolute;top: 50%;right: 20%;">
+        <span class="close" onclick="closeRulesPopup()">
+            <i class="fas fa-times"></i>
+        </span>
+        <p class="message"></p> 
+    </div>
+</div>
 <?php
 include_once('../../footer.php');
 ?>
@@ -228,7 +245,7 @@ $(document).ready(function() {
                 d.dump_country = $('#dump-country').val();
                 d.dump_type = $('#dump-type').val();
                 d.dump_pin = $('#dump-pin').val();
-                d.dumps_per_page = $('#dumps-per-page').val();
+                d.base_name = $('#base_name').val();
             }
         },
         columns: [
@@ -262,6 +279,44 @@ $(document).ready(function() {
         table.ajax.reload();
     });
 });
+
+function showConfirm(dumpId, price) {
+
+        $.ajax({
+            url: 'buy_dump.php',
+            type: 'POST',
+            data: { dump_id: dumpId },
+            dataType: 'json',
+            success: function(response) {
+                showPopupMessage(response.message, response.success ? 'success' : 'error');
+                if (response.success) {
+                    setTimeout(() => window.location.reload(), 2000); 
+                }
+            },
+            error: function() {
+                showPopupMessage('An error occurred while processing your request. Please try again.', 'error');
+            }
+        });
+  
+}
+
+
+function showPopupMessage(message, type) {
+    const popup = document.getElementById('rules-popup');
+    const messageElement = popup.querySelector('.message');
+    
+    messageElement.textContent = message;
+
+
+    popup.className = `popup-modal ${type}`;
+    popup.style.display = 'block';
+}
+
+
+function closeRulesPopup() {
+    const popup = document.getElementById('rules-popup');
+    popup.style.display = 'none';
+}
 
 
 </script>
