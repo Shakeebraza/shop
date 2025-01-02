@@ -63,7 +63,7 @@ $dumpCountries = $pdo->query("
     GROUP BY UPPER(TRIM(REPLACE(REPLACE(country, CHAR(160), ''), CHAR(9), '')))
 ")->fetchAll(PDO::FETCH_COLUMN);
 
-// Capture filter values for credit cards
+
 $ccBin = isset($_POST['cc_bin']) ? trim($_POST['cc_bin']) : '';
 $ccCountry = isset($_POST['cc_country']) ? trim($_POST['cc_country']) : '';
 $ccState = isset($_POST['cc_state']) ? trim($_POST['cc_state']) : '';
@@ -72,13 +72,13 @@ $ccZip = isset($_POST['cc_zip']) ? trim($_POST['cc_zip']) : '';
 $ccType = isset($_POST['cc_type']) ? trim($_POST['cc_type']) : 'all';
 $cardsPerPage = isset($_POST['cards_per_page']) ? (int)$_POST['cards_per_page'] : 10;
 
-// Build SQL query for credit cards based on filters
+
 $sql = "SELECT id, card_type,name_on_card, card_number, mm_exp, yyyy_exp, country, state, city, zip, price 
         FROM credit_cards 
         WHERE buyer_id IS NULL AND status = 'unsold'";
 $params = [];
 
-// Handle multiple BINs for credit cards
+
 if (!empty($ccBin)) {
     $bins = array_map('trim', explode(',', $ccBin));
     $sql .= " AND (" . implode(" OR ", array_fill(0, count($bins), "card_number LIKE ?")) . ")";
@@ -107,13 +107,13 @@ if ($ccType !== 'all') {
     $params[] = $ccType;
 }
 
-// Limit and order results for credit cards
+
 $sql .= " ORDER BY id DESC LIMIT " . intval($cardsPerPage);
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $creditCards = $stmt->fetchAll();
 
-// Fetch sold credit cards for "My Cards" section in descending order
+
 $stmt = $pdo->prepare("
     SELECT * 
     FROM credit_cards 

@@ -115,7 +115,9 @@ a.buy-button {
     width: 100px !important;
     text-align: center !important;
 }
-
+td{
+    padding: 10px; border: 1px solid #ddd;
+}
 </style>
 
 
@@ -169,13 +171,13 @@ a.buy-button {
         </select>
     </div>
     
+
     <div class="inpt-dmps-bx">
-        <label for="cards_per_page">Cards per Page</label>
-        <select name="cards_per_page" id="cards_per_page">
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
+        <label for="dumps_per_page">Base name</label>
+        <select name="dumps_per_page" id="dumps_per_page">
+            <option value="No">No</option>
+            <option value="yes">Yes</option>
+           
         </select>
     </div>
     <div class="inpt-dmps-bx">
@@ -197,7 +199,7 @@ a.buy-button {
 ?>
 <?php if (!empty($creditCards)): ?>
     <div class="main-tbl321">
-    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+    <table id="creditCardsTable" style="width: 100%; border-collapse: collapse; text-align: left;">
         <thead>
             <tr style="background-color:#0c182f;">
                 <th style="padding: 10px; border: 1px solid #ddd;">Type</th>
@@ -211,35 +213,7 @@ a.buy-button {
                 <th style="padding: 10px; border: 1px solid #ddd;">Buy</th>
             </tr>
         </thead>
-        <tbody>
-            <?php foreach ($creditCards as $card):
-                $zip = $card['zip'];
-                $displayZip = substr($zip, 0, 3) . '****'; ?>
-                <tr>
-                    <td style="padding: 10px; border: 1px solid #ddd;">
-                        <img src="/shop/images/cards/<?php echo strtolower($card['card_type']); ?>.png" 
-                            alt="<?php echo htmlspecialchars($card['card_type']); ?> logo" 
-                            class="card-logo">
-                    </td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><?= htmlspecialchars($card['card_number']); ?></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><?= htmlspecialchars($card['mm_exp']) . '/' . htmlspecialchars($card['yyyy_exp']); ?></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><?= htmlspecialchars($card['country']); ?></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><?= htmlspecialchars($card['state']); ?></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><?= htmlspecialchars($card['city']); ?></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;"><?= $displayZip; ?></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">$<?= htmlspecialchars($card['price']); ?></td>
-                    <td style="text-align:center;">
-                        <a href="#" 
-                        class="buy-button" style="background-color:#0c182f;"
-                        onclick="showConfirm('<?php echo $card['id']; ?>', '<?php echo $card['price']; ?>')">
-                        <span class="price">$<?php echo $card['price']; ?></span>
-                        <span class="buy-now">Buy Now</span>
-                        </a>
-                    </td>
-
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
+        
     </table>
 </div>
 
@@ -389,5 +363,41 @@ function closeRulesPopup() {
     popup.style.display = 'none';
 }
 
+$(document).ready(function () {
+        $('#creditCardsTable').DataTable({
+            processing: true,
+            serverSide: true,
+            searching: false,
+            ajax: {
+                url: '<?= $urlval?>ajax/carddata.php',
+                type: 'POST',
+                data: function (d) {
+                   
+                    d.cc_bin = $('#cc_bin').val();
+                    d.cc_country = $('#cc_country').val();
+                    d.cc_state = $('#cc_state').val();
+                    d.cc_city = $('#cc_city').val();
+                    d.cc_zip = $('#cc_zip').val();
+                    d.cc_type = $('#cc_type').val();
+                    d.cards_per_page = $('#cards_per_page').val();
+                }
+            },
+            columns: [
+                { data: 'card_logo' },
+                { data: 'card_number' },
+                { data: 'expiry' },
+                { data: 'country' },
+                { data: 'state' },
+                { data: 'city' },
+                { data: 'zip' },
+                { data: 'price' },
+                { data: 'actions' }
+            ]
+        });
 
+       
+        $('#filter-form input, #filter-form select').on('change', function () {
+            $('#creditCardsTable').DataTable().ajax.reload();
+        });
+    });
 </script>
