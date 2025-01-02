@@ -1,0 +1,247 @@
+/* General Container */
+#support-chat {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #f4f7fa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Ticket List */
+.ticket-list {
+    width: 100%;
+    max-width: 800px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.ticket-item {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.ticket-item:hover {
+    background: #f9f9f9;
+}
+
+.ticket-item .ticket-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+/* Ticket Conversation */
+.ticket-conversation {
+    display: none;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background-color: #fefefe;
+
+    /* Adjust this value to manually set the size */
+    max-height: 350px; /* Example height: Adjust this to your preferred size */
+
+    overflow-y: auto; /* Enable vertical scrolling for overflow */
+    scrollbar-width: thin; /* Firefox - Thin scrollbar */
+    scrollbar-color: #ccc #f4f4f4; /* Firefox - Scrollbar colors */
+}
+
+/* Custom Scrollbar for WebKit Browsers */
+.ticket-conversation::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ticket-conversation::-webkit-scrollbar-thumb {
+    background: #ccc; /* Scrollbar thumb color */
+    border-radius: 4px; /* Rounded scrollbar thumb */
+}
+
+.ticket-conversation::-webkit-scrollbar-track {
+    background: #f4f4f4; /* Scrollbar track color */
+}
+
+/* Open state */
+.ticket-conversation.open {
+    display: block !important;
+
+    /* Ensure this matches your desired max-height */
+    max-height: 350px; /* Example height: Adjust this to your preferred size */
+}
+
+
+/* Admin and User Message Styles */
+.ticket-conversation .admin-message,
+.ticket-conversation .user-message {
+    max-width: 100%;
+    margin-bottom: 10px; /* Space between individual messages */
+    padding: 0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    position: relative;
+}
+
+/* Admin Message Styling */
+.ticket-conversation .admin-message {
+    background: rgba(244, 67, 54, 0.1);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+/* User Message Styling */
+.ticket-conversation .user-message {
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+/* Message Tag (Admin/User Name) */
+.message-tag {
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    line-height: 1;
+    margin-bottom: 4px; /* Gap between User/Admin tag and message text */
+}
+
+/* Message Text */
+.ticket-conversation .admin-message p,
+.ticket-conversation .user-message p {
+    margin: 0;
+    padding: 0;
+    padding-left: 8px; /* Slight padding for message readability */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Timestamp Styling */
+.ticket-conversation small {
+    margin-top: 6px; /* Gap between message and timestamp */
+    font-size: 0.85em;
+    color: #666;
+    text-align: right;
+    display: block; /* Ensure timestamp is on its own line */
+}
+
+/* Admin Control Buttons */
+.admin-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.admin-controls button {
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+.admin-controls .close-ticket {
+    background-color: #f44336;
+    color: #fff;
+}
+
+.admin-controls .delete-message {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.admin-controls button:hover {
+    opacity: 0.9;
+}
+
+/* Reply Form Styling */
+.reply-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.reply-form textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    resize: vertical;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.reply-form button {
+    align-self: flex-start;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.reply-form button:hover {
+    background-color: #45a049;
+}
+
+/* Notification Badge */
+.notification-badge {
+    color: red;
+    font-weight: bold;
+    font-size: 1em;
+    margin-left: 5px;
+}
+
+/* Reply Control Row */
+.reply-control-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+/* Additional Styling for the Back Button */
+.back-button {
+    display: inline-block;
+    padding: 12px 24px;
+    color: #fff;
+    background-color: #6c757d;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1em;
+    margin: 20px auto;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.back-button:hover {
+    background-color: #5a6268;
+}
+
+/* Center the Button Horizontally */
+.back-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
