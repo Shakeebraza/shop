@@ -151,6 +151,13 @@ form#dump-filters {
             <option value="100">100</option>
         </select>
     </div>
+    
+
+    <div class="inpt-dmps-bx">
+    <button type="submit" id="search-btn" class="btn" style="background-color: #0c182f; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">Search</button>
+    <a type="button" id="clear-btn" class="btn" style="background-color: #f44336; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">Clear</a>
+</div>
+
 </form>
 
 
@@ -190,9 +197,9 @@ $(document).ready(function() {
     var table = $('#dumpsTable').DataTable({
         processing: true,
         serverSide: true,
-        searching:false,
+        searching: false,
         ajax: {
-            url: '<?= $urlval ?>ajax/dumpdata.php', 
+            url: '<?= $urlval ?>ajax/dumpdata.php',
             type: 'POST',
             data: function(d) {
                 d.dump_bin = $('#dump-bin').val();
@@ -213,11 +220,27 @@ $(document).ready(function() {
         ]
     });
 
-    // Reload the DataTable on any filter change
-    $('#dump-filters input, #dump-filters select').on('change', function() {
+
+    $('#dump-filters select').on('change', function() {
+        if (this.id !== 'search-btn' && this.id !== 'clear-btn') {
+            table.ajax.reload();
+        }
+    });
+
+    $('#search-btn').on('click', function(event) {
+        event.preventDefault();
+        table.ajax.reload(); 
+    });
+
+ 
+    $('#clear-btn').on('click', function(event) {
+        event.preventDefault();
+        document.getElementById('dump-filters').reset();
+        
         table.ajax.reload();
     });
 });
+
 
 </script>
 
