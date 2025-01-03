@@ -1139,11 +1139,15 @@ body {
     position: absolute;
     transition: opacity 0.3s ease-in-out;
     font-size: 14px;
-    left: 8px;
+    left: 15px;
+    text-align: center;
+
+  
 }
 
 .btn-with-icon:hover .btn-text {
     opacity: 1;
+    ;
 }
 
 .btn-with-icon i {

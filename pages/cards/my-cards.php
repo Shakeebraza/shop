@@ -43,6 +43,8 @@ table button {
 .copy-button {
     background-color: #0c182f;
     color: white;
+  
+    margin-right:0px 5px 0px 0px !important;
 }
 
 .copy-button:hover {
@@ -59,9 +61,6 @@ table button {
 }
 .activity-log-table th{
     background-color:#0c182f !important;
-}
-.copy-button {
-    margin-bottom: 5px !important;
 }
 
 @media (max-width: 768px) {
@@ -81,6 +80,45 @@ table button {
  
 }
 }
+.copy-button {
+    background-color: #0c182f;
+    color: white;
+  
+    margin:0px 5px 0px 0px !important;
+}
+.ribbon {
+            position: absolute;
+            top: -3px;
+            left: -21px;
+            background: #4CAF50;
+            color: white;
+            padding: 5px 16px;
+            transform: rotate(-45deg);
+            transform-origin: top right;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1;
+            border-radius: 8px;
+            animation: swing 2s ease-in-out infinite;
+        }
+        @keyframes swing {
+    0% {
+        transform: rotate(-45deg);
+    }
+    25% {
+        transform: rotate(-43deg);
+    }
+    50% {
+        transform: rotate(-47deg);
+    }
+    75% {
+        transform: rotate(-43deg);
+    }
+    100% {
+        transform: rotate(-45deg);
+    }
+}
 </style>
   
     <div class="main-content">
@@ -93,7 +131,7 @@ table button {
         <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; margin-top: 20px;">
     <thead>
         <tr style="background-color: #f4f4f4; border-bottom: 2px solid #ddd;">
-            <th style="padding: 10px; border: 1px solid #ddd;">Card Number</th>
+            <th style="padding: 10px; border: 1px solid #ddd; width: 18%;">Card Number</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Expiration</th>
             <th style="padding: 10px; border: 1px solid #ddd;">CVV</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Name on Card</th>
@@ -105,19 +143,21 @@ table button {
             <th style="padding: 10px; border: 1px solid #ddd;">Date of Birth</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
         </tr>
+
     </thead>
     <tbody>
         <?php foreach ($soldCards as $card): ?>
-            <tr id="card-<?php echo htmlspecialchars($card['id']); ?>" 
-                style="border-bottom: 1px solid #ddd; text-align: center;">
-                <td style="padding: 10px;">
-                    <?php echo htmlspecialchars($card['card_number']); ?>
-                    <?php if ($card['is_view'] == 0): ?>
-                        <span style="color: white; background-color: #28a745; padding: 5px 8px; 
-                                     border-radius: 3px; font-size: 12px; font-weight: bold; margin-left: 5px;">
+            <tr id="card-<?php echo htmlspecialchars($card['id']); ?>"  
+                style="border-bottom: 1px solid #ddd; text-align: center;
+            overflow: hidden;">
+                <td style="padding: 10px; position: relative;">
+                <?php if ($card['is_view'] == 0): ?>
+                        <span class="ribbon">
                             New
                         </span>
                     <?php endif; ?>
+                    <?php echo htmlspecialchars($card['card_number']); ?>
+                  
                 </td>
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['mm_exp'] . '/' . $card['yyyy_exp']); ?></td>
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['cvv']); ?></td>
@@ -129,16 +169,16 @@ table button {
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['phone_number']); ?></td>
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['date_of_birth']); ?></td>
                 <td style="padding: 10px;display: flex;justify-content: center;align-content: center;align-items: center;">
-                    <button class="copy-button" style="padding: 5px 10px; 
+                    <button class="copy-button" style="padding: 6px 10px; 
                         border: none; border-radius: 3px; cursor: pointer; margin-right: 5px;" 
                         onclick="copyCardInfo(<?php echo htmlspecialchars($card['id']); ?>)">Copy</button>
-                    <button class="check-card-button" style="padding: 5px 10px; 
-                        border: none; border-radius: 3px; cursor: pointer; margin-right: 5px;" 
+                    <button class="check-card-button" style="padding: 6px 10px; 
+                        border: none; border-radius: 3px; cursor: pointer; margin:0px 5px 0px 0px;" 
                         onclick="checkCard(<?php echo htmlspecialchars($card['id']); ?>)">Check</button>
-                        <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)" id="clear-btn" class="btn btn-with-icon" style="background-color: #f44336; color: white; padding: 8px 24px; border-radius: 4px; border: none; cursor: pointer; 
+                        <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)" id="clear-btn" class="btn text-center btn-with-icon" style="background-color: #f44336; color: white; padding: 5px 15px; width:70px; border-radius: 4px; border: none; cursor: pointer; 
                                 margin-top: -1px;">
                             <i class="fa fa-times"></i>
-                            <span class="btn-text" style="text-align: center;">Delete</span>
+                            <span class="btn-text" style="text-align:center !important;">Delete</span>
                         </a>
                 </td>
             </tr>
