@@ -383,6 +383,7 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         searching: false, 
+        ordering: false,
         ajax: {
             url: '<?= $urlval ?>ajax/carddata.php',
             type: 'POST',

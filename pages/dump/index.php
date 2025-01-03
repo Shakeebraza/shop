@@ -238,6 +238,7 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         searching: false,
+        ordering: false,
         ajax: {
             url: '<?= $urlval ?>ajax/dumpdata.php',
             type: 'POST',
@@ -284,24 +285,35 @@ $(document).ready(function() {
 });
 
 function showConfirm(dumpId, price) {
-
-        $.ajax({
-            url: 'buy_dump.php',
-            type: 'POST',
-            data: { dump_id: dumpId },
-            dataType: 'json',
-            success: function(response) {
-                showPopupMessage(response.message, response.success ? 'success' : 'error');
-                if (response.success) {
-                    setTimeout(() => window.location.reload(), 2000); 
+    alertify.confirm(
+        'Confirm Purchase',
+        `Are you sure you want to buy this card for $${price}?`,
+        function() {
+            // AJAX request inside the confirmation callback
+            $.ajax({
+                url: 'buy_dump.php',
+                type: 'POST',
+                data: { dump_id: dumpId },
+                dataType: 'json',
+                success: function(response) {
+                    showPopupMessage(response.message, response.success ? 'success' : 'error');
+                    if (response.success) {
+                        setTimeout(() => window.location.reload(), 2000); // reload after 2 seconds
+                    }
+                },
+                error: function() {
+                    showPopupMessage('An error occurred while processing your request. Please try again.', 'error');
                 }
-            },
-            error: function() {
-                showPopupMessage('An error occurred while processing your request. Please try again.', 'error');
-            }
-        });
-  
+            });
+        },
+        function() {
+            alertify.error('Purchase cancelled.');
+        }
+    ).set('labels', { ok: 'Confirm', cancel: 'Cancel' });
+
+    return false; 
 }
+
 
 
 function showPopupMessage(message, type) {
