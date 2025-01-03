@@ -187,6 +187,7 @@ table button {
 </table>
 
 
+
 </div>
 
     <?php endif; ?>  
@@ -284,7 +285,7 @@ $(document).ready(function() {
     $('#soldDumpsTable').DataTable({
         "paging": true,            
         "searching": false,
-        "ordering": true,         
+        "ordering": false,         
         "info": true,             
         "lengthChange": true,      
         "autoWidth": true,         

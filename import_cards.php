@@ -60,6 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pos_phone_number = $_POST['pos_phone_number'];
         $pos_dob = $_POST['pos_dob'];
         $pos_full_name = $_POST['pos_full_name'];
+        $pos_mmn = $_POST['pos_mmn'];
+        $pos_account_number = $_POST['pos_account_number'];
+        $pos_sort_code = $_POST['pos_sort_code'];
+        $pos_cardholder_name = $_POST['pos_cardholder_name'];
 
         $stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");
         $stmt->execute([$seller_id]);
@@ -79,6 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $city = $pos_city ? $details[$pos_city - 1] : 'N/A';
                 $state = $pos_state ? $details[$pos_state - 1] : 'N/A';
                 $zip = $pos_zip ? $details[$pos_zip - 1] : 'N/A';
+                $mmn = $pos_mmn ? $details[$pos_mmn - 1] : 'N/A';
+                $account_number = $pos_account_number ? $details[$pos_account_number - 1] : 'N/A';
+                $sort_code = $pos_sort_code ? $details[$pos_sort_code - 1] : 'N/A';
+                $cardholder_name = $pos_cardholder_name ? $details[$pos_cardholder_name - 1] : 'N/A';
                 $country = $pos_country ? strtoupper(trim(preg_replace('/\s+/', ' ', $details[$pos_country - 1]))) : 'N/A';
                 $phone_number = $pos_phone_number ? $details[$pos_phone_number - 1] : 'N/A';
                 $card_type = getCardType($card_number);
@@ -94,10 +102,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $checkStmt->execute([$card_number]);
 
                 if ($checkStmt->rowCount() == 0) {
-                    $query = "INSERT INTO $section (card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, full_name, seller_id, seller_name, price, section, card_type)
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $query = "INSERT INTO $section (mmn,account_number,sort_code,cardholder_name,card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, full_name, seller_id, seller_name, price, section, card_type)
+                              VALUES (?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     $stmt = $pdo->prepare($query);
-                    $stmt->execute([$card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $full_name, $seller_id, $seller_name, $price, $section, $card_type]);
+                    $stmt->execute([$mmn,$account_number,$sort_code,$cardholder_name,$card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $full_name, $seller_id, $seller_name, $price, $section, $card_type]);
                     $importedCount++;
                 } else {
                     $duplicateCount++;
@@ -130,7 +138,7 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Import Data</title>
-    <link rel="stylesheet" href="css/importer.css"> <!-- Link to external CSS -->
+    <link rel="stylesheet" href="css/importer.css"> 
 </head>
 <body>
     <div class="container">
@@ -138,11 +146,11 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
 
         <form action="import_cards.php" method="POST" enctype="multipart/form-data">
 
-            <!-- File upload for CSV or TXT files -->
+           
             <textarea name="data" id="data" placeholder="Enter data based on the format selected"></textarea>
             <input type="file" name="import_file" accept=".csv, .txt">
 
-            <!-- Set field positions for data mapping -->
+          
             <div class="grid-container">
                 <input type="number" name="pos_card_number" placeholder="Card Number Pos" required>
                 <input type="number" name="pos_exp_month" placeholder="Exp Month Pos" required>
@@ -153,20 +161,24 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
                 <input type="number" name="pos_address" placeholder="Address Pos" required>
 
                 <input type="number" name="pos_city" placeholder="City Pos" required>
-                <input type="number" name="pos_state" placeholder="State Pos" required> <!-- New state field -->
+                <input type="number" name="pos_state" placeholder="State Pos" required>
                 <input type="number" name="pos_zip" placeholder="ZIP Pos" required>
                 <input type="number" name="pos_country" placeholder="Country Pos" required>
 
                 <input type="number" name="pos_phone_number" placeholder="Phone Number Pos" required>
                 <input type="number" name="pos_dob" placeholder="DOB Pos" required>
                 <input type="number" name="pos_full_name" placeholder="Full Name Pos" required>
+           
+                <input type="number" name="pos_mmn" placeholder="MMN Pos">
+                <input type="number" name="pos_account_number" placeholder="Account Number Pos">
+                <input type="number" name="pos_sort_code" placeholder="Sort Code Pos">
+                <input type="number" name="pos_cardholder_name" placeholder="Cardholder Name Pos">
             </div>
 
-            <!-- Select the user who will benefit from the sale -->
             <select name="seller_id" id="seller_id" required>
                 <option value="">Select Seller</option>
                 <?php
-                // Loop through all sellers and create an option for each
+       
                 if ($sellers) {
                     foreach ($sellers as $seller) {
                         echo "<option value='{$seller['id']}'>{$seller['username']}</option>";

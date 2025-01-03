@@ -39,9 +39,22 @@ include_once('../../header.php');
     border-radius: 4px;
     cursor: pointer;
 }
+.check-card-button {
+    background-color:#0c182f;
+    color: white;
+}
 
+.check-card-button:hover {
+    background-color: #e0a800;
+}
 .copy-button:hover, .check-dump-button:hover {
     background-color: #0056b3;
+}
+.copy-button {
+    background-color: #0c182f;
+    color: white;
+  
+    margin:0px 5px 0px 0px !important;
 }
 @media (max-width: 768px) {
     table {
@@ -92,15 +105,18 @@ include_once('../../header.php');
                 <td><?php echo htmlspecialchars($dump['track2']); ?></td>
                 <td><?php echo htmlspecialchars($dump['pin'] ?: 'No'); ?></td>
                 <td><?php echo htmlspecialchars($dump['country']); ?></td>
-                <td>
-                    <button class="copy-button" onclick="copyDumpInfo(<?php echo htmlspecialchars($dump['id']); ?>)">Copy</button>
-                    <button class="check-dump-button" onclick="checkDump(<?php echo htmlspecialchars($dump['id']); ?>)">Check</button>
-
-                    <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)" id="clear-btn" class="btn btn-with-icon" style="background-color: #f44336; color: white; padding: 8px 24px; border-radius: 4px; border: none; cursor: pointer; 
-                            margin-top: -1px;">
-                        <i class="fa fa-times"></i>
-                        <span class="btn-text" style="text-align: center;">Delete</span>
-                    </a>
+                <td style="padding: 10px;display: flex;justify-content: center;align-content: center;align-items: center;">
+                    <button class="copy-button" style="padding: 6px 10px; 
+                        border: none; border-radius: 3px; cursor: pointer; margin-right: 5px;" 
+                        onclick="copyCardInfo(<?php echo htmlspecialchars($card['id']); ?>)">Copy</button>
+                    <button class="check-card-button" style="padding: 6px 10px; 
+                        border: none; border-radius: 3px; cursor: pointer; margin:0px 5px 0px 0px;" 
+                        onclick="checkCard(<?php echo htmlspecialchars($card['id']); ?>)">Check</button>
+                        <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)" id="clear-btn" class="btn text-center btn-with-icon" style="background-color: #f44336; color: white; padding: 5px 15px; width:70px; border-radius: 4px; border: none; cursor: pointer; 
+                                margin-top: -1px;">
+                            <i class="fa fa-times"></i>
+                            <span class="btn-text" style="text-align:center !important;">Delete</span>
+                        </a>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -189,7 +205,7 @@ include_once('../../footer.php');
     $('#soldDumpsTable').DataTable({
         "paging": true,            
         "searching": false,
-        "ordering": true,         
+        "ordering": false,         
         "info": true,             
         "lengthChange": true,      
         "autoWidth": true,         
