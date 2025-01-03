@@ -89,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $cardholder_name = $pos_cardholder_name ? $details[$pos_cardholder_name - 1] : 'N/A';
                 $country = $pos_country ? strtoupper(trim(preg_replace('/\s+/', ' ', $details[$pos_country - 1]))) : 'N/A';
                 $phone_number = $pos_phone_number ? $details[$pos_phone_number - 1] : 'N/A';
+                $otherinfo=$_POST['otherinfo'] ?$_POST['otherinfo'] :'NA';
                 $card_type = getCardType($card_number);
 
                 if (strlen($phone_number) > 20) $phone_number = substr($phone_number, 0, 20);
@@ -102,10 +103,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $checkStmt->execute([$card_number]);
 
                 if ($checkStmt->rowCount() == 0) {
-                    $query = "INSERT INTO $section (mmn,account_number,sort_code,cardholder_name,card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, full_name, seller_id, seller_name, price, section, card_type)
-                              VALUES (?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $query = "INSERT INTO $section (mmn,account_number,sort_code,cardholder_name,card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, full_name, seller_id, seller_name, price, section, card_type,otherinfo)
+                              VALUES (?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
                     $stmt = $pdo->prepare($query);
-                    $stmt->execute([$mmn,$account_number,$sort_code,$cardholder_name,$card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $full_name, $seller_id, $seller_name, $price, $section, $card_type]);
+                    $stmt->execute([$mmn,$account_number,$sort_code,$cardholder_name,$card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $full_name, $seller_id, $seller_name, $price, $section, $card_type,$otherinfo]);
                     $importedCount++;
                 } else {
                     $duplicateCount++;
@@ -148,6 +149,7 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
 
            
             <textarea name="data" id="data" placeholder="Enter data based on the format selected"></textarea>
+            <textarea name="otherinfo" id="otherinfo" placeholder="Enter the other information"></textarea>
             <input type="file" name="import_file" accept=".csv, .txt">
 
           

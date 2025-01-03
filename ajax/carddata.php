@@ -64,6 +64,13 @@ $totalRecords = $totalStmt->fetchColumn();
 
 $data = [];
 foreach ($creditCards as $card) {
+    if(!empty($card['otherinfo']) AND $card['otherinfo'] != 'NA'){
+        $otherinfo =  'Yes';
+    }else{
+        $otherinfo =  'No';
+        
+    }
+
     $data[] = [
         'card_logo' => '<img src="/shop/images/cards/' . strtolower($card['card_type']) . '.png" alt="Card Logo" class="card-logo">',
         'card_number' => htmlspecialchars($card['card_number']),
@@ -71,12 +78,13 @@ foreach ($creditCards as $card) {
         'country' => htmlspecialchars($card['country']),
         'state' => htmlspecialchars($card['state']),
         'city' => htmlspecialchars($card['city']),
-        'mmn' => htmlspecialchars($card['mmn']),
-        'account_number' => htmlspecialchars($card['account_number']),
-        'sort_code' => htmlspecialchars($card['sort_code']),
-        'cardholder_name' => htmlspecialchars($card['cardholder_name']),
+        // 'mmn' => htmlspecialchars($card['mmn']),
+        // 'account_number' => htmlspecialchars($card['account_number']),
+        // 'sort_code' => htmlspecialchars($card['sort_code']),
+        // 'cardholder_name' => htmlspecialchars($card['cardholder_name']),
         'zip' => substr($card['zip'], 0, 3) . '****',
         'price' => '$' . htmlspecialchars($card['price']),
+        'otherinfo' => $otherinfo,
         'actions' => '<a href="#" class="buy-button" style="background-color:#0c182f;" onclick="showConfirm(\'' . $card['id'] . '\', \'' . $card['price'] . '\')">
         <span class="price">$' . htmlspecialchars($card['price']) . '</span>
         <span class="buy-now">Buy Now</span>

@@ -227,12 +227,13 @@ td{
                 <th style="padding: 10px; border: 1px solid #ddd;">Country</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">State</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">City</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">MNN</th>
+                <!-- <th style="padding: 10px; border: 1px solid #ddd;">MNN</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">Account Number</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">Sort Code</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">Cardholder Name</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Cardholder Name</th> -->
                 <th style="padding: 10px; border: 1px solid #ddd;">ZIP</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">Price</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Other Information</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">Buy</th>
             </tr>
         </thead>
@@ -385,12 +386,13 @@ $(document).ready(function () {
             { data: 'country' },
             { data: 'state' },
             { data: 'city' },
-            { data: 'mmn' },
-            { data: 'account_number' },
-            { data: 'sort_code' },
-            { data: 'cardholder_name' },
+            // { data: 'mmn' },
+            // { data: 'account_number' },
+            // { data: 'sort_code' },
+            // { data: 'cardholder_name' },
             { data: 'zip' },
             { data: 'price' },
+            { data: 'otherinfo' },
             { data: 'actions' }
         ]
     });

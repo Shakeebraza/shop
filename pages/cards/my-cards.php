@@ -127,7 +127,7 @@ table button {
  <?php if (empty($soldCards)): ?>
         <p>No purchased cards available.</p>
     <?php else: ?>
-        <div class="main-tbl321">
+        <div class="main-tbl321" style="overflow-x: auto; max-width: 100%; border: 1px solid #ddd; margin-top: 20px;">
         <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; margin-top: 20px;" id="soldDumpsTable">
     <thead>
         <tr style="background-color: #f4f4f4; border-bottom: 2px solid #ddd;">
@@ -137,10 +137,15 @@ table button {
             <th style="padding: 10px; border: 1px solid #ddd;">Name on Card</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Address</th>
             <th style="padding: 10px; border: 1px solid #ddd;">City</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">MNN</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Account Number</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Sort Code</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Cardholder Name</th> 
             <th style="padding: 10px; border: 1px solid #ddd;">ZIP</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Country</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Phone Number</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Date of Birth</th>
+            <th style="padding: 10px; border: 1px solid #ddd;">Other Information</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
         </tr>
 
@@ -159,15 +164,20 @@ table button {
                     <?php echo htmlspecialchars($card['card_number']); ?>
                   
                 </td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($card['mm_exp'] . '/' . $card['yyyy_exp']); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($card['cvv']); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($card['name_on_card']); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($card['address']); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($card['city']); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($card['zip']); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($card['country']); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($card['phone_number']); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($card['date_of_birth']); ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['mm_exp'] . '/' . $card['yyyy_exp']) ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['cvv']) ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['name_on_card']) ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['address']) ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['city']) ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['mmn']) ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['account_number']); ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['sort_code']) ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['cardholder_name']) ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['zip']) ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['country']) ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['phone_number']) ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars($card['date_of_birth'] ?? 'N/A'); ?></td>
+                <td style="padding: 10px;"><?php echo htmlspecialchars(!empty($card['otherinfo']) ? $card['otherinfo']: 'N/A')  ?></td>
                 <td style="padding: 10px;display: flex;justify-content: center;align-content: center;align-items: center;">
                     <button class="copy-button" style="padding: 6px 10px; 
                         border: none; border-radius: 3px; cursor: pointer; margin-right: 5px;" 
@@ -196,32 +206,33 @@ table button {
     <div id="card-activity-log">
         <h2>Card Activity Log</h2>
         <div class="main-tbl321">
-        <table id="activity-log-table" class="activity-log-table" >
-            <thead>
+        <table id="card_activity_log" class="activity-log-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Card Number</th>
+            <th>Date Checked</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (empty($checkedHistory)): ?>
+            <tr>
+                <td colspan="4" style="text-align: center;">No activity logged yet</td>
+            </tr>
+        <?php else: ?>
+            <?php foreach ($checkedHistory as $history): ?>
                 <tr>
-                    <th>ID</th>
-                    <th>Card Number</th>
-                    <th>Date Checked</th>
-                    <th>Status</th>
+                    <td><?php echo htmlspecialchars($history['id']); ?></td>
+                    <td><?php echo htmlspecialchars($history['card_number']); ?></td>
+                    <td><?php echo htmlspecialchars($history['date_checked']); ?></td>
+                    <td><?php echo htmlspecialchars($history['status']); ?></td>
                 </tr>
-            </thead>
-            <tbody>
-                <?php if (empty($checkedHistory)): ?>
-                    <tr>
-                        <td colspan="4" style="text-align: center;">No activity logged yet</td>
-                    </tr>
-                <?php else: ?>
-                    <?php foreach ($checkedHistory as $history): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($history['id']); ?></td>
-                            <td><?php echo htmlspecialchars($history['card_number']); ?></td>
-                            <td><?php echo htmlspecialchars($history['date_checked']); ?></td>
-                            <td><?php echo htmlspecialchars($history['status']); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </tbody>
-        </table>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </tbody>
+</table>
+
         </div>
     </div>
 </div>
@@ -290,6 +301,17 @@ $(document).ready(function() {
         "lengthChange": true,      
         "autoWidth": true,         
         "responsive": true        
+    });
+});
+$(document).ready(function() {
+    $('#card_activity_log').DataTable({
+        "paging": true,            
+        "searching": false,
+        "ordering": false,         
+        "info": true,             
+        "lengthChange": true,      
+        "autoWidth": true,         
+        "responsive": true         
     });
 });
 

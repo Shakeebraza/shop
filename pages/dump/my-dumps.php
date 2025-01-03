@@ -212,4 +212,16 @@ include_once('../../footer.php');
         "responsive": true        
     });
 });
+
+$(document).ready(function() {
+    $('#activity-log-table').DataTable({
+        "paging": true,            
+        "searching": false,
+        "ordering": false,         
+        "info": true,             
+        "lengthChange": true,      
+        "autoWidth": true,         
+        "responsive": true         
+    });
+});
 </script>
