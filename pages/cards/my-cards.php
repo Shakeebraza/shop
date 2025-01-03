@@ -145,7 +145,6 @@ table button {
             <th style="padding: 10px; border: 1px solid #ddd;">Country</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Phone Number</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Date of Birth</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Other Information</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
         </tr>
 
@@ -177,7 +176,6 @@ table button {
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['country']) ?></td>
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['phone_number']) ?></td>
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['date_of_birth'] ?? 'N/A'); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars(!empty($card['otherinfo']) ? $card['otherinfo']: 'N/A')  ?></td>
                 <td style="padding: 10px;display: flex;justify-content: center;align-content: center;align-items: center;">
                     <button class="copy-button" style="padding: 6px 10px; 
                         border: none; border-radius: 3px; cursor: pointer; margin-right: 5px;" 
@@ -237,6 +235,22 @@ table button {
     </div>
 </div>
 
+    </div>
+</div>
+
+<div id="rules-popup2" class="popup-modal">
+    <div class="popup-content">
+        <span class="close" onclick="closeRulesPopup()">
+            <i class="fas fa-times"></i>
+        </span>
+        <h2>Purchased Information</h2>
+        <p>Here are the updated rules for using the system:</p>
+        <ul>
+            <li>Purchased information will be automatically removed from these sections after 30 days.</li>
+            <li>Users are advised thru a static note container box in my cards/my dumps section to download or copy their information before the 30-day period ends to avoid losing access to it.</li>
+            <li>This ensures users are aware of the time limit and can act accordingly.</li>
+            <li>After 30 days, the information displayed on My Cards/My dumps should be removed from the user section, but not from the server.</li>
+        </ul>
     </div>
 </div>
 <?php
@@ -314,7 +328,19 @@ $(document).ready(function() {
         "responsive": true         
     });
 });
+function openRulesPopup() {
+    document.getElementById("rules-popup2").style.display = "flex";
+}
 
+
+function closeRulesPopup() {
+    document.getElementById('rules-popup2').style.display = 'none';
+}
+
+
+window.onload = function() {
+    openRulesPopup();
+}
 </script>
 
 

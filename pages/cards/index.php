@@ -263,21 +263,7 @@ td{
     </div>
 </div>
 
-<div id="rules-popup2" class="popup-modal">
-    <div class="popup-content">
-        <span class="close" onclick="closeRulesPopup()">
-            <i class="fas fa-times"></i>
-        </span>
-        <h2>Purchased Information</h2>
-        <p>Here are the updated rules for using the system:</p>
-        <ul>
-            <li>Purchased information will be automatically removed from these sections after 30 days.</li>
-            <li>Users are advised thru a static note container box in my cards/my dumps section to download or copy their information before the 30-day period ends to avoid losing access to it.</li>
-            <li>This ensures users are aware of the time limit and can act accordingly.</li>
-            <li>After 30 days, the information displayed on My Cards/My dumps should be removed from the user section, but not from the server.</li>
-        </ul>
-    </div>
-</div>
+
 <?php
 include_once('../../footer.php');
 ?>
@@ -415,17 +401,5 @@ $(document).ready(function () {
         $('#creditCardsTable').DataTable().ajax.reload(); 
     });
 });
-function openRulesPopup() {
-    document.getElementById("rules-popup2").style.display = "flex";
-}
 
-
-function closeRulesPopup() {
-    document.getElementById('rules-popup2').style.display = 'none';
-}
-
-
-window.onload = function() {
-    openRulesPopup();
-}
 </script>

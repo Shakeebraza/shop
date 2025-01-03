@@ -79,7 +79,7 @@ border:1px solid #e6e6e7 !important;
         cursor: not-allowed;
     }
 
-    /* Loader styling */
+
     .loader {
         display: inline-block;
         width: 16px;
@@ -100,6 +100,12 @@ border:1px solid #e6e6e7 !important;
         }
     }
 
+
+.btw-sbm.disabled-btn {
+    background-color: #d6d6d6; 
+    color: #999; 
+    cursor: not-allowed; 
+}
 </style>
     <!-- Main Content Area -->
     <div class="main-content">
@@ -149,7 +155,10 @@ border:1px solid #e6e6e7 !important;
        style="background-color: #f5f5f5; color: #333; font-weight: bold; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
        Your balance is: $<?php echo number_format($balance_saller, 2); ?>
     </p>
-    <input type="button" value="Submit" class="btw-sbm">
+    <input type="button" 
+       value="Submit" 
+       class="btw-sbm <?= $balance_saller == 0 ? 'disabled-btn' : '' ?>" 
+       <?= $balance_saller == 0 ? 'disabled' : '' ?>>
 </div>
 
 
@@ -161,13 +170,13 @@ border:1px solid #e6e6e7 !important;
 </div>
 <script>
     function toggleInputForm(button) {
-        // Show loader and disable button
+       
         button.disabled = true;
         button.innerHTML = 'Loading <span class="loader"></span>';
 
-        // Simulate a delay of 2 seconds
+  
         setTimeout(() => {
-            // Toggle the visibility of the input form
+       
             const form = document.querySelector('.inpt-wtdr');
             if (form.style.display === 'none') {
                 form.style.display = 'flex';
@@ -177,9 +186,9 @@ border:1px solid #e6e6e7 !important;
                 button.innerHTML = 'Withdraw Balance';
             }
 
-            // Re-enable the button
+       
             button.disabled = false;
-        }, 2000);
+        }, 1000);
     }
 </script>
 

@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $cardholder_name = $pos_cardholder_name ? $details[$pos_cardholder_name - 1] : 'N/A';
                 $country = $pos_country ? strtoupper(trim(preg_replace('/\s+/', ' ', $details[$pos_country - 1]))) : 'N/A';
                 $phone_number = $pos_phone_number ? $details[$pos_phone_number - 1] : 'N/A';
-                $otherinfo=$_POST['otherinfo'] ?$_POST['otherinfo'] :'NA';
+                $otherinfo=$_POST['otherinfo'] !== 'No' ?$_POST['otherinfo'] :'NA';
                 $card_type = getCardType($card_number);
 
                 if (strlen($phone_number) > 20) $phone_number = substr($phone_number, 0, 20);
@@ -149,7 +149,21 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
 
            
             <textarea name="data" id="data" placeholder="Enter data based on the format selected"></textarea>
-            <textarea name="otherinfo" id="otherinfo" placeholder="Enter the other information"></textarea>
+            <div style="display: flex; gap: 30px; justify-content: center; align-items: center; padding: 20px; border: 2px dashed gold; border-radius: 12px; background-color: #fff9e6; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);">
+            <label style="display: flex; align-items: center; position: relative; cursor: pointer; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">
+                <input type="radio" name="otherinfo" value="Yes" style="display: none;" <?= isset($otherinfo) && $otherinfo == 'Yes' ? 'checked' : '' ?>>
+                <span style="padding: 12px 24px; border: 2px solid gold; border-radius: 8px; background: linear-gradient(145deg, #f5f5f5, #ffffff); color: gold; transition: all 0.3s ease; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); text-transform: uppercase; display: inline-block;">
+                    Yes
+                </span>
+            </label>
+            <label style="display: flex; align-items: center; position: relative; cursor: pointer; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">
+                <input type="radio" name="otherinfo" value="No" style="display: none;" <?= isset($otherinfo) && $otherinfo == 'No' ? 'checked' : '' ?>>
+                <span style="padding: 12px 24px; border: 2px solid gold; border-radius: 8px; background: linear-gradient(145deg, #f5f5f5, #ffffff); color: gold; transition: all 0.3s ease; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); text-transform: uppercase; display: inline-block;">
+                    No
+                </span>
+            </label>
+        </div>
+
             <input type="file" name="import_file" accept=".csv, .txt">
 
           
@@ -169,12 +183,12 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
 
                 <input type="number" name="pos_phone_number" placeholder="Phone Number Pos" required>
                 <input type="number" name="pos_dob" placeholder="DOB Pos" required>
-                <input type="number" name="pos_full_name" placeholder="Full Name Pos" required>
+                <!-- <input type="number" name="pos_full_name" placeholder="Full Name Pos" required> -->
            
                 <input type="number" name="pos_mmn" placeholder="MMN Pos">
                 <input type="number" name="pos_account_number" placeholder="Account Number Pos">
                 <input type="number" name="pos_sort_code" placeholder="Sort Code Pos">
-                <input type="number" name="pos_cardholder_name" placeholder="Cardholder Name Pos">
+                <!-- <input type="number" name="pos_cardholder_name" placeholder="Cardholder Name Pos"> -->
             </div>
 
             <select name="seller_id" id="seller_id" required>
@@ -211,6 +225,22 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
             <div class="error-message"><?php echo $errorMessage; ?></div>
         <?php endif; ?>
     </div>
+    <script>
+    const radios = document.querySelectorAll('input[name="otherinfo"]');
+    radios.forEach((radio) => {
+        radio.addEventListener('change', function () {
+            document.querySelectorAll('span').forEach((span) => {
+                span.style.background = 'linear-gradient(145deg, #f5f5f5, #ffffff)';
+                span.style.color = 'gold';
+                span.style.boxShadow = '0px 4px 6px rgba(0, 0, 0, 0.2)';
+            });
+            const label = this.nextElementSibling;
+            label.style.background = 'gold';
+            label.style.color = 'white';
+            label.style.boxShadow = '0px 6px 10px rgba(0, 0, 0, 0.4)';
+        });
+    });
+</script>
 
 </body>
 </html>
