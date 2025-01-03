@@ -150,7 +150,7 @@ form#dump-filters {
         </select>
     </div>
     <div class="inpt-dmps-bx">
-        <label for="track-pin">Track</label>
+        <label for="track-pin">Track 1</label>
         <select name="track-pin" id="track-pin">
             <option value="all">All</option>
             <option value="yes">Yes</option>
@@ -203,7 +203,7 @@ form#dump-filters {
                 <th>BIN</th>
                 <th>Exp Date</th>
                 <th>PIN</th>
-                <th>Track 1 Title</th>
+                <th>Track 1</th>
                 <th>Country</th>
                 <th>Price</th>
                 <th>Buy</th>
