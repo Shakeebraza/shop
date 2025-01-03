@@ -73,39 +73,40 @@ include_once('../../header.php');
         <p>No purchased dumps available.</p>
         <?php else: ?>
             <div class="main-tbl321">
-    <table class="sold-dumps-table">
-        <thead style="background:#0c182f; color:white;">
-            <tr>
-                <th>ID</th>
-                <th>Track 1</th>
-                <th>Track 2</th>
-                <th>PIN</th>
-                <th>Country</th>
-                <th>Actions</th>
+            <table class="sold-dumps-table" id="soldDumpsTable">
+    <thead style="background:#0c182f; color:white;">
+        <tr>
+            <th>ID</th>
+            <th>Track 1</th>
+            <th>Track 2</th>
+            <th>PIN</th>
+            <th>Country</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($soldDumps as $dump): ?>
+            <tr id="dump-<?php echo htmlspecialchars($dump['id']); ?>" class="dump-item">
+                <td><?php echo htmlspecialchars($dump['id']); ?></td>
+                <td><?php echo htmlspecialchars(empty($dump['track1']) ? '' : $dump['track1']); ?></td>
+                <td><?php echo htmlspecialchars($dump['track2']); ?></td>
+                <td><?php echo htmlspecialchars($dump['pin'] ?: 'No'); ?></td>
+                <td><?php echo htmlspecialchars($dump['country']); ?></td>
+                <td>
+                    <button class="copy-button" onclick="copyDumpInfo(<?php echo htmlspecialchars($dump['id']); ?>)">Copy</button>
+                    <button class="check-dump-button" onclick="checkDump(<?php echo htmlspecialchars($dump['id']); ?>)">Check</button>
+
+                    <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)" id="clear-btn" class="btn btn-with-icon" style="background-color: #f44336; color: white; padding: 8px 24px; border-radius: 4px; border: none; cursor: pointer; 
+                            margin-top: -1px;">
+                        <i class="fa fa-times"></i>
+                        <span class="btn-text" style="text-align: center;">Delete</span>
+                    </a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($soldDumps as $dump): ?>
-                <tr id="dump-<?php echo htmlspecialchars($dump['id']); ?>" class="dump-item">
-                    <td><?php echo htmlspecialchars($dump['id']); ?></td>
-                    <td><?php echo htmlspecialchars(empty($dump['track1']) ? '' : $dump['track1']); ?></td>
-                    <td><?php echo htmlspecialchars($dump['track2']); ?></td>
-                    <td><?php echo htmlspecialchars($dump['pin'] ?: 'No'); ?></td>
-                    <td><?php echo htmlspecialchars($dump['country']); ?></td>
-                    <td>
-                        <button  class="copy-button" onclick="copyDumpInfo(<?php echo htmlspecialchars($dump['id']); ?>)">Copy</button>
-                        <button class="check-dump-button" onclick="checkDump(<?php echo htmlspecialchars($dump['id']); ?>)">Check</button>
-                        
-                        <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)" id="clear-btn" class="btn btn-with-icon" style="background-color: #f44336; color: white; padding: 8px 24px; border-radius: 4px; border: none; cursor: pointer; 
-                                margin-top: -1px;">
-                            <i class="fa fa-times"></i>
-                            <span class="btn-text" style="text-align: center;">Delete</span>
-                        </a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
     </div>
 <?php endif; ?>
 
@@ -183,4 +184,16 @@ include_once('../../footer.php');
     //         }
     //     }
     // }
+
+    $(document).ready(function() {
+    $('#soldDumpsTable').DataTable({
+        "paging": true,            
+        "searching": false,
+        "ordering": true,         
+        "info": true,             
+        "lengthChange": true,      
+        "autoWidth": true,         
+        "responsive": true        
+    });
+});
 </script>

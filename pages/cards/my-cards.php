@@ -128,7 +128,7 @@ table button {
         <p>No purchased cards available.</p>
     <?php else: ?>
         <div class="main-tbl321">
-        <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; margin-top: 20px;">
+        <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; margin-top: 20px;" id="soldDumpsTable">
     <thead>
         <tr style="background-color: #f4f4f4; border-bottom: 2px solid #ddd;">
             <th style="padding: 10px; border: 1px solid #ddd; width: 18%;">Card Number</th>
@@ -195,7 +195,7 @@ table button {
     <div id="card-activity-log">
         <h2>Card Activity Log</h2>
         <div class="main-tbl321">
-        <table id="activity-log-table" class="activity-log-table">
+        <table id="activity-log-table" class="activity-log-table" >
             <thead>
                 <tr>
                     <th>ID</th>
@@ -280,7 +280,17 @@ include_once('../../footer.php');
             console.error('Error:', error);
         });
 });
-
+$(document).ready(function() {
+    $('#soldDumpsTable').DataTable({
+        "paging": true,            
+        "searching": false,
+        "ordering": true,         
+        "info": true,             
+        "lengthChange": true,      
+        "autoWidth": true,         
+        "responsive": true        
+    });
+});
 
 </script>
 
