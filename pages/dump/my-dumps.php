@@ -88,7 +88,7 @@ include_once('../../header.php');
             <?php foreach ($soldDumps as $dump): ?>
                 <tr id="dump-<?php echo htmlspecialchars($dump['id']); ?>" class="dump-item">
                     <td><?php echo htmlspecialchars($dump['id']); ?></td>
-                    <td><?php echo htmlspecialchars($dump['track1']); ?></td>
+                    <td><?php echo htmlspecialchars(empty($dump['track1']) ? '' : $dump['track1']); ?></td>
                     <td><?php echo htmlspecialchars($dump['track2']); ?></td>
                     <td><?php echo htmlspecialchars($dump['pin'] ?: 'No'); ?></td>
                     <td><?php echo htmlspecialchars($dump['country']); ?></td>
@@ -97,9 +97,9 @@ include_once('../../header.php');
                         <button class="check-dump-button" onclick="checkDump(<?php echo htmlspecialchars($dump['id']); ?>)">Check</button>
                         
                         <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)" id="clear-btn" class="btn btn-with-icon" style="background-color: #f44336; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">
-                            <i class="fa fa-times"></i>
-                            <span class="btn-text">Delete</span>
-                        </a>
+                    <i class="fa fa-times"></i>
+                    <span class="btn-text">Clear</span>
+                </a>
                     </td>
                 </tr>
             <?php endforeach; ?>
