@@ -96,10 +96,11 @@ include_once('../../header.php');
                         <button  class="copy-button" onclick="copyDumpInfo(<?php echo htmlspecialchars($dump['id']); ?>)">Copy</button>
                         <button class="check-dump-button" onclick="checkDump(<?php echo htmlspecialchars($dump['id']); ?>)">Check</button>
                         
-                        <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)" id="clear-btn" class="btn btn-with-icon" style="background-color: #f44336; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">
-                    <i class="fa fa-times"></i>
-                    <span class="btn-text">Clear</span>
-                </a>
+                        <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)" id="clear-btn" class="btn btn-with-icon" style="background-color: #f44336; color: white; padding: 8px 24px; border-radius: 4px; border: none; cursor: pointer; 
+                                margin-top: -1px;">
+                            <i class="fa fa-times"></i>
+                            <span class="btn-text" style="text-align: center;">Delete</span>
+                        </a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -109,7 +110,7 @@ include_once('../../header.php');
 <?php endif; ?>
 
 
-    <!-- Dumps Activity Log Section -->
+  
      
     <div id="dumps-activity-log">
       
@@ -152,12 +153,11 @@ include_once('../../footer.php');
 ?>
 
 <script>
-    // Check for hidden rows on page load
+ 
     document.addEventListener('DOMContentLoaded', function () {
-        // Get deleted IDs from localStorage
+     
         const deletedIds = JSON.parse(localStorage.getItem('deletedRows')) || [];
 
-        // Hide rows that are marked as deleted
         deletedIds.forEach(id => {
             const row = document.getElementById(`dump-${id}`);
             if (row) {
@@ -166,16 +166,16 @@ include_once('../../footer.php');
         });
     });
 
-    // Delete row function
+
     function deleteRow(cardId) {
         if (confirm('Are you sure you want to delete this row?')) {
-            // Hide the row
+   
             const row = document.getElementById(`dump-${cardId}`);
             if (row) {
                 row.style.display = 'none';
             }
 
-            // Save the deleted ID to localStorage
+         
             const deletedIds = JSON.parse(localStorage.getItem('deletedRows')) || [];
             if (!deletedIds.includes(cardId)) {
                 deletedIds.push(cardId);
