@@ -167,20 +167,20 @@ include_once('../../footer.php');
     });
 
 
-    function deleteRow(cardId) {
-        if (confirm('Are you sure you want to delete this row?')) {
+    // function deleteRow(cardId) {
+    //     if (confirm('Are you sure you want to delete this row?')) {
    
-            const row = document.getElementById(`dump-${cardId}`);
-            if (row) {
-                row.style.display = 'none';
-            }
+    //         const row = document.getElementById(`dump-${cardId}`);
+    //         if (row) {
+    //             row.style.display = 'none';
+    //         }
 
          
-            const deletedIds = JSON.parse(localStorage.getItem('deletedRows')) || [];
-            if (!deletedIds.includes(cardId)) {
-                deletedIds.push(cardId);
-                localStorage.setItem('deletedRows', JSON.stringify(deletedIds));
-            }
-        }
-    }
+    //         const deletedIds = JSON.parse(localStorage.getItem('deletedRows')) || [];
+    //         if (!deletedIds.includes(cardId)) {
+    //             deletedIds.push(cardId);
+    //             localStorage.setItem('deletedRows', JSON.stringify(deletedIds));
+    //         }
+    //     }
+    // }
 </script>

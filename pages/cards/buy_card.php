@@ -41,7 +41,11 @@ try {
             $updateBuyerStmt = $pdo->prepare("UPDATE users SET balance = balance - ? WHERE id = ?");
             $updateBuyerStmt->execute([$price, $buyer_id]);
 
-            $updateCardStmt = $pdo->prepare("UPDATE credit_cards SET buyer_id = ?, status = 'sold' WHERE id = ?");
+            $updateCardStmt = $pdo->prepare("
+                UPDATE credit_cards 
+                SET buyer_id = ?, status = 'sold', created_at = NOW() 
+                WHERE id = ?
+            ");
             $updateCardStmt->execute([$buyer_id, $card_id]);
 
             $pdo->commit();
@@ -64,3 +68,4 @@ try {
 
 echo json_encode($response);
 exit();
+fix:"";

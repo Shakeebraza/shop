@@ -119,7 +119,7 @@ $stmt = $pdo->prepare("
     FROM credit_cards 
     WHERE buyer_id = ? 
     AND status = 'sold' 
-    ORDER BY id DESC
+    ORDER BY created_at DESC
 ");
 $stmt->execute([$user_id]);
 $soldCards = $stmt->fetchAll();
