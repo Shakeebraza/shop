@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (count($details) >= max($pos_track1, $pos_track2, $pos_pin, $pos_country)) {
                 if($details[$pos_track1] == 0){
                     
-                    $track1 = "No";
+                    $track1 = NULL;
                 }else{
 
                     $track1 = $details[$pos_track1 - 1] ;
