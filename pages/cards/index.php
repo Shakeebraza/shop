@@ -227,6 +227,10 @@ td{
                 <th style="padding: 10px; border: 1px solid #ddd;">Country</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">State</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">City</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">MNN</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Account Number</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Sort Code</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Cardholder Name</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">ZIP</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">Price</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">Buy</th>
@@ -242,64 +246,7 @@ td{
 
 
 
-    <div style="display: none; gap: 20px; padding: 20px; flex-wrap: wrap; justify-content: center;">
-    <?php if (!empty($creditCards)): ?>
-    <?php foreach ($creditCards as $card):
-    if ($card['card_type'] == 'Mastercard') {
-        $background = 'background-image: url(https://wallpapers.com/images/hd/mastercard-logo-black-background-6ud73xlg936woct6.jpg); background-size: cover; background-position: center;';
-    } elseif ($card['card_type'] == 'Amex') {
-       
-        $background = 'background: linear-gradient(45deg, #b8860b, #000000);';
-    } elseif ($card['card_type'] == 'Visa') {
-        $background = 'background: linear-gradient(45deg, #2E4053, #000000);';
-    }else{
-        $background = 'background: linear-gradient(45deg,rgb(48, 46, 83),rgb(46, 43, 43));';
-        
-    }
-        $zip = $card['zip'];
-        $displayZip = substr($zip, 0, 3) . '****';?>
-        <div style="width: 420px; height: 265px; 
-            <?= $background ?> 
-            background-size: cover; 
-            background-position: center; 
-            border-radius: 15px; 
-            padding: 25px; 
-            position: relative; 
-            overflow: hidden; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
-            <h1 style="color: white; font-size: 24px; margin: 0;"><?php echo $card['card_type']; ?></h1>
-            <div style="color: white; font-size: 23px; letter-spacing: 2px; margin-bottom: 20px; font-family: 'Courier New', monospace;">
-                <?php echo $card['card_number']; ?>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                <div style="color: #888; font-size: 12px;">
-                    STATE<br>
-                    <span style="color: white;"><?php echo $card['country']; ?>/<?php echo $card['city']; ?></span>
-                </div>
-                <div style="color: #888; font-size: 12px;">
-                    EXPIRES END<br>
-                    <span style="color: white;"><?php echo $card['mm_exp']; ?>/<?php echo $card['yyyy_exp']; ?></span>
-                </div>
-            </div>
-            <div style="color: white; font-size: 16px; margin-bottom: 5px;"><?php echo $card['name_on_card']; ?></div>
-            <div style="color: white; font-size: 16px;"><?php echo $displayZip ?></div>
-            <div style="position: absolute; bottom: 25px; right: 25px;">
-                <a href="javascript:void(0);" 
-                    class="buy-button" 
-                    onclick="return showConfirm(<?php echo htmlspecialchars($card['id']); ?>, <?php echo htmlspecialchars($card['price']); ?>);">
-                    <span class="price">$<?php echo $card['price']; ?></span>
-                    <span class="buy-now">Buy Now</span>
-                    </a>
-            </div>
-            <div style="position: absolute; top: 25px; right: 25px; color: white; transform: rotate(90deg);"></div>
-        </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>No credit cards available.</p>
-        <?php endif; ?>
 
-
-    </div>
 
 </div>
 
@@ -438,6 +385,10 @@ $(document).ready(function () {
             { data: 'country' },
             { data: 'state' },
             { data: 'city' },
+            { data: 'mmn' },
+            { data: 'account_number' },
+            { data: 'sort_code' },
+            { data: 'cardholder_name' },
             { data: 'zip' },
             { data: 'price' },
             { data: 'actions' }

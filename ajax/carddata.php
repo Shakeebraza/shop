@@ -12,7 +12,7 @@ $ccZip = isset($_POST['cc_zip']) ? trim($_POST['cc_zip']) : '';
 $ccType = isset($_POST['cc_type']) ? trim($_POST['cc_type']) : 'all';
 $basename = isset($_POST['basename']) ? trim($_POST['basename']) : 'all';
 
-$sql = "SELECT SQL_CALC_FOUND_ROWS id, card_type, card_number, mm_exp, yyyy_exp, country, state, city, zip, price 
+$sql = "SELECT *
         FROM credit_cards 
         WHERE buyer_id IS NULL AND status = 'unsold'";
 
@@ -71,6 +71,10 @@ foreach ($creditCards as $card) {
         'country' => htmlspecialchars($card['country']),
         'state' => htmlspecialchars($card['state']),
         'city' => htmlspecialchars($card['city']),
+        'mmn' => htmlspecialchars($card['mmn']),
+        'account_number' => htmlspecialchars($card['account_number']),
+        'sort_code' => htmlspecialchars($card['sort_code']),
+        'cardholder_name' => htmlspecialchars($card['cardholder_name']),
         'zip' => substr($card['zip'], 0, 3) . '****',
         'price' => '$' . htmlspecialchars($card['price']),
         'actions' => '<a href="#" class="buy-button" style="background-color:#0c182f;" onclick="showConfirm(\'' . $card['id'] . '\', \'' . $card['price'] . '\')">
