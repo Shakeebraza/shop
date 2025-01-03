@@ -213,6 +213,11 @@ td{
 ?>
 <?php if (!empty($creditCards)): ?>
     <div class="main-tbl321">
+    <div id="customLoader" style="display: none; text-align: center; margin-bottom: 15px;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     <table id="creditCardsTable" style="width: 100%; border-collapse: collapse; text-align: left;">
         <thead>
             <tr style="background-color:#0c182f;">
@@ -378,15 +383,26 @@ function closeRulesPopup() {
 }
 
 $(document).ready(function () {
- 
+    var customLoader = $('#customLoader');
     $('#creditCardsTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         searching: false, 
         ordering: false,
         ajax: {
             url: '<?= $urlval ?>ajax/carddata.php',
             type: 'POST',
+            beforeSend: function () {
+             
+                customLoader.show();
+            },
+            complete: function () {
+                
+                customLoader.hide();
+            },
+            error: function () {
+                alert('Failed to load data. Please try again.');
+            },
             data: function (d) {
              
                 d.cc_bin = $('#credit-card-bin').val();

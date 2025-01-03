@@ -196,6 +196,11 @@ form#dump-filters {
 
     <div id="dumps-list" class="main-tbl321">
     <?php if (!empty($dumps)): ?>
+        <div id="customLoader" style="display: none; text-align: center; margin-bottom: 15px;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     <table id="dumpsTable"  class="dumps-table">
         <thead>
             <tr>
@@ -234,14 +239,26 @@ include_once('../../footer.php');
 ?>
 <script type="text/javascript">
 $(document).ready(function() {
+    var customLoader = $('#customLoader');
     var table = $('#dumpsTable').DataTable({
-        processing: true,
+        processing: false,
         serverSide: true,
         searching: false,
         ordering: false,
         ajax: {
             url: '<?= $urlval ?>ajax/dumpdata.php',
             type: 'POST',
+            beforeSend: function () {
+             
+                customLoader.show();
+            },
+            complete: function () {
+                
+                customLoader.hide();
+            },
+            error: function () {
+                alert('Failed to load data. Please try again.');
+            },
             data: function(d) {
                 d.dump_bin = $('#dump-bin').val();
                 d.dump_country = $('#dump-country').val();
