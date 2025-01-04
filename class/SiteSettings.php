@@ -17,7 +17,7 @@ class SiteSettings {
         } else {
             return null; 
         }
-    }
+    } 
     function getCreditCardBaseNames() {
     
         $sql = "SELECT DISTINCT base_name FROM credit_cards WHERE base_name != 'NA' AND base_name IS NOT NULL";
