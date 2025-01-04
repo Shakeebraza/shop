@@ -73,7 +73,7 @@ foreach ($creditCards as $card) {
 
     $data[] = [
         'card_logo' => '<img src="/shop/images/cards/' . strtolower($card['card_type']) . '.png" alt="Card Logo" class="card-logo">',
-        'card_number' => htmlspecialchars($card['card_number']),
+        'card_number' => htmlspecialchars(substr($card['card_number'], 0, 6)),
         'expiry' => htmlspecialchars($card['mm_exp']) . '/' . htmlspecialchars($card['yyyy_exp']),
         'country' => htmlspecialchars($card['country']),
         'state' => htmlspecialchars($card['state']),
