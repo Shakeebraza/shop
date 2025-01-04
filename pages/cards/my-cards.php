@@ -140,7 +140,6 @@ table button {
             <th style="padding: 10px; border: 1px solid #ddd;">MNN</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Account Number</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Sort Code</th>
-            <th style="padding: 10px; border: 1px solid #ddd;">Cardholder Name</th> 
             <th style="padding: 10px; border: 1px solid #ddd;">ZIP</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Country</th>
             <th style="padding: 10px; border: 1px solid #ddd;">Phone Number</th>
@@ -171,7 +170,7 @@ table button {
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['mmn']) ?></td>
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['account_number']); ?></td>
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['sort_code']) ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($card['cardholder_name']) ?></td>
+           
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['zip']) ?></td>
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['country']) ?></td>
                 <td style="padding: 10px;"><?php echo htmlspecialchars($card['phone_number']) ?></td>
@@ -202,7 +201,16 @@ table button {
 
 
     <div id="card-activity-log">
+    <div style="display: flex; align-items: center; gap: 20px;">
         <h2>Card Activity Log</h2>
+        <button id="rules-btn" 
+                style="padding: 5px 15px; background-color: #f39c12; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; display: flex; align-items: center; gap: 5px;" 
+                onclick="openRulesPopup()">
+            <i class="fas fa-gavel"></i>
+            Rules
+        </button>
+    </div>
+
         <div class="main-tbl321">
         <table id="card_activity_log" class="activity-log-table">
     <thead>
@@ -246,10 +254,10 @@ table button {
         <h2>Purchased Information</h2>
         <p>Here are the updated rules for using the system:</p>
         <ul>
-            <li>Purchased information will be automatically removed from these sections after 30 days.</li>
-            <li>Users are advised thru a static note container box in my cards/my dumps section to download or copy their information before the 30-day period ends to avoid losing access to it.</li>
-            <li>This ensures users are aware of the time limit and can act accordingly.</li>
-            <li>After 30 days, the information displayed on My Cards/My dumps should be removed from the user section, but not from the server.</li>
+           
+            <li>1. Purchased information will be automatically removed from these sections after 30 days. </li>
+            <li>2. Users are advised to download or copy their information before the 30-day period ends to avoid losing access.</li>
+           
         </ul>
     </div>
 </div>
@@ -338,9 +346,7 @@ function closeRulesPopup() {
 }
 
 
-window.onload = function() {
-    openRulesPopup();
-}
+
 </script>
 
 

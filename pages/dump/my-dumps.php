@@ -131,10 +131,16 @@ include_once('../../header.php');
      
     <div id="dumps-activity-log">
       
+        <div style="display: flex; align-items: center; gap: 20px;">
         <h2>Dumps Activity Log</h2>
-        <button id="rules-btn" style="padding: 5px 15px; background-color: #f39c12; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; display: flex; align-items: center; gap: 5px;" onclick="openRulesPopup()" class="">
-    <i class="fas fa-gavel"></i>
-    </button>
+        <button id="rules-btn" 
+                style="padding: 5px 15px; background-color: #f39c12; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; display: flex; align-items: center; gap: 5px;" 
+                onclick="openRulesPopup()">
+            <i class="fas fa-gavel"></i>
+            Rules
+        </button>
+    </div>
+
         <div class="main-tbl321">
         <table id="activity-log-table" class="activity-log-table">
             <thead>
@@ -177,10 +183,10 @@ include_once('../../header.php');
         <h2>Purchased Information</h2>
         <p>Here are the updated rules for using the system:</p>
         <ul>
-            <li>Purchased information will be automatically removed from these sections after 30 days.</li>
-            <li>Users are advised thru a static note container box in my cards/my dumps section to download or copy their information before the 30-day period ends to avoid losing access to it.</li>
-            <li>This ensures users are aware of the time limit and can act accordingly.</li>
-            <li>After 30 days, the information displayed on My Cards/My dumps should be removed from the user section, but not from the server.</li>
+           
+            <li>1. Purchased information will be automatically removed from these sections after 30 days. </li>
+            <li>2. Users are advised to download or copy their information before the 30-day period ends to avoid losing access.</li>
+           
         </ul>
     </div>
 </div>
@@ -254,7 +260,5 @@ function closeRulesPopup() {
 }
 
 
-window.onload = function() {
-    openRulesPopup();
-}
+
 </script>
