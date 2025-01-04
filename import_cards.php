@@ -188,7 +188,7 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
                 <input type="number" name="pos_mmn" placeholder="MMN Pos">
                 <input type="number" name="pos_account_number" placeholder="Account Number Pos">
                 <input type="number" name="pos_sort_code" placeholder="Sort Code Pos">
-                <input type="number" name="base_name" placeholder="Basename Pos">
+                <input type="text" name="base_name" placeholder="Basename Pos">
             </div>
 
             <select name="seller_id" id="seller_id" required>

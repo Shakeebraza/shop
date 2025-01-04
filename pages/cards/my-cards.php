@@ -119,6 +119,24 @@ table button {
         transform: rotate(-45deg);
     }
 }
+
+@keyframes shake-up-down {
+    0% { transform: translateY(0); }
+    25% { transform: translateY(-5px); }
+    50% { transform: translateY(5px); }
+    75% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+}
+
+
+.shake {
+    animation: shake-up-down 0.5s ease-in-out;
+}
+
+#rules-btn:hover {
+    animation: shake-up-down 0.5s ease-in-out;
+}
+
 </style>
   
     <div class="main-content">
@@ -203,7 +221,7 @@ table button {
     <div id="card-activity-log">
     <div style="display: flex; align-items: center; gap: 20px;">
         <h2>Card Activity Log</h2>
-        <button id="rules-btn" 
+        <button id="rules-btnnew" 
                 style="padding: 5px 15px; background-color: #f39c12; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; display: flex; align-items: center; gap: 5px;" 
                 onclick="openRulesPopup()">
             <i class="fas fa-gavel"></i>
@@ -345,6 +363,17 @@ function closeRulesPopup() {
     document.getElementById('rules-popup2').style.display = 'none';
 }
 
+const rulesBtn = document.getElementById('rules-btnnew');
+if (rulesBtn) {
+    setInterval(() => {
+        rulesBtn.classList.add('shake');
+        setTimeout(() => {
+            rulesBtn.classList.remove('shake');
+        }, 500);
+    }, 2000);
+} else {
+    console.error('Button with id "rules-btnnew" not found.');
+}
 
 
 </script>

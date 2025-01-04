@@ -82,7 +82,7 @@ width: 100% !important;
     <button id="rules-btn" 
     style="padding: 5px 15px; background-color: #f39c12; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; display: flex; align-items: center; gap: 5px;" 
     onclick="openRulesPopup()">
-    <i class="fas fa-gavel"></i>
+    <i class="fas fa-gavel"></i>Rules
     </button>
 
     </div>
