@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pos_account_number = $_POST['pos_account_number'];
         $pos_sort_code = $_POST['pos_sort_code'];
         $pos_cardholder_name = $_POST['pos_cardholder_name'];
+        $base_name = $_POST['base_name'];
 
         $stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");
         $stmt->execute([$seller_id]);
@@ -90,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $country = $pos_country ? strtoupper(trim(preg_replace('/\s+/', ' ', $details[$pos_country - 1]))) : 'N/A';
                 $phone_number = $pos_phone_number ? $details[$pos_phone_number - 1] : 'N/A';
                 $otherinfo=$_POST['otherinfo'] !== 'No' ?$_POST['otherinfo'] :'NA';
-                $base_name=$_POST['base_name'] ??'NA';
+                $base_nameData=$base_name ? $details[$base_name - 1] : 'N/A';
                 $card_type = getCardType($card_number);
 
                 if (strlen($phone_number) > 20) $phone_number = substr($phone_number, 0, 20);
@@ -107,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $query = "INSERT INTO $section (mmn,account_number,sort_code,cardholder_name,card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, full_name, seller_id, seller_name, price, section, card_type,otherinfo,base_name)
                               VALUES (?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
                     $stmt = $pdo->prepare($query);
-                    $stmt->execute([$mmn,$account_number,$sort_code,$cardholder_name,$card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $full_name, $seller_id, $seller_name, $price, $section, $card_type,$otherinfo,$base_name]);
+                    $stmt->execute([$mmn,$account_number,$sort_code,$cardholder_name,$card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $full_name, $seller_id, $seller_name, $price, $section, $card_type,$otherinfo,$base_nameData]);
                     $importedCount++;
                 } else {
                     $duplicateCount++;
@@ -189,15 +190,10 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
                 <input type="number" name="pos_mmn" placeholder="MMN Pos">
                 <input type="number" name="pos_account_number" placeholder="Account Number Pos">
                 <input type="number" name="pos_sort_code" placeholder="Sort Code Pos">
+                <input type="base_name" name="base_name" placeholder="Base Name Pos">
                 
             </div>
-            <div class="grid-container">
-                <input type="text" id="base_name" name="base_name" placeholder="Basename Pos" maxlength="30" 
-                style="padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 8px; width: 250px; 
-                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); transition: all 0.3s ease-in-out; outline: none;">
-            </div>
-
-            <span id="charCount" style="font-size: 14px; margin-left: 10px;">0/30</span>
+     
 
             <select name="seller_id" id="seller_id" required>
                 <option value="">Select Seller</option>
@@ -248,14 +244,6 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
             label.style.boxShadow = '0px 6px 10px rgba(0, 0, 0, 0.4)';
         });
     });
-
-    document.getElementById('base_name').addEventListener('input', function() {
-    var maxLength = 30;
-    var currentLength = this.value.length;
-    var charCount = document.getElementById('charCount');
- 
-    charCount.textContent = currentLength + '/' + maxLength;
-});
 
 </script>
 
