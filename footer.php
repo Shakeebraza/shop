@@ -101,7 +101,25 @@ document.addEventListener('DOMContentLoaded', function() {
         
             cartTotal.textContent = total.toFixed(2);
         }
-
+        function removeFromCart(cardId) {
+    fetch('<?= $urlval?>ajax/removefromcart.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cardId: cardId }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+          
+            updateCartSidebar(data.cartItems, data.total);
+        } else {
+            alert(data.message); 
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
 </script>
 
 

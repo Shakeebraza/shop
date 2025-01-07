@@ -420,7 +420,7 @@ endif;
 .checkout-btn {
     display: block;
     width: 100%;
-    background-color: #28a745;
+    background-color: #6c5ce7;
     color: #ffffff;
     text-align: center;
     padding: 10px;
@@ -431,7 +431,7 @@ endif;
 }
 
 .checkout-btn:hover {
-    background-color: #218838;
+    background-color: #5a4ebbbf;
 }
 
 .user-actions {
@@ -584,7 +584,7 @@ endif;
    
 
     <div class="cart-sidebar" id="cartSidebar">
-        <span class="close-btn" id="closeSidebar">&times;</span>
+        <span class="close-btn close" id="closeSidebar" style="top:7px !important;">&times;</span>
         <h2>Add to Cart</h2>
         <div id="cartItems"></div>
         <div style="margin-top: 20px; font-weight: bold;">
