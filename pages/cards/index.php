@@ -1,5 +1,7 @@
 <?php
 include_once('../../header.php');
+
+
 ?>
 <style>
     .message-success {
@@ -499,7 +501,7 @@ function updateCartSidebar(cartItems, total) {
         cartItem.innerHTML = `
             <img src="${item.image}" alt="Item Image" style="width: 50px; height: 50px; object-fit: cover;">
             <div class="cart-item-details">
-                <h4>${item.name}</h4>
+                <h4>${item.bin}</h4>
                 <p>$${item.price}</p>
             </div>
             <span style="cursor: pointer;" onclick="removeFromCart(${item.id})">&times;</span>
@@ -510,6 +512,84 @@ function updateCartSidebar(cartItems, total) {
 
     cartTotal.textContent = total.toFixed(2);
 }
+
+function getCartItems() {
+    return fetch('getCartItems.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                return data.cartItems || []; 
+            } else {
+                return []; 
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            return []; 
+        });
+}
+
+async function proceedToCheckout() {
+    alertify.confirm(
+        'Confirm Purchase',
+        `Are you sure you want to buy all the cards?`,
+        async function () {
+            try {
+                // Get all cart items
+                const cartItems = await getCartItems();
+
+                if (cartItems.length === 0) {
+                    alert("Your cart is empty!");
+                    return;
+                }
+
+                const payload = {
+                    cartItems: cartItems.map(item => ({
+                        cardId: item.id,
+                        quantity: item.quantity
+                    }))
+                };
+
+                // Proceed with the checkout
+                const response = await fetch('checkout.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showPopupMessage('success', data.message || 'Purchase successful.');
+                   
+                    removeAllFromCart(); 
+                    setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                    removeAllFromCart(); 
+                    showPopupMessage('error', data.message || 'Purchase failed.');
+                    setTimeout(() => {
+                            window.location.href = '<?= $urlval?>pages/add-money/index.php';
+                        }, 2000);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred.');
+            }
+        },
+        function () {
+            console.log('Purchase canceled');
+        }
+    ).set('labels', { ok: 'Confirm', cancel: 'Cancel' });
+}
+
+
+
+
+
 
 
 

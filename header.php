@@ -295,6 +295,7 @@ endif;
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Include Bootstrap Icons (optional) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -433,13 +434,57 @@ endif;
     padding: 10px;
     border-radius: 5px;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 15px;
     margin-top: 20px;
 }
 
 .checkout-btn:hover {
     background-color: #5a4ebbbf;
 }
+.empty-cart-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    background-color:rgb(255, 5, 5);
+    color: #ffffff;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    margin-top: 20px;
+    position: relative;
+}
+
+.empty-cart-btn i {
+    margin-right: 8px;
+    font-size: 18px;  
+    transition: opacity 0.3s ease; 
+}
+
+.empty-cart-btn .btn-text {
+    display: none;  
+    margin-left: 8px;
+    transition: opacity 0.3s ease; 
+}
+
+.empty-cart-btn:hover .btn-text {
+    display: inline;  
+    left: 3px;
+  position: absolute;
+}
+
+.empty-cart-btn:hover i {
+    opacity: 0; 
+}
+
+.empty-cart-btn:hover {
+    background-color:rgba(182, 27, 27, 0.75);
+}
+
+
+
 
 .user-actions {
     display: flex;
@@ -590,15 +635,22 @@ endif;
     </nav>
    
 
+
     <div class="cart-sidebar" id="cartSidebar">
-        <span class="close-btn close" id="closeSidebar" style="top:7px !important;">&times;</span>
-        <h2>Add to Cart</h2>
-        <div id="cartItems"></div>
-        <div style="margin-top: 20px; font-weight: bold;">
-            <p>Total: $<span id="cartTotal">0.00</span></p>
-        </div>
-        <a href="#" class="checkout-btn">Proceed to Checkout</a>
+    <span class="close-btn close" id="closeSidebar" style="top:7px !important;">&times;</span>
+    <h2>Add to Cart</h2>
+    <div id="cartItems"></div>
+    <div style="margin-top: 20px; font-weight: bold;">
+        <p>Total: $<span id="cartTotal">0.00</span></p>
     </div>
+    <div class="user-actions">
+        <a href="#" class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</a>
+        <a href="#" class="empty-cart-btn" onclick="removeAllFromCart()">
+        <i class="fa-regular fa-file"></i>
+        <span class="btn-text">Empty Cart</span>
+        </a>
+    </div>
+</div>
         <script>
 document.querySelector('.see-all').addEventListener('click', function (event) {
     const hiddenContent = document.querySelector('.sdbr-ct32');

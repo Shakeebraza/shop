@@ -14,7 +14,7 @@ $cardId = $input['cardId'] ?? null;
 if ($cardId) {
 
     try {
-        $stmt = $pdo->prepare("SELECT id, name_on_card, price, card_type FROM credit_cards WHERE id = :cardId");
+        $stmt = $pdo->prepare("SELECT id,card_number, name_on_card, price, card_type FROM credit_cards WHERE id = :cardId");
         $stmt->bindParam(':cardId', $cardId, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -25,7 +25,7 @@ if ($cardId) {
            
             $cardData = [
                 'id' => $card['id'],
-                'name' => $card['name_on_card'],
+                'bin' => substr($card['card_number'], 0, 6),
                 'price' => $card['price'],
                 'image' => '/shop/images/cards/'.strtolower($card['card_type']).'.png', 
             ];

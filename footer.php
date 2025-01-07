@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 cartItem.innerHTML = `
                     <img src="${item.image}" alt="Item Image" style="width: 50px; height: 50px; object-fit: cover;">
                     <div class="cart-item-details">
-                        <h4>${item.name}</h4>
+                        <h4>${item.bin}</h4>
                         <p>$${item.price}</p>
                     </div>
                     <span style="cursor: pointer;" onclick="removeFromCart(${item.id})">&times;</span>
@@ -130,6 +130,26 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => console.error('Error fetching cart count:', error));
     }
+
+    function removeAllFromCart() {
+    fetch('<?= $urlval?>ajax/removeallfromcart.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: 'removeAll' }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateCartSidebar(data.cartItems, data.total);
+            updateCartCount(); 
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
 </script>
 
 
