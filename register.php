@@ -229,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirm_password');
 const confirmMessage = document.getElementById('confirmMessage');
-const passwordRulesContainer = document.getElementById('passwordRules'); // container for rules
+const passwordRulesContainer = document.getElementById('passwordRules'); 
 const passwordRules = {
     lengthRule: /^.{8,20}$/,
     specialCharRule: /[!@#$%^&*]/,
@@ -244,11 +244,11 @@ const rulesList = {
     letterRule: document.getElementById('letterRule')
 };
 
-// Validate password as user types
+
 passwordInput.addEventListener('input', function () {
     const value = passwordInput.value;
 
-    // Show password rules container when user starts typing
+  
     passwordRulesContainer.style.display = value.length > 0 ? "flex" : "none"; 
 
     Object.keys(passwordRules).forEach(rule => {
@@ -261,11 +261,11 @@ passwordInput.addEventListener('input', function () {
         }
     });
 
-    // Check confirm password matches
+   
     checkPasswordsMatch();
 });
 
-// Validate confirm password
+
 confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
 
 function checkPasswordsMatch() {
