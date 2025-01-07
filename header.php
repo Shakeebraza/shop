@@ -239,6 +239,13 @@ if (!isset($_SESSION['username'])) {
 } else {
     $username = $_SESSION['username'];
 }
+
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
+
+$cartItemCount = count($_SESSION['cart']);
 ?>
 
 
@@ -488,7 +495,7 @@ endif;
             <div class="user-actions">
                 <div class="cart-icon" id="cartIcon">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-badge" id="cartBadge">3</span>
+                    <span class="cart-badge" id="cartBadge"><?= $cartItemCount ?></span>
                 </div>
                 <div id="userDropdownToggle">
                 <span class="arrow" id="dropdownArrow"><i class="fa-solid fa-bars"></i></span>

@@ -114,12 +114,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (data.success) {
           
             updateCartSidebar(data.cartItems, data.total);
+            updateCartCount()
         } else {
             alert(data.message); 
         }
     })
     .catch(error => console.error('Error:', error));
 }
+
+    function updateCartCount() {
+        fetch('<?= $urlval ?>ajax/cart-count.php')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('cartBadge').textContent = data.count;
+            })
+            .catch(error => console.error('Error fetching cart count:', error));
+    }
 </script>
 
 
