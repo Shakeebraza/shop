@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const cartIcon = document.getElementById('cartIcon');
         const cartSidebar = document.getElementById('cartSidebar');
         const closeSidebar = document.getElementById('closeSidebar');
+        // const dashboard_con = document.getElementsByClassName('dashboard-container');
 
        
         cartIcon.addEventListener('click', () => {
@@ -64,6 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
         closeSidebar.addEventListener('click', () => {
             cartSidebar.classList.remove('open');
         });
+        // dashboard_con.addEventListener('click', () => {
+        //     cartSidebar.classList.remove('open');
+        // });
         document.addEventListener('DOMContentLoaded', function () {
             fetch('<?= $urlval ?>getcart.php')
                 .then(response => response.json())

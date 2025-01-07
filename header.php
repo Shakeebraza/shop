@@ -636,20 +636,20 @@ endif;
 
 
     <div class="cart-sidebar" id="cartSidebar">
-    <span class="close-btn close" id="closeSidebar" style="top:7px !important;">&times;</span>
-    <h2>Add to Cart</h2>
-    <div id="cartItems"></div>
-    <div style="margin-top: 20px; font-weight: bold;">
-        <p>Total: $<span id="cartTotal">0.00</span></p>
+        <span class="close-btn close" id="closeSidebar" style="top:7px !important;">&times;</span>
+        <h2>Add to Cart</h2>
+        <div id="cartItems"></div>
+        <div style="margin-top: 20px; font-weight: bold;">
+            <p>Total: $<span id="cartTotal">0.00</span></p>
+        </div>
+        <div class="user-actions">
+            <a href="#" class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</a>
+            <a href="#" class="empty-cart-btn" onclick="removeAllFromCart()">
+            <i class="fa-regular fa-file"></i>
+            <span class="btn-text">Empty Cart</span>
+            </a>
+        </div>
     </div>
-    <div class="user-actions">
-        <a href="#" class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</a>
-        <a href="#" class="empty-cart-btn" onclick="removeAllFromCart()">
-        <i class="fa-regular fa-file"></i>
-        <span class="btn-text">Empty Cart</span>
-        </a>
-    </div>
-</div>
         <script>
 document.querySelector('.see-all').addEventListener('click', function (event) {
     const hiddenContent = document.querySelector('.sdbr-ct32');

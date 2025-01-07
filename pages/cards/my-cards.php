@@ -343,17 +343,17 @@ $(document).ready(function() {
         "responsive": true        
     });
 });
-$(document).ready(function() {
-    $('#card_activity_log').DataTable({
-        "paging": true,            
-        "searching": false,
-        "ordering": false,         
-        "info": true,             
-        "lengthChange": true,      
-        "autoWidth": true,         
-        "responsive": true         
-    });
-});
+// $(document).ready(function() {
+//     $('#card_activity_log').DataTable({
+//         "paging": true,            
+//         "searching": false,
+//         "ordering": false,         
+//         "info": true,             
+//         "lengthChange": true,      
+//         "autoWidth": true,         
+//         "responsive": true         
+//     });
+// });
 function openRulesPopup() {
     document.getElementById("rules-popup2").style.display = "flex";
 }
