@@ -27,7 +27,7 @@ if ($cardId) {
                 'id' => $card['id'],
                 'name' => $card['name_on_card'],
                 'price' => $card['price'],
-                'image' => '/shop/images/cards/'.$card['card_type'].'.png', 
+                'image' => '/shop/images/cards/'.strtolower($card['card_type']).'.png', 
             ];
 
  
