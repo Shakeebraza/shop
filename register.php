@@ -137,47 +137,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     <?php endif; ?>
 
-    <form method="POST" action="register.php">
-        <label for="username">Username</label>
-        <input type="text" name="username" required>
+    <form method="POST" action="register.php" id="registerForm">
+    <label for="username">Username</label>
+    <input type="text" name="username" required>
 
-        <!-- Preferred Contact Option -->
-        <label for="contact_option">Preferred Contact Option</label>
-        <select name="contact_option" id="contact_option" required>
-            <option value="Jabber" selected>Jabber</option>
-            <option value="Telegram">Telegram</option>
-        </select>
+    <!-- Preferred Contact Option -->
+    <label for="contact_option">Preferred Contact Option</label>
+    <select name="contact_option" id="contact_option" required>
+        <option value="Jabber" selected>Jabber</option>
+        <option value="Telegram">Telegram</option>
+    </select>
 
-        <input type="text" name="contact_value" id="contact_value" placeholder="Enter your Jabber email" pattern="^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$" required>
+    <input type="text" name="contact_value" id="contact_value" placeholder="Enter your Jabber email" pattern="^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$" required>
 
-        <label for="password">Password</label>
-        <input type="password" name="password" required>
+    <label for="password">Password</label>
+<input type="password" name="password" id="password" required>
+<ul id="passwordRules" style="list-style-type: none; padding: 0; display: none; flex-wrap: wrap; gap: 10px;">
+    <li id="lengthRule" style="display: inline-block;">At least 8-20 characters</li>
+    <li id="specialCharRule" style="display: inline-block;">At least one special character (!@#$%^&*)</li>
+    <li id="numberRule" style="display: inline-block;">At least one number</li>
+    <li id="letterRule" style="display: inline-block;">At least one letter</li>
+</ul>
 
-        <label for="confirm_password">Confirm Password</label>
-        <input type="password" name="confirm_password" required>
+<label for="confirm_password">Confirm Password</label>
+<input type="password" name="confirm_password" id="confirm_password" required>
+<p id="confirmMessage" style="color: red; display: none;">Passwords do not match.</p>
 
-        <!-- Secret Code Section -->
-        <label for="secret_code">Secret Code
-            <span class="help-container">
-                <span class="help-link" onclick="showPopup()">What's this?</span>
-                <div class="popup-message" id="popupMessage">
-                    Set your secret code from 6 digits, and keep it secure. You will need this code when you want to change or edit your account profile.
-                </div>
-            </span>
-        </label>
-        <input type="text" name="secret_code" pattern="\d{6}" maxlength="6" required>
+    <!-- Secret Code Section -->
+    <label for="secret_code">Secret Code
+        <span class="help-container">
+            <span class="help-link" onclick="showPopup()">What's this?</span>
+            <div class="popup-message" id="popupMessage">
+                Set your secret code from 6 digits, and keep it secure. You will need this code when you want to change or edit your account profile.
+            </div>
+        </span>
+    </label>
+    <input type="text" name="secret_code" pattern="\d{6}" maxlength="6" required>
 
-        <!-- CAPTCHA Section -->
-        <div class="captcha-row">
-            <label for="captcha">Enter CAPTCHA:</label>
-            <img src="captcha.php" alt="CAPTCHA" class="captcha-image">
-        </div>
-        <input type="text" name="captcha" class="captcha-input" required>
+    <!-- CAPTCHA Section -->
+    <div class="captcha-row">
+        <label for="captcha">Enter CAPTCHA:</label>
+        <img src="captcha.php" alt="CAPTCHA" class="captcha-image">
+    </div>
+    <input type="text" name="captcha" class="captcha-input" required>
 
-        <input type="submit" value="Register">
+    <input type="submit" value="Register">
 
-        <a href="login.php">Already have an account? Login here</a>
-    </form>
+    <a href="login.php">Already have an account? Login here</a>
+</form>
+
 
     <?php if ($accountCreated): ?>
         <div class="modal" id="successModal">
@@ -198,7 +206,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         popup.style.display = (popup.style.display === "none" || popup.style.display === "") ? "block" : "none";
     }
 
-    // Close the popup if the user clicks outside it
+    
     document.addEventListener("click", function(event) {
         var popup = document.getElementById("popupMessage");
         var helpLink = document.querySelector(".help-link");
@@ -207,17 +215,67 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     });
 
-    // Toggle validation pattern and placeholder based on contact option
     document.getElementById("contact_option").addEventListener("change", function() {
-        const contactValue = document.getElementById("contact_value");
-        if (this.value === "Jabber") {
-            contactValue.placeholder = "Enter your Jabber email";
-            contactValue.pattern = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
-        } else if (this.value === "Telegram") {
-            contactValue.placeholder = "Enter Telegram @username or phone number";
-            contactValue.pattern = "^(@?\\w+|\\+?\\d{7,15}|\\d{7,15})$";
+    const contactValue = document.getElementById("contact_value");
+    if (this.value === "Jabber") {
+        contactValue.placeholder = "Enter your Jabber email";
+        contactValue.pattern = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+    } else if (this.value === "Telegram") {
+        contactValue.placeholder = "Enter Telegram @username or phone number";
+        contactValue.pattern = "^(@?\\w+|\\+?\\d{7,15}|\\d{7,15})$";
+    }
+});
+
+const passwordInput = document.getElementById('password');
+const confirmPasswordInput = document.getElementById('confirm_password');
+const confirmMessage = document.getElementById('confirmMessage');
+const passwordRulesContainer = document.getElementById('passwordRules'); // container for rules
+const passwordRules = {
+    lengthRule: /^.{8,20}$/,
+    specialCharRule: /[!@#$%^&*]/,
+    numberRule: /\d/,
+    letterRule: /[a-zA-Z]/
+};
+
+const rulesList = {
+    lengthRule: document.getElementById('lengthRule'),
+    specialCharRule: document.getElementById('specialCharRule'),
+    numberRule: document.getElementById('numberRule'),
+    letterRule: document.getElementById('letterRule')
+};
+
+// Validate password as user types
+passwordInput.addEventListener('input', function () {
+    const value = passwordInput.value;
+
+    // Show password rules container when user starts typing
+    passwordRulesContainer.style.display = value.length > 0 ? "flex" : "none"; 
+
+    Object.keys(passwordRules).forEach(rule => {
+        if (passwordRules[rule].test(value)) {
+            rulesList[rule].style.color = 'green';
+            rulesList[rule].style.textDecoration = 'line-through';
+        } else {
+            rulesList[rule].style.color = 'red';
+            rulesList[rule].style.textDecoration = 'none';
         }
     });
+
+    // Check confirm password matches
+    checkPasswordsMatch();
+});
+
+// Validate confirm password
+confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
+
+function checkPasswordsMatch() {
+    if (passwordInput.value && confirmPasswordInput.value && passwordInput.value !== confirmPasswordInput.value) {
+        confirmMessage.style.display = 'block';
+    } else {
+        confirmMessage.style.display = 'none';
+    }
+}
+
 </script>
 
 </body>

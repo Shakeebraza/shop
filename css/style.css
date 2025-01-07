@@ -101,7 +101,20 @@ input[type="submit"] {
     font-size: 18px;
     transition: background-color 0.3s ease;
 }
+.sub_btn{
+    padding: 12px 15px;
+    width: 100%;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    cursor: pointer;
+    border: none;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
 
+.sub_btn:hover{
+    background-color: var(--primary-light);
+}
 input[type="submit"]:hover {
     background-color: var(--primary-light);
 }

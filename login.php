@@ -2,42 +2,10 @@
 require 'global.php';
 session_start();
 
-$errors = [];
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['password']);
-    $captcha = $_POST['captcha'];
+$csrfToken = $settings->generateCsrfToken();
 
-  
-    if ($captcha !== $_SESSION['captcha_code']) {
-        $errors[] = "Invalid CAPTCHA";
-    }
-
-    if (empty($errors)) {
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-        $stmt->execute([$username]);
-        $user = $stmt->fetch();
-
-        if ($user && password_verify($password, $user['password'])) {
-
-
-            if ($user['banned'] == 1) {
-                $errors[] = "Your account has been banned. Please contact support.";
-            } else {
-      
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username '] = $user['username'];
-                $_SESSION['role'] = $user['role'];
-               
-                header("Location: ".$urlval."/pages/news/index.php"); 
-                exit();
-            }
-        } else {
-            $errors[] = "Invalid username or password";
-        }
-    }
-}
 ?>
+
 
 
 <!DOCTYPE html>
@@ -47,42 +15,103 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="container">
         <h2>Login</h2>
-        <!-- Error container -->
-        <?php if (!empty($errors)) : ?>
-            <div class="error-container">
-                <ul>
-                    <?php foreach ($errors as $error) : ?>
-                        <li class="error-message"><?php echo $error; ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
+        <div id="error-container" class="error-container" style="display: none;"></div>
 
-        <form method="POST" action="login.php">
-            <label for="username">Username</label>
-            <input type="text" name="username" required>
+        <form id="login-form">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken); ?>">
+    
+    <label for="username">Username</label>
+    <input type="text" name="username" id="username" required>
 
-            <label for="password">Password</label>
-            <input type="password" name="password" required>
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required>
 
-            <!-- CAPTCHA Section -->
-            <div class="captcha-row">
-                <label for="captcha">Enter CAPTCHA:</label>
-                <img src="captcha.php" alt="CAPTCHA" class="captcha-image">
-            </div>
-            <input type="text" name="captcha" class="captcha-input" required>
+    <div class="captcha-row">
+        <label for="captcha">Enter CAPTCHA:</label>
+        <img src="captcha.php" alt="CAPTCHA" class="captcha-image" id="captcha-image">
+        <!-- <button type="button" id="refresh-captcha">Refresh</button> -->
+    </div>
+    <input type="text" name="captcha" id="captcha" required>
 
-            <input type="submit" value="Login">
+    <button class="sub_btn" type="submit">Login</button>
 
-            <a href="register.php">Don't have an account? Register here</a>
-        </form>
+    <a href="register.php">Don't have an account? Register here</a>
+</form>
+
     </div>
 
-    <script src="js/captcha.js"></script>
-</body>
+    <script>
+        $(document).ready(function () {
+            const form = $('#login-form');
+            const errorContainer = $('#error-container');
 
+       
+            $('#refresh-captcha').click(function () {
+                $('#captcha-image').attr('src', 'captcha.php?' + Date.now());
+            });
+
+ 
+            form.submit(function (event) {
+                event.preventDefault(); 
+
+                $.ajax({
+                    url: '<?= $urlval?>ajax/login.php',
+                    method: 'POST',
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            window.location.href = response.redirect; 
+                        } else {
+                            errorContainer.empty().show();
+
+                            if (response.remaining_time) {
+                                startTimer(response.remaining_time);
+                                disableForm();
+                            }
+
+                            response.errors.forEach(error => {
+                                errorContainer.append('<p>' + error + '</p>');
+                            });
+                        }
+                    },
+                    error: function () {
+                        errorContainer.html('<p>An error occurred. Please try again.</p>').show();
+                    }
+                });
+            });
+
+    
+            function startTimer(duration) {
+                let timer = duration;
+                const interval = setInterval(() => {
+                    timer--;
+                    errorContainer.find('.timer').text(timer + ' seconds');
+
+                    if (timer <= 0) {
+                        clearInterval(interval);
+                        enableForm();
+                        errorContainer.hide();
+                    }
+                }, 1000);
+            }
+
+            function disableForm() {
+                form.find('input, button').prop('disabled', true);
+                errorContainer.append('<p class="timer"></p>'); 
+            }
+
+           
+            function enableForm() {
+                form.find('input, button').prop('disabled', false);
+            }
+        });
+    </script>
+</body>
 </html>
+
