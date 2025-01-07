@@ -4,11 +4,10 @@ require 'config.php';
 require 'global.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: {$urlval}login.php");
     exit();
 }
-
-
+ 
 $user_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT username, balance, seller, credit_cards_balance, dumps_balance, credit_cards_total_earned, dumps_total_earned, status, seller_percentage FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
