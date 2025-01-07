@@ -85,10 +85,17 @@ foreach ($creditCards as $card) {
         'zip' => substr($card['zip'], 0, 3) . '****',
         'price' => '$' . htmlspecialchars($card['price']),
         'otherinfo' => $otherinfo,
-        'actions' => '<a href="#" class="buy-button" style="background-color:#0c182f;" onclick="showConfirm(\'' . $card['id'] . '\', \'' . $card['price'] . '\')">
-        <span class="price">$' . htmlspecialchars($card['price']) . '</span>
-        <span class="buy-now">Buy Now</span>
-      </a>'
+        'actions' => '
+            <div class="action-buttons">
+                <a href="#" class="buy-button" style="background-color:#0c182f;" onclick="showConfirm(\'' . $card['id'] . '\', \'' . $card['price'] . '\')">
+                    <span class="price">$' . htmlspecialchars($card['price']) . '</span>
+                    <span class="buy-now">Buy Now</span>
+                </a>
+                <button class="add-to-cart-button" style="background-color:#ffc107; color:#0c182f; margin-left:10px; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;" 
+                    onclick="addToCart(\'' . $card['id'] . '\')">
+                    Add to Cart
+                </button>
+            </div>'
     ];
 }
 

@@ -402,4 +402,61 @@ $(document).ready(function () {
     });
 });
 
+
+function addToCart(cardId) {
+    
+    fetch('addtocartcc.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cardId: cardId }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateCartSidebar(data.cartItems, data.total);
+               
+                const cartSidebar = document.getElementById('cartSidebar');
+                    cartSidebar.classList.add('open'); 
+                
+            } else {
+                alert('Failed to add to cart.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred.');
+        });
+}
+
+function updateCartSidebar(cartItems, total) {
+    const cartItemsContainer = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+
+
+    cartItemsContainer.innerHTML = '';
+
+
+    cartItems.forEach(item => {
+        const cartItem = document.createElement('div');
+        cartItem.className = 'cart-item';
+        cartItem.innerHTML = `
+            <img src="${item.image}" alt="Item Image" style="width: 50px; height: 50px; object-fit: cover;">
+            <div class="cart-item-details">
+                <h4>${item.name}</h4>
+                <p>$${item.price}</p>
+            </div>
+            <span style="cursor: pointer;" onclick="removeFromCart(${item.id})">&times;</span>
+        `;
+        cartItemsContainer.appendChild(cartItem);
+    });
+
+
+    cartTotal.textContent = total.toFixed(2);
+}
+
+
+
+
 </script>

@@ -333,6 +333,113 @@ endif;
         display: block;
     }
 }
+
+.cart-icon {
+    font-size: 24px;
+    cursor: pointer;
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: #dc3545;
+    color: #ffffff;
+    font-size: 12px;
+    border-radius: 50%;
+    padding: 2px 6px;
+}
+
+/* Sidebar Styles */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -300px;  /* Initially hidden off-screen */
+    width: 300px;
+    height: 100%;
+    background-color: #0c182f;
+    color: #ffffff;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease; /* Smooth transition */
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.cart-sidebar.open {
+    right: 0; /* Show sidebar */
+}
+
+.cart-sidebar h2 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.cart-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.cart-item-details h4 {
+    margin: 0;
+    font-size: 14px;
+}
+
+.cart-item-details p {
+    margin: 0;
+    font-size: 12px;
+    color: #ccc;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.checkout-btn {
+    display: block;
+    width: 100%;
+    background-color: #28a745;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.checkout-btn:hover {
+    background-color: #218838;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 </style>
 
 </head>
@@ -371,14 +478,22 @@ endif;
     <div class="logo">CardVault</div>
     <div class="user-info-container">
 
-        <div class="user-container" id="userDropdownToggle">
+        <div class="user-container" >
             <div class="username-container">
                 <span class="username">Logged in as: <?php echo $user['username']; ?></span>
             </div>
             <div class="balance-container">
                 <span class="balance">Balance: $<?php echo number_format($user['balance'], 2); ?></span>
             </div>
-            <span class="arrow" id="dropdownArrow"><i class="fa-solid fa-bars"></i></span>
+            <div class="user-actions">
+                <div class="cart-icon" id="cartIcon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">3</span>
+                </div>
+                <div id="userDropdownToggle">
+                <span class="arrow" id="dropdownArrow"><i class="fa-solid fa-bars"></i></span>
+            </div>
+            </div>
             <div class="user-dropdown" id="userDropdownMenu" style="display: none;margin-top:15px; background-color: #0c182f; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); width: 220px; padding: 15px; font-family: Arial, sans-serif; color: #ffffff;">
 
 
@@ -403,7 +518,8 @@ endif;
                             <i class="fas fa-user-cog" style="margin-right: 10px; color: #ffc107;"></i> Admin Setting
                         </a>
                     <?php endif; ?>
-
+                
+                    
     
                     <a href="<?= $urlval ?>logout.php" style="text-decoration: none; color: #ffffff; display: block; padding: 8px 0; font-size: 14px; transition: all 0.3s ease;"
                         onmouseover="this.style.backgroundColor='#dc3545'; this.style.color='#ffffff'; this.style.paddingLeft='12px';" 
@@ -467,7 +583,15 @@ endif;
     </nav>
    
 
-
+    <div class="cart-sidebar" id="cartSidebar">
+        <span class="close-btn" id="closeSidebar">&times;</span>
+        <h2>Add to Cart</h2>
+        <div id="cartItems"></div>
+        <div style="margin-top: 20px; font-weight: bold;">
+            <p>Total: $<span id="cartTotal">0.00</span></p>
+        </div>
+        <a href="#" class="checkout-btn">Proceed to Checkout</a>
+    </div>
         <script>
 document.querySelector('.see-all').addEventListener('click', function (event) {
     const hiddenContent = document.querySelector('.sdbr-ct32');
@@ -475,15 +599,15 @@ document.querySelector('.see-all').addEventListener('click', function (event) {
 
     event.preventDefault();
 
-    // Get the current display style of the hiddenContent element
+
     const currentDisplay = window.getComputedStyle(hiddenContent).display;
 
     if (currentDisplay === 'flex') {
-        // Hide the content
+      
         hiddenContent.style.display = 'block'; 
         button.textContent = 'Hide All';
     } else {
-        // Show the content
+        
         hiddenContent.style.display = 'flex'; 
         button.textContent = 'See All';
     }

@@ -51,6 +51,56 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+        const cartIcon = document.getElementById('cartIcon');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const closeSidebar = document.getElementById('closeSidebar');
+
+       
+        cartIcon.addEventListener('click', () => {
+            cartSidebar.classList.add('open'); 
+        });
+
+
+        closeSidebar.addEventListener('click', () => {
+            cartSidebar.classList.remove('open');
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('<?= $urlval ?>getcart.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateCartSidebar(data.cartItems, data.total);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        function updateCartSidebar(cartItems, total) {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+
+            cartItemsContainer.innerHTML = '';
+
+            
+            cartItems.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <img src="${item.image}" alt="Item Image" style="width: 50px; height: 50px; object-fit: cover;">
+                    <div class="cart-item-details">
+                        <h4>${item.name}</h4>
+                        <p>$${item.price}</p>
+                    </div>
+                    <span style="cursor: pointer;" onclick="removeFromCart(${item.id})">&times;</span>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+
+        
+            cartTotal.textContent = total.toFixed(2);
+        }
 
 </script>
 
