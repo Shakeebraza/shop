@@ -1,5 +1,8 @@
 <?php
 include_once('../../header.php');
+// var_dump($_SESSION['cards']);
+// var_dump($_SESSION['dumps']);
+// exit();
 ?>
 <style>
        .dumps-table {
@@ -351,6 +354,32 @@ function closeRulesPopup() {
     const popup = document.getElementById('rules-popup');
     popup.style.display = 'none';
 }
+function addToDump(dumpId) {
+    fetch('<?= $urlval?>ajax/addtocart.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ cardId: dumpId, type: 'dump' }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateCartSidebar(data.cards, data.dumps, data.total); 
+                updateCartCount();
+                const cartSidebar = document.getElementById('cartSidebar');
+                cartSidebar.classList.add('open');
+            } else {
+                alert('Failed to add to dump.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred.');
+        });
+}
+
+
 
 
 </script>

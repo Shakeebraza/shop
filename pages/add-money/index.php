@@ -504,12 +504,12 @@ function closeinsufficient_popup() {
 }
 
 function openRulesPopup() {
-    document.getElementById("rules-popup").style.display = "flex";
+    document.getElementById("rules-popup1").style.display = "flex";
 }
 
 
 function closeRulesPopup() {
-    document.getElementById("rules-popup").style.display = "none";
+    document.getElementById("rules-popup1").style.display = "none";
 }
 
 

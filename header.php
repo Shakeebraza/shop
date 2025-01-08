@@ -239,12 +239,15 @@ if (!isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
 }
 
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
+if (!isset($_SESSION['cards'])) {
+    $_SESSION['cards'] = [];
+}
+if (!isset($_SESSION['dumps'])) {
+    $_SESSION['dumps'] = [];
 }
 
 
-$cartItemCount = count($_SESSION['cart']);
+$cartItemCount = count($_SESSION['cards'] ?? 0) + count($_SESSION['dumps'] ?? 0 ) ?? 0;
 ?>
 
 
@@ -634,22 +637,38 @@ endif;
     </nav>
    
 
-
     <div class="cart-sidebar" id="cartSidebar">
-        <span class="close-btn close" id="closeSidebar" style="top:7px !important;">&times;</span>
-        <h2>Add to Cart</h2>
-        <div id="cartItems"></div>
-        <div style="margin-top: 20px; font-weight: bold;">
-            <p>Total: $<span id="cartTotal">0.00</span></p>
+    <span class="close-btn close" id="closeSidebar" style="top:7px !important;">&times;</span>
+    <h2>Add to Cart</h2>
+    
+    <div id="cartSections">
+        <!-- Section for Cards -->
+        <div id="cardsSection">
+            <h3>Cards</h3>
+            <div id="cartCards"></div> <!-- Container for card items -->
         </div>
-        <div class="user-actions">
-            <a href="#" class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</a>
-            <a href="#" class="empty-cart-btn" onclick="removeAllFromCart()">
-            <i class="fa-regular fa-file"></i>
-            <span class="btn-text">Empty Cart</span>
-            </a>
+        
+        <!-- Section for Dumps -->
+        <div id="dumpsSection" style="margin-top: 20px;">
+            <h3>Dumps</h3>
+            <div id="cartDumps"></div> <!-- Container for dump items -->
         </div>
     </div>
+    
+    <div style="margin-top: 20px; font-weight: bold;">
+        <p>Total: $<span id="cartTotal">0.00</span></p>
+    </div>
+    
+    <div class="user-actions">
+        <a href="#" class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</a>
+        <a href="#" class="empty-cart-btn" onclick="removeAllFromCart()">
+            <i class="fa-regular fa-file"></i>
+            <span class="btn-text">Empty Cart</span>
+        </a>
+    </div>
+</div>
+
+
         <script>
 document.querySelector('.see-all').addEventListener('click', function (event) {
     const hiddenContent = document.querySelector('.sdbr-ct32');

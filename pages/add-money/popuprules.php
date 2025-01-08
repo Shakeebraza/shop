@@ -3,7 +3,7 @@
 
 
 <!-- Popup Modal for Rules -->
-<div id="rules-popup" class="popup-modal">
+<div id="rules-popup1" class="popup-modal">
     <div class="popup-content">
         <span class="close" onclick="closeRulesPopup()">
             <i class="fas fa-times"></i>

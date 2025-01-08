@@ -122,58 +122,7 @@ td{
 }
 
 
-.add-to-cart-button {
-    background-color: #6c5ce7;
-    color: #fff;
-    margin-left: 10px;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    position: relative; 
-    overflow: hidden; 
-    transition: all 0.3s ease-in-out;
-}
 
-
-.button-text {
-    display: inline-block;
-    transition: opacity 0.3s ease;
-}
-
-
-.card-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 20px;
-    color: white;
-    opacity: 0; 
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-
-.add-to-cart-button:hover {
-    background-color: #4e3b9e;
- 
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.add-to-cart-button:hover .card-icon {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.3);
-}
-
-.add-to-cart-button:hover .button-text {
-    opacity: 0;
-}
-
-
-.add-to-cart-button:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(106, 90, 205, 0.4);
-}
 
 </style>
 
@@ -311,14 +260,7 @@ td{
     </div>
 </div>  
 
-<div id="rules-popup" class="popup-modal" style="display: none;">
-    <div class="popup-content" style="position: absolute;top: 50%;right: 20%;">
-        <span class="close" onclick="closeRulesPopup()">
-            <i class="fas fa-times"></i>
-        </span>
-        <p class="message"></p>  <!-- This will be dynamically replaced by success/error message -->
-    </div>
-</div>
+
 
 
 <?php
@@ -368,20 +310,7 @@ function showConfirm(cardId, price) {
 }
 
 
-function showPopupMessage(type, message) {
-    const popup = document.getElementById('rules-popup');
-    const popupContent = popup.querySelector('.popup-content');
 
-
-    popupContent.innerHTML = `
-        <span class="close" onclick="closeRulesPopup()">
-            <i class="fas fa-times"></i>
-        </span>
-        <p class="${type === 'success' ? 'message-success' : 'message-error'}">${message}</p>
-    `;
-
-    popup.style.display = 'block';
-}
 
 
 function closeRulesPopup() {
@@ -460,131 +389,41 @@ $(document).ready(function () {
 });
 
 
-function addToCart(cardId) {
-    
-    fetch('addtocartcc.php', {
+function addToCart(cardId, type='card') {
+    fetch('<?= $urlval?>ajax/addtocart.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ cardId: cardId }),
+        body: JSON.stringify({ cardId: cardId, type: type }), 
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                updateCartSidebar(data.cartItems, data.total);
-                updateCartCount();
-                const cartSidebar = document.getElementById('cartSidebar');
-                    cartSidebar.classList.add('open'); 
-                
+    .then(response => response.json())
+    .then(data => {
+        console.log('Response data:', data);
+        if (data.success) {
+    
+            if (Array.isArray(data.cards)) {
+                updateCartSidebar(data.cards, data.total);
             } else {
-                alert('Failed to add to cart.');
+                console.error('No cards in response.');
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred.');
-        });
-}
-
-function updateCartSidebar(cartItems, total) {
-    const cartItemsContainer = document.getElementById('cartItems');
-    const cartTotal = document.getElementById('cartTotal');
-
-
-    cartItemsContainer.innerHTML = '';
-
-
-    cartItems.forEach(item => {
-        const cartItem = document.createElement('div');
-        cartItem.className = 'cart-item';
-        cartItem.innerHTML = `
-            <img src="${item.image}" alt="Item Image" style="width: 50px; height: 50px; object-fit: cover;">
-            <div class="cart-item-details">
-                <h4>${item.bin}</h4>
-                <p>$${item.price}</p>
-            </div>
-            <span style="cursor: pointer;" onclick="removeFromCart(${item.id})">&times;</span>
-        `;
-        cartItemsContainer.appendChild(cartItem);
-    });
-
-
-    cartTotal.textContent = total.toFixed(2);
-}
-
-function getCartItems() {
-    return fetch('getCartItems.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                return data.cartItems || []; 
-            } else {
-                return []; 
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            return []; 
-        });
-}
-
-async function proceedToCheckout() {
-    alertify.confirm(
-        'Confirm Purchase',
-        `Are you sure you want to buy all the cards?`,
-        async function () {
-            try {
-                // Get all cart items
-                const cartItems = await getCartItems();
-
-                if (cartItems.length === 0) {
-                    alert("Your cart is empty!");
-                    return;
-                }
-
-                const payload = {
-                    cartItems: cartItems.map(item => ({
-                        cardId: item.id,
-                        quantity: item.quantity
-                    }))
-                };
-
-                // Proceed with the checkout
-                const response = await fetch('checkout.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload),
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    showPopupMessage('success', data.message || 'Purchase successful.');
-                   
-                    removeAllFromCart(); 
-                    setTimeout(() => {
-                            window.location.reload();
-                        }, 2000);
-                    } else {
-                    removeAllFromCart(); 
-                    showPopupMessage('error', data.message || 'Purchase failed.');
-                    setTimeout(() => {
-                            window.location.href = '<?= $urlval?>pages/add-money/index.php';
-                        }, 2000);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred.');
-            }
-        },
-        function () {
-            console.log('Purchase canceled');
+            updateCartCount();
+            const cartSidebar = document.getElementById('cartSidebar');
+            cartSidebar.classList.add('open');
+        } else {
+            alert('Failed to add to cart.');
         }
-    ).set('labels', { ok: 'Confirm', cancel: 'Cancel' });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred.');
+    });
 }
+
+
+
+
+
 
 
 

@@ -2,10 +2,13 @@
 session_start();
 
 
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
+if (!isset($_SESSION['cards'])) {
+    $_SESSION['cards'] = [];
 }
+if (!isset($_SESSION['dumps'])) {
+    $_SESSION['dumps'] = [];
+}
+$count=count($_SESSION['cards']) +count($_SESSION['dumps']);
 
-
-echo json_encode(['count' => count($_SESSION['cart'])]);
+echo json_encode(['count' => $count]);
 ?>

@@ -6,7 +6,8 @@ $inputData = json_decode(file_get_contents('php://input'), true);
 
 if (isset($inputData['action']) && $inputData['action'] == 'removeAll') {
 
-    unset($_SESSION['cart']);
+    unset($_SESSION['cards']);
+    unset($_SESSION['dumps']);
 
 
     echo json_encode([
