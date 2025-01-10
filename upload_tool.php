@@ -25,7 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     
     $uploadFile = $uploadDir . basename($file['name']);
-
+var_dump($uploadFile );
+exit();
     // Check if a file with the same name exists in the database for this section
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM uploads WHERE name = ? AND section = ?");
     $stmt->execute([$name, $section]);
