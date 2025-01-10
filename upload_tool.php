@@ -18,6 +18,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $section = $_POST['section'];
     $file = $_FILES['file'];
 
+    // Check for any file upload errors
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        $errors[] = "File upload error: " . $file['error'];
+        error_log("File upload error: " . $file['error']);
+        echo json_encode(['error' => "File upload error: " . $file['error']]);
+        exit();
+    }
+
     // Directory to upload files
     $uploadDir = 'uploads/' . strtolower($section) . '/';
     if (!is_dir($uploadDir)) {
@@ -25,8 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     
     $uploadFile = __DIR__ . '/' . $uploadDir . basename($file['name']);
-    
-
     
     // Check if a file with the same name exists in the database for this section
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM uploads WHERE name = ? AND section = ?");
@@ -39,11 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (file_exists($uploadFile)) {
         $errors[] = "A file with the name '{$file['name']}' already exists. Please rename your file and try again.";
     } else {
-        // Check for upload errors
-        if ($file['error'] !== UPLOAD_ERR_OK) {
-            $errors[] = "File upload error: " . $file['error'];
-        } elseif (move_uploaded_file($file['tmp_name'], $uploadFile)) {
-            // Insert file details into database
+        // Move the uploaded file
+        if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
+            // Insert file details into the database
             $stmt = $pdo->prepare("INSERT INTO uploads (name, description, file_path, price, section) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([$name, $description, $uploadFile, $price, $section]);
 
@@ -52,9 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         } else {
             $errors[] = "Failed to upload the file.";
+            error_log("Failed to upload the file.");
+            echo json_encode(['error' => 'Failed to upload the file']);
+            exit();
         }
     }
 }
+
 
 // Show success message if redirected with success status
 if (isset($_GET['success']) && $_GET['success'] == 1) {
