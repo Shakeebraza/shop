@@ -389,35 +389,29 @@ $(document).ready(function () {
 });
 
 
-function addToCart(cardId, type='card') {
+function addToCart(cardId) {
     fetch('<?= $urlval?>ajax/addtocart.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ cardId: cardId, type: type }), 
+        body: JSON.stringify({ cardId: cardId, type: 'card' }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Response data:', data);
-        if (data.success) {
-    
-            if (Array.isArray(data.cards)) {
-                updateCartSidebar(data.cards, data.total);
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateCartSidebar(data.cards, data.dumps, data.total); 
+                updateCartCount();
+                const cartSidebar = document.getElementById('cartSidebar');
+                cartSidebar.classList.add('open');
             } else {
-                console.error('No cards in response.');
+                alert('Failed to add to dump.');
             }
-            updateCartCount();
-            const cartSidebar = document.getElementById('cartSidebar');
-            cartSidebar.classList.add('open');
-        } else {
-            alert('Failed to add to cart.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred.');
-    });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred.');
+        });
 }
 
 
