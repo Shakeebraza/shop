@@ -18,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $section = $_POST['section'];
     $file = $_FILES['file'];
 
-    // Check for any file upload errors
     if ($file['error'] !== UPLOAD_ERR_OK) {
         $errors[] = "File upload error: " . $file['error'];
         error_log("File upload error: " . $file['error']);
@@ -26,16 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    // Directory to upload files
+
     $uploadDir = 'uploads/' . strtolower($section) . '/';
     if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true); // Ensure the directory is created if it doesn't exist
+        mkdir($uploadDir, 0777, true); 
     }
     
     $uploadFile = __DIR__ . '/' . $uploadDir . basename($file['name']);
-    var_Dump(    $uploadFile);
-    exit();
-    // Check if a file with the same name exists in the database for this section
+ 
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM uploads WHERE name = ? AND section = ?");
     $stmt->execute([$name, $section]);
     $count = $stmt->fetchColumn();
@@ -46,13 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (file_exists($uploadFile)) {
         $errors[] = "A file with the name '{$file['name']}' already exists. Please rename your file and try again.";
     } else {
-        // Move the uploaded file
+    
         if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
-            // Insert file details into the database
+       
             $stmt = $pdo->prepare("INSERT INTO uploads (name, description, file_path, price, section) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([$name, $description, $uploadFile, $price, $section]);
 
-            // Redirect to avoid resubmission
             header("Location: upload_tool.php?success=1&file_name=" . urlencode($name));
             exit();
         } else {
@@ -65,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 
-// Show success message if redirected with success status
+
 if (isset($_GET['success']) && $_GET['success'] == 1) {
     $fileName = isset($_GET['file_name']) ? htmlspecialchars($_GET['file_name']) : '';
     $successMessage = "{$fileName} uploaded successfully!";
