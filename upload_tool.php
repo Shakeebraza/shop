@@ -21,12 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Directory to upload files
     $uploadDir = 'uploads/' . strtolower($section) . '/';
     if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
+        mkdir($uploadDir, 0777, true); // Ensure the directory is created if it doesn't exist
     }
     
-    $uploadFile = $uploadDir . basename($file['name']);
-var_dump($uploadFile );
-exit();
+    $uploadFile = __DIR__ . '/' . $uploadDir . basename($file['name']);
+    
+
+    
     // Check if a file with the same name exists in the database for this section
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM uploads WHERE name = ? AND section = ?");
     $stmt->execute([$name, $section]);
@@ -38,7 +39,11 @@ exit();
     } elseif (file_exists($uploadFile)) {
         $errors[] = "A file with the name '{$file['name']}' already exists. Please rename your file and try again.";
     } else {
-        if (move_uploaded_file($file['tmp_name'], $uploadFile)) {
+        // Check for upload errors
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            $errors[] = "File upload error: " . $file['error'];
+        } elseif (move_uploaded_file($file['tmp_name'], $uploadFile)) {
+            // Insert file details into database
             $stmt = $pdo->prepare("INSERT INTO uploads (name, description, file_path, price, section) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([$name, $description, $uploadFile, $price, $section]);
 
