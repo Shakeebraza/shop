@@ -56,11 +56,11 @@ try {
         }
     }
 
-    // Process dumps
+
 
     foreach ($sessionDumps as $dumpId) {
         $stmt = $pdo->prepare("SELECT seller_id, price FROM dumps WHERE id = ? AND buyer_id IS NULL FOR UPDATE");
-        $stmt->execute([$dumpId['id']]);  // Correct usage of $dumpId
+        $stmt->execute([$dumpId['id']]);  
         $dumpData = $stmt->fetch();
     
         if ($dumpData) {
@@ -127,7 +127,7 @@ try {
             ");
             $updateSellerStmt->execute([$seller_earnings, $seller_earnings, $dump['seller_id']]);
         }
-
+ 
         $pdo->commit();
 
         unset($_SESSION['cards'], $_SESSION['dumps']);
