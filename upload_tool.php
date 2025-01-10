@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mkdir($uploadDir, 0777, true); // Ensure the directory is created if it doesn't exist
     }
     
-    $uploadFile = __DIR__ . '/' . $uploadDir . basename($file['name']);
+    $uploadFile = $urlval . $uploadDir . basename($file['name']);
     
     // Check if a file with the same name exists in the database for this section
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM uploads WHERE name = ? AND section = ?");
