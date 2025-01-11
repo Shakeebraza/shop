@@ -52,5 +52,47 @@ class SiteSettings {
         }
         return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
     }
+
+    public function getFilesBySection($section, $limit, $page) {
+     
+        $limit = (int)$limit;
+        
+      
+        $offset = ($page - 1) * $limit;
+    
+      
+        $sql = "SELECT * FROM uploads WHERE section = :section LIMIT :limit OFFSET :offset";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':section', $section, PDO::PARAM_STR);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);  
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);  
+        $stmt->execute();
+    
+
+        $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+
+        $countSql = "SELECT COUNT(*) FROM uploads WHERE section = :section";
+        $countStmt = $this->pdo->prepare($countSql);
+        $countStmt->bindParam(':section', $section, PDO::PARAM_STR);
+        $countStmt->execute();
+        $totalFiles = $countStmt->fetchColumn();
+    
+
+        $totalPages = ceil($totalFiles / $limit);
+  
+        return [
+            'files' => $files,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
+        ];
+    }
+    
+    
+
+    
+    
+    
 }
 ?>
