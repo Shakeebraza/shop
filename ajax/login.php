@@ -36,9 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = trim($_POST['password']);
     $captcha = $_POST['captcha'];
 
-    if ($captcha !== $_SESSION['captcha_code']) {
-        $response['errors'][] = "Invalid CAPTCHA";
-    }
+    // if ($captcha !== $_SESSION['captcha_code']) {
+    //     $response['errors'][] = "Invalid CAPTCHA";
+    // }
 
     if (empty($response['errors'])) {
         $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
