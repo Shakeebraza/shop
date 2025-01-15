@@ -90,7 +90,48 @@ class SiteSettings {
     }
     
     
-
+    public function fetchOrders($userId, $page = 1, $perPage = 6)
+    {
+        if (!$userId) {
+            return [
+                'error' => 'User not authenticated',
+                'code' => 401
+            ];
+        }
+    
+        $offset = ($page - 1) * $perPage;
+    
+        // Fetch paginated orders
+        $stmt = $this->pdo->prepare("
+            SELECT uploads.id AS tool_id, uploads.name, uploads.description, uploads.price, uploads.file_path, orders.created_at 
+            FROM orders 
+            JOIN uploads ON orders.tool_id = uploads.id 
+            WHERE orders.user_id = ? 
+            ORDER BY orders.created_at DESC
+            LIMIT $perPage OFFSET $offset
+        ");
+        $stmt->execute([$userId]);
+        $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        // Fetch total order count for pagination
+        $countStmt = $this->pdo->prepare("
+            SELECT COUNT(*) 
+            FROM orders 
+            JOIN uploads ON orders.tool_id = uploads.id 
+            WHERE orders.user_id = ?
+        ");
+        $countStmt->execute([$userId]);
+        $totalOrders = $countStmt->fetchColumn();
+        $totalPages = ceil($totalOrders / $perPage);
+    
+        return [
+            'orders' => $orders,
+            'totalOrders' => $totalOrders,
+            'totalPages' => $totalPages,
+            'currentPage' => $page
+        ];
+    }
+    
     
     
     
