@@ -169,7 +169,7 @@ function fetchFiles(currentPage = 1) {
                     const price = parseFloat(file.price);
                     const formattedPrice = isNaN(price) ? 'N/A' : `$${price.toFixed(2)}`;
 
-                    // Check session variable directly in PHP and pass it to JavaScript
+
                     const isActive = <?= json_encode($_SESSION['active'] === 1); ?>;
 
                     const fileItem = `

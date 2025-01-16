@@ -95,8 +95,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['active'])) {
                     } else {
                         if (response.active === 0) {
                             showRulesPopup(
-                                "<li>Your account is inactive. To activate your account, please top up your balance with at least $20.</li>" +
-                                "<li>Attention: Accounts that remain inactive for more than 15 days will be automatically deleted.</li>"
+                                "<p>Your account is inactive. To activate your account, please top up your balance with at least $20.</p>" +
+                                "<p>Attention: Accounts that remain inactive for more than 15 days will be automatically deleted.</p>"
                             );
                             setTimeout(function() {
                                 window.location.reload(); // Reload to allow login
