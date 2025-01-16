@@ -2,19 +2,18 @@
 require '../global.php';
 session_start();
 
-header('Content-Type: application/json'); 
+header('Content-Type: application/json');
 
 $response = [
     'status' => 'error',
-    'errors' => []
+    'errors' => [],
+    'active' => null, // Include the active field in the response
 ];
-
 
 if (!isset($_SESSION['login_attempts'])) {
     $_SESSION['login_attempts'] = 0;
     $_SESSION['last_attempt_time'] = time();
 }
-
 
 if ($_SESSION['login_attempts'] >= 3 && time() - $_SESSION['last_attempt_time'] < 60) {
     $remaining_time = 60 - (time() - $_SESSION['last_attempt_time']);
@@ -31,11 +30,13 @@ if (!isset($_POST['csrf_token']) || !$settings->verifyCsrfToken($_POST['csrf_tok
     ]);
     exit;
 }
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
     $captcha = $_POST['captcha'];
 
+    // Uncomment if CAPTCHA validation is required
     // if ($captcha !== $_SESSION['captcha_code']) {
     //     $response['errors'][] = "Invalid CAPTCHA";
     // }
@@ -46,24 +47,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
+            $response['active'] = $user['active']; 
+            
             if ($user['banned'] == 1) {
                 $response['errors'][] = "Your account has been banned. Please contact support.";
-            } else {
+            }  else {
                 $_SESSION['login_attempts'] = 0;
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
+                $_SESSION['active'] = $user['active'];
 
                 $response['status'] = 'success';
                 $response['redirect'] = $urlval . "/pages/news/index.php";
+               
+                if ($user['active'] == 0) {
+                    $response['msg']= "Your account is inactive. Please wait 10 seconds before trying again.";
+                    $response['delay'] = 10;
+                }
                 echo json_encode($response);
                 exit();
             }
         } else {
-            $response['errors'][] = "Invalid username or password";
+            $response['errors'][] = "Invalid username or password.";
         }
     }
-
 
     if (!empty($response['errors'])) {
         $_SESSION['login_attempts']++;

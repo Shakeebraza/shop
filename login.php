@@ -3,7 +3,10 @@ require 'global.php';
 session_start();
 
 $csrfToken = $settings->generateCsrfToken();
-
+if (isset($_SESSION['user_id']) && isset($_SESSION['active'])) {
+    header("Location: ".$urlval."pages/add-money/index.php");
+    exit();
+}
 ?>
 
 
@@ -16,8 +19,12 @@ $csrfToken = $settings->generateCsrfToken();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="<?= $urlval?>css/popup.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 
 <body>
     <div class="container">
@@ -44,7 +51,14 @@ $csrfToken = $settings->generateCsrfToken();
 
             <a href="register.php">Don't have an account? Register here</a>
         </form>
-
+        <div id="rules-popup" class="popup-modal">
+            <div class=" popup-content" style="position: absolute;top: 50%;right: 20%;">
+                <span class="close" onclick="closeRulesPopup()">
+                    <i class="fas fa-times"></i>
+                </span>
+                <p class="message"></p>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -52,39 +66,55 @@ $csrfToken = $settings->generateCsrfToken();
         const form = $('#login-form');
         const errorContainer = $('#error-container');
 
-
         $('#refresh-captcha').click(function() {
             $('#captcha-image').attr('src', 'captcha.php?' + Date.now());
         });
-
 
         form.submit(function(event) {
             event.preventDefault();
 
             $.ajax({
-                url: '<?= $urlval?>ajax/login.php',
+                url: '<?= $urlval ?>ajax/login.php',
                 method: 'POST',
                 data: form.serialize(),
                 dataType: 'json',
                 success: function(response) {
                     if (response.status === 'success') {
-                        window.location.href = response.redirect;
-                    } else {
-                        errorContainer.empty().show();
+                        if (response.active === 0) {
+                            showRulesPopup(
+                                "<li>Your account is inactive. To activate your account, please top up your balance with at least $20.</li>" +
+                                "<li>Attention: Accounts that remain inactive for more than 15 days will be automatically deleted.</li>"
+                            );
+                            setTimeout(function() {
+                                window.location.reload(); // Reload to allow login
+                            }, response.delay * 1000);
+                        } else {
 
-                        if (response.remaining_time) {
-                            startTimer(response.remaining_time);
-                            disableForm();
+                            window.location.href = response.redirect;
                         }
+                    } else {
+                        if (response.active === 0) {
+                            showRulesPopup(
+                                "<li>Your account is inactive. To activate your account, please top up your balance with at least $20.</li>" +
+                                "<li>Attention: Accounts that remain inactive for more than 15 days will be automatically deleted.</li>"
+                            );
+                            setTimeout(function() {
+                                window.location.reload(); // Reload to allow login
+                            }, response.delay * 1000);
+                        } else {
+                            if (response.remaining_time) {
+                                startTimer(response.remaining_time);
+                                disableForm();
+                            }
 
-                        response.errors.forEach(error => {
-                            errorContainer.append('<p>' + error + '</p>');
-                        });
+                            const message = response.errors.join('<br>');
+                            showRulesPopup(message);
+                        }
                     }
                 },
                 error: function() {
-                    errorContainer.html('<p>An error occurred. Please try again.</p>')
-                        .show();
+                    const message = 'An error occurred. Please try again.';
+                    showRulesPopup(message);
                 }
             });
         });
@@ -99,7 +129,6 @@ $csrfToken = $settings->generateCsrfToken();
                 if (timer <= 0) {
                     clearInterval(interval);
                     enableForm();
-                    errorContainer.hide();
                 }
             }, 1000);
         }
@@ -109,11 +138,24 @@ $csrfToken = $settings->generateCsrfToken();
             errorContainer.append('<p class="timer"></p>');
         }
 
-
         function enableForm() {
             form.find('input, button').prop('disabled', false);
         }
+
+        function showRulesPopup(message) {
+            const popup = document.getElementById('rules-popup');
+            const messageContainer = popup.querySelector('.message');
+            messageContainer.innerHTML = message;
+            popup.style.display = 'block';
+        }
+
+
     });
+
+    function closeRulesPopup() {
+        const popup = document.getElementById('rules-popup');
+        popup.style.display = 'none';
+    }
     </script>
 </body>
 

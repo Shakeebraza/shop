@@ -1213,3 +1213,10 @@ body {
     box-shadow: 0 0 0 4px rgba(106, 90, 205, 0.4);
 }
 
+
+a.buy-button.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+    text-decoration: none;
+}
