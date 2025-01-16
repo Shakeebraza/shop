@@ -169,21 +169,21 @@ function fetchFiles(currentPage = 1) {
                     const price = parseFloat(file.price);
                     const formattedPrice = isNaN(price) ? 'N/A' : `$${price.toFixed(2)}`;
 
-
-                    const isActive = <?= json_encode($_SESSION['active'] === 1); ?>;
+                    const isActive = <?= htmlspecialchars(json_encode($_SESSION['active'] === 1)); ?>;
 
                     const fileItem = `
-                    <div class="tool-item">
-                        <h3>${escapeHtml(file.name)}</h3>
-                        <p>${escapeHtml(file.description).replace(/\n/g, '<br>')}</p>
-                        <p>Price: ${formattedPrice}</p>
-                        <a class="buy-button ${!isActive ? 'disabled' : ''}" href="buy_tool.php?tool_id=${file.id}&section=leads" 
-                            data-id="${file.id}" data-section="leads" >
-                            <span class="price">${formattedPrice}</span>
-                            <span class="buy-now">Buy Now</span>
-                        </a>
-                    </div>
-                    `;
+        <div class="tool-item">
+            <h3>${escapeHtml(file.name)}</h3>
+            <p>${escapeHtml(file.description).replace(/\n/g, '<br>')}</p>
+            <p>Price: ${formattedPrice}</p>
+            <a class="buy-button ${!isActive ? 'disabled' : ''}" 
+                href="${isActive ? `buy_tool.php?tool_id=${file.id}&section=leads` : 'javascript:void(0);'}" 
+                data-id="${file.id}" data-section="leads">
+                <span class="price">${formattedPrice}</span>
+                <span class="buy-now">Buy Now</span>
+            </a>
+        </div>
+        `;
                     gridContainers.innerHTML += fileItem;
                 });
                 createPagination(data.currentPage, data.totalPages);

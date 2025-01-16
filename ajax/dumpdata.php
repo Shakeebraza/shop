@@ -1,6 +1,6 @@
 <?php
 include_once('../global.php'); 
-
+session_start();
 $dumpBin = isset($_POST['dump_bin']) ? trim($_POST['dump_bin']) : '';
 $dumpCountry = isset($_POST['dump_country']) ? trim($_POST['dump_country']) : '';
 $dumpType = isset($_POST['dump_type']) ? trim($_POST['dump_type']) : 'all';
@@ -90,7 +90,7 @@ if ($base_name !== 'all') {
 $filteredStmt = $pdo->prepare($filteredSql);
 $filteredStmt->execute($filteredParams);
 $totalFiltered = $filteredStmt->fetchColumn();
-
+$ative=$_SESSION['active'] === 0 ?'disabled':'';
 $data = [];
 foreach ($dumps as $dump) {
     $data[] = [
@@ -106,11 +106,11 @@ foreach ($dumps as $dump) {
         //                 <span class="buy-now">Buy Now</span>
         //               </a>',
      'actions' => '  <div class="action-buttons">
-        <a href="#" class="buy-button" style="background-color:#0c182f;" onclick="showConfirm(\'' . $dump['id'] . '\', \'' . $dump['price'] . '\')">
+        <a href="#" class="buy-button '.$ative.'" style="background-color:#0c182f;" onclick="showConfirm(\'' . $dump['id'] . '\', \'' . $dump['price'] . '\')">
             <span class="price">$' . htmlspecialchars($dump['price']) . '</span>
             <span class="buy-now">Buy Now</span>
         </a>
-        <button class="add-to-cart-button" style="background-color:#6c5ce7; color:#fff; margin-left:10px; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;" 
+        <button class="add-to-cart-button '.$ative.'" style="background-color:#6c5ce7; color:#fff; margin-left:10px; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;" 
             onclick="addToDump(\'' . $dump['id'] . '\')">
             <span class="button-text">Add to Cart</span>
             <i class="card-icon fas fa-shopping-cart"></i> <!-- Font Awesome shopping cart icon -->
