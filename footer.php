@@ -175,7 +175,7 @@ function removeFromCart(cardId) {
         .then(data => {
             if (data.success) {
 
-                updateCartSidebar(data.cartItems, data.dumpsItems, data.total);
+                updateCartSidebar(data.cardsItems, data.dumpsItems, data.total);
                 updateCartCount()
             } else {
                 alert(data.message);
@@ -197,8 +197,8 @@ function removeFromdumps(cardId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-
-                updateCartSidebar(data.cartItems, data.dumpsItems, data.total);
+                console.log(data)
+                updateCartSidebar(data.cardsItems, data.dumpsItems, data.total);
                 updateCartCount()
             } else {
                 alert(data.message);
