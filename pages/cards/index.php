@@ -4,7 +4,7 @@ include_once('../../header.php');
 
 ?>
 <style>
-    .message-success {
+.message-success {
     color: green;
     font-weight: bold;
     text-align: center;
@@ -46,11 +46,13 @@ tbody tr {
 }
 
 tbody tr:nth-of-type(even) {
-    background-color: #f9f9f9; /* Alternating row color */
+    background-color: #f9f9f9;
+    /* Alternating row color */
 }
 
 tbody tr:hover {
-    background-color: #f1f1f1; /* Row hover effect */
+    background-color: #f1f1f1;
+    /* Row hover effect */
 }
 
 /* Table cells */
@@ -77,17 +79,19 @@ a.buy-button:hover {
     background-color: #218838;
     cursor: pointer;
 }
-#credit-card-filters{
+
+#credit-card-filters {
     display: flex !important;
     align-items: center !important;
     gap: 20px !important;
 }
-#credit-cards{
+
+#credit-cards {
     display: inline-block !important;
     width: auto !important;
-    margin-top:20px;
+    margin-top: 20px;
     border-radius: 0px !important;
-    box-shadow:none !important;
+    box-shadow: none !important;
 }
 
 /* Responsive design */
@@ -95,21 +99,27 @@ a.buy-button:hover {
     table {
         font-size: 14px;
     }
-    td, th {
+
+    td,
+    th {
         padding: 8px 15px;
-        text-wrap:nowrap !important;
+        text-wrap: nowrap !important;
     }
+
     a.buy-button {
         font-size: 12px;
         padding: 6px 10px;
     }
-    .main-tbl321{
-    width: 100% !important;
-    overflow-x:scroll !important;}
+
+    .main-tbl321 {
+        width: 100% !important;
+        overflow-x: scroll !important;
+    }
+
     a.buy-button {
-    height: 30px !important;
- 
-}
+        height: 30px !important;
+
+    }
 }
 
 a.buy-button {
@@ -117,73 +127,72 @@ a.buy-button {
     width: 100px !important;
     text-align: center !important;
 }
-td{
-    padding: 10px; border: 1px solid #ddd;
+
+td {
+    padding: 10px;
+    border: 1px solid #ddd;
 }
-
-
-
-
 </style>
 
 
-    <div class="main-content">
+<div class="main-content">
     <div id="credit-cards" class="uuper">
-    <h2>Credit Cards Section</h2>
+        <h2>Credit Cards Section</h2>
 
 
-    <div class="filter-container-cards">
-    <form id="credit-card-filters" method="post" action="#credit-cards">
-    <div class="inpt-dmps-bx">
-        <label for="credit-card-bin">BIN</label>
-        <input type="text" name="cc_bin" id="credit-card-bin" placeholder="Comma-separated for multiple - e.g., 123456, 654321">
-    </div>
-    
-    <div class="inpt-dmps-bx">
-        <label for="credit-card-country">Country</label>
-        <select name="cc_country" id="credit-card-country">
-            <option value="">All</option>
-            <?php foreach ($creditCardCountries as $country): ?>
-                <option value="<?php echo htmlspecialchars($country); ?>">
-                    <?php echo htmlspecialchars($country); ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-    </div>
-    
-    <div class="inpt-dmps-bx">
-        <label for="state">State</label>
-        <input type="text" name="cc_state" id="state" placeholder="">
-    </div>
-    
-    <div class="inpt-dmps-bx">
-        <label for="city">City</label>
-        <input type="text" name="cc_city" id="city" placeholder="">
-    </div>
-    
-    <div class="inpt-dmps-bx">
-        <label for="zip">ZIP</label>
-        <input type="text" name="cc_zip" id="zip" placeholder="">
-    </div>
-    
-    <div class="inpt-dmps-bx">
-        <label for="type">Type</label>
-        <select name="cc_type" id="type">
-            <option value="all">All</option>
-            <option value="visa">Visa</option>
-            <option value="mastercard">Mastercard</option>
-            <option value="amex">Amex</option>
-            <option value="discover">Discover</option>
-        </select>
-    </div>
-    
+        <div class="filter-container-cards">
+            <form id="credit-card-filters" method="post" action="#credit-cards">
+                <div class="inpt-dmps-bx">
+                    <label for="credit-card-bin">BIN</label>
+                    <input type="text" name="cc_bin" id="credit-card-bin"
+                        placeholder="Comma-separated for multiple - e.g., 123456, 654321">
+                </div>
 
-    <div class="inpt-dmps-bx">
-    <label for="dumps_per_page">Base name</label>
-    <select name="basename" id="basename">
-        <option value="all">All</option>
-        
-        <?php
+                <div class="inpt-dmps-bx">
+                    <label for="credit-card-country">Country</label>
+                    <select name="cc_country" id="credit-card-country">
+                        <option value="">All</option>
+                        <?php foreach ($creditCardCountries as $country): ?>
+                        <option value="<?php echo htmlspecialchars($country); ?>">
+                            <?php echo htmlspecialchars($country); ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="inpt-dmps-bx">
+                    <label for="state">State</label>
+                    <input type="text" name="cc_state" id="state" placeholder="">
+                </div>
+
+                <div class="inpt-dmps-bx">
+                    <label for="city">City</label>
+                    <input type="text" name="cc_city" id="city" placeholder="">
+                </div>
+
+                <div class="inpt-dmps-bx">
+                    <label for="zip">ZIP</label>
+                    <input type="text" name="cc_zip" id="zip" placeholder="">
+                </div>
+
+                <div class="inpt-dmps-bx">
+                    <label for="type">Type</label>
+                    <select name="cc_type" id="type">
+                        <option value="all">All</option>
+                        <option value="visa">Visa</option>
+                        <option value="mastercard">Mastercard</option>
+                        <option value="amex">Amex</option>
+                        <option value="discover">Discover</option>
+                    </select>
+                </div>
+
+
+                <div class="inpt-dmps-bx">
+                    <label for="dumps_per_page">Base name</label>
+                    <select name="basename" id="basename">
+                        <option value="all">All</option>
+
+                        <?php
         $baseNames = $settings->getCreditCardBaseNames();
              
         foreach ($baseNames as $baseName) {
@@ -193,10 +202,10 @@ td{
             }
         }
         ?>
-    </select>
-    </div>
+                    </select>
+                </div>
 
-
+                <!-- 
     <div class="inpt-dmps-bx" style="display: flex; gap: 9px; margin-top: 20px;">
         <button type="submit" id="search-btn" class="btn btn-with-icon" style="background-color: #0c182f; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">
             <i class="fa fa-search"></i>
@@ -206,59 +215,71 @@ td{
             <i class="fa fa-times"></i>
             <span class="btn-text">Clear</span>
         </a>
-    </div>
+    </div> -->
+                <div class="inpt-dmps-bx" style="display: flex; gap: 9px; margin-top: 20px;">
+                    <button type="submit" id="search-btn" class="btn btn-with-icon"
+                        style="background-color: #0c182f; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">
+                        <i class="fa fa-search"></i>
+                        <span class="btn-text" style="margin-left: -7px;">Search</span>
+                    </button>
+                    <a type="button" id="clear-btn" class="btn btn-with-icon"
+                        style="background-color: #f44336; color: white; padding: 10px 20px; border-radius: 4px; border: none; cursor: pointer;">
+                        <i class="fa fa-times"></i>
+                        <span class="btn-text" style="margin-left: -7px;">Clear</span>
+                    </a>
+                              
+                </div>
+            </form>
 
-    </form>
-
-    </div>
+        </div>
 
 
- 
-<?php
+
+        <?php
 // var_dump($creditCards);
 ?>
-<?php if (!empty($creditCards)): ?>
-    <div class="main-tbl321">
-    <div id="customLoader" style="display: none; text-align: center; margin-bottom: 15px;">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+        <?php if (!empty($creditCards)): ?>
+        <div class="main-tbl321">
+            <div id="customLoader" style="display: none; text-align: center; margin-bottom: 15px;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             </div>
-        </div>
-    <table id="creditCardsTable" style="width: 100%; border-collapse: collapse; text-align: left;">
-        <thead>
-            <tr style="background-color:#0c182f;">
-                <th style="padding: 10px; border: 1px solid #ddd;">Type</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">BIN</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">Expiry</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">Country</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">State</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">City</th>
-                <!-- <th style="padding: 10px; border: 1px solid #ddd;">MNN</th>
+            <table id="creditCardsTable" style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background-color:#0c182f;">
+                        <th style="padding: 10px; border: 1px solid #ddd;">Type</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">BIN</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Expiry</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Country</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">State</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">City</th>
+                        <!-- <th style="padding: 10px; border: 1px solid #ddd;">MNN</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">Account Number</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">Sort Code</th>
                 <th style="padding: 10px; border: 1px solid #ddd;">Cardholder Name</th> -->
-                <th style="padding: 10px; border: 1px solid #ddd;">ZIP</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">Price</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">Other Information</th>
-                <th style="padding: 10px; border: 1px solid #ddd;">Buy</th>
-            </tr>
-        </thead>
-        
-    </table>
-</div>
+                        <th style="padding: 10px; border: 1px solid #ddd;">ZIP</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Price</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Other Information</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Buy</th>
+                    </tr>
+                </thead>
 
-<?php else: ?>
-<p>No credit cards available.</p>
-<?php endif; ?>
+            </table>
+        </div>
 
-
+        <?php else: ?>
+        <p>No credit cards available.</p>
+        <?php endif; ?>
 
 
 
-</div>
+
 
     </div>
-</div>  
+
+</div>
+</div>
 
 
 
@@ -278,7 +299,9 @@ function showConfirm(cardId, price) {
             $.ajax({
                 url: 'buy_card.php',
                 type: 'POST',
-                data: { card_id: cardId },
+                data: {
+                    card_id: cardId
+                },
                 success: function(response) {
                     try {
                         const result = typeof response === 'string' ? JSON.parse(response) : response;
@@ -304,7 +327,10 @@ function showConfirm(cardId, price) {
         function() {
             alertify.error('Purchase cancelled.');
         }
-    ).set('labels', { ok: 'Confirm', cancel: 'Cancel' });
+    ).set('labels', {
+        ok: 'Confirm',
+        cancel: 'Cancel'
+    });
 
     return false;
 }
@@ -318,89 +344,111 @@ function closeRulesPopup() {
     popup.style.display = 'none';
 }
 
-$(document).ready(function () {
+$(document).ready(function() {
     var customLoader = $('#customLoader');
     $('#creditCardsTable').DataTable({
         processing: false,
         serverSide: true,
-        searching: false, 
+        searching: false,
         ordering: false,
         ajax: {
             url: '<?= $urlval ?>ajax/carddata.php',
             type: 'POST',
-            beforeSend: function () {
-             
+            beforeSend: function() {
+
                 customLoader.show();
             },
-            complete: function () {
-                
+            complete: function() {
+
                 customLoader.hide();
             },
-            error: function () {
+            error: function() {
                 alert('Failed to load data. Please try again.');
             },
-            data: function (d) {
-             
+            data: function(d) {
+
                 d.cc_bin = $('#credit-card-bin').val();
                 d.cc_country = $('#credit-card-country').val();
                 d.cc_state = $('#state').val();
                 d.cc_city = $('#city').val();
                 d.cc_zip = $('#zip').val();
                 d.cc_type = $('#type').val();
-                d.basename = $('#basename').val();  
-                d.dumps_per_page = $('#dumps_per_page').val(); 
+                d.basename = $('#basename').val();
+                d.dumps_per_page = $('#dumps_per_page').val();
             }
         },
-        columns: [
-            { data: 'card_logo' },
-            { data: 'card_number' },
-            { data: 'expiry' },
-            { data: 'country' },
-            { data: 'state' },
-            { data: 'city' },
+        columns: [{
+                data: 'card_logo'
+            },
+            {
+                data: 'card_number'
+            },
+            {
+                data: 'expiry'
+            },
+            {
+                data: 'country'
+            },
+            {
+                data: 'state'
+            },
+            {
+                data: 'city'
+            },
             // { data: 'mmn' },
             // { data: 'account_number' },
             // { data: 'sort_code' },
             // { data: 'cardholder_name' },
-            { data: 'zip' },
-            { data: 'price' },
-            { data: 'otherinfo' },
-            { data: 'actions' }
+            {
+                data: 'zip'
+            },
+            {
+                data: 'price'
+            },
+            {
+                data: 'otherinfo'
+            },
+            {
+                data: 'actions'
+            }
         ]
     });
 
-    
-    $('#credit-card-filters select').on('change', function () {
-        $('#creditCardsTable').DataTable().ajax.reload();  
+
+    $('#credit-card-filters select').on('change', function() {
+        $('#creditCardsTable').DataTable().ajax.reload();
     });
 
     $('#search-btn').on('click', function(event) {
         event.preventDefault();
-        $('#creditCardsTable').DataTable().ajax.reload(); 
+        $('#creditCardsTable').DataTable().ajax.reload();
     });
 
- 
+
     $('#clear-btn').on('click', function(event) {
         event.preventDefault();
         document.getElementById('credit-card-filters').reset();
-        
-        $('#creditCardsTable').DataTable().ajax.reload(); 
+
+        $('#creditCardsTable').DataTable().ajax.reload();
     });
 });
 
 
 function addToCart(cardId) {
     fetch('<?= $urlval?>ajax/addtocart.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ cardId: cardId, type: 'card' }),
-    })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cardId: cardId,
+                type: 'card'
+            }),
+        })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                updateCartSidebar(data.cards, data.dumps, data.total); 
+                updateCartSidebar(data.cards, data.dumps, data.total);
                 updateCartCount();
                 const cartSidebar = document.getElementById('cartSidebar');
                 cartSidebar.classList.add('open');
@@ -413,18 +461,4 @@ function addToCart(cardId) {
             alert('An error occurred.');
         });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </script>
