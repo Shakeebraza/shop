@@ -363,7 +363,9 @@ function showConfirm(dumpId, price) {
                 },
                 dataType: 'json',
                 success: function(response) {
-                    showPopupMessage(response.message, response.success ? 'success' : 'error');
+                    showPopupMessage(response.message, response.success ?
+                        'Purchase successful. Please visit the My Dumps section view your purchased dumps.' :
+                        'error');
                     if (response.success) {
                         setTimeout(() => window.location.reload(), 2000); // reload after 2 seconds
                     }

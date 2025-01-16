@@ -307,7 +307,9 @@ function showConfirm(cardId, price) {
                         const result = typeof response === 'string' ? JSON.parse(response) : response;
 
                         if (result.success) {
-                            showPopupMessage('success', result.message || 'Purchase successful.');
+                            showPopupMessage('success', result.message ||
+                                'Purchase Successful": "Purchase successful. Please visit the My Cards section view your purchased cards.'
+                                );
                             setTimeout(() => {
                                 window.location.reload();
                             }, 2000);

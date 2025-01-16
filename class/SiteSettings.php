@@ -131,6 +131,78 @@ class SiteSettings {
             'currentPage' => $page
         ];
     }
+
+    
+    function getCreditCardData($start = 0, $length = 10, $filters = []) {
+        global $pdo; // Use the PDO object globally
+    
+        // Default filter values
+        $ccBin = isset($filters['cc_bin']) ? trim($filters['cc_bin']) : '';
+        $ccCountry = isset($filters['cc_country']) ? trim($filters['cc_country']) : '';
+        $ccState = isset($filters['cc_state']) ? trim($filters['cc_state']) : '';
+        $ccCity = isset($filters['cc_city']) ? trim($filters['cc_city']) : '';
+        $ccZip = isset($filters['cc_zip']) ? trim($filters['cc_zip']) : '';
+        $ccType = isset($filters['cc_type']) ? trim($filters['cc_type']) : 'all';
+        $basename = isset($filters['basename']) ? trim($filters['basename']) : 'all';
+    
+        // Base SQL query to fetch data
+        $sql = "SELECT * FROM credit_cards WHERE buyer_id IS NULL AND status = 'unsold'";
+    
+        // Prepare parameters for filtering
+        $params = [];
+    
+        if (!empty($ccBin)) {
+            $bins = array_map('trim', explode(',', $ccBin));
+            $sql .= " AND (" . implode(" OR ", array_fill(0, count($bins), "card_number LIKE ?")) . ")";
+            foreach ($bins as $bin) {
+                $params[] = $bin . '%';
+            }
+        }
+        if (!empty($ccCountry)) {
+            $sql .= " AND UPPER(TRIM(country)) = ?";
+            $params[] = strtoupper(trim($ccCountry));
+        }
+        if (!empty($ccState)) {
+            $sql .= " AND state LIKE ?";
+            $params[] = "%$ccState%";
+        }
+        if (!empty($ccCity)) {
+            $sql .= " AND city LIKE ?";
+            $params[] = "%$ccCity%";
+        }
+        if (!empty($ccZip)) {
+            $sql .= " AND zip LIKE ?";
+            $params[] = "%$ccZip%";
+        }
+        if ($ccType !== 'all') {
+            $sql .= " AND card_type = ?";
+            $params[] = $ccType;
+        }
+        if ($basename !== 'all') {
+            $sql .= " AND base_name = ?";
+            $params[] = $basename;
+        }
+    
+        // Execute the filtered query to get total records count
+        $totalSql = "SELECT COUNT(*) FROM credit_cards WHERE buyer_id IS NULL AND status = 'unsold'";
+        $totalStmt = $pdo->prepare($totalSql);
+        $totalStmt->execute($params);
+        $totalRecords = $totalStmt->fetchColumn();
+    
+        // Apply pagination to the main query (LIMIT and OFFSET)
+        $sql .= " ORDER BY id DESC LIMIT " . intval($start) . ", " . intval($length);
+    
+        // Execute the main query to fetch paginated data
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        $creditCards = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        return [
+            'totalRecords' => $totalRecords,
+            'data' => $creditCards
+        ];
+    }
+    
     
     
     

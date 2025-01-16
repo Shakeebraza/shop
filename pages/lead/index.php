@@ -251,36 +251,48 @@ function closeRulesPopup() {
 
 document.addEventListener("click", function(event) {
     if (event.target.closest(".buy-button")) {
-        event.preventDefault(); // Prevent the default navigation
+        event.preventDefault();
 
         const button = event.target.closest(".buy-button");
         const toolId = button.getAttribute("data-id");
         const section = button.getAttribute("data-section");
 
-        if (confirm('Are you sure you want to buy this item?')) {
-            // Send AJAX request
-            fetch("buy_tool.php", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: `tool_id=${toolId}&section=${section}`,
-                })
-                .then((response) => response.json()) // Parse the JSON response
-                .then((data) => {
-                    console.log(data);
-                    if (data.success) {
-                        showPopupMessage(data.success, 'success');
-                        setTimeout(() => window.location.reload(), 2000);
-                    } else {
-                        showPopupMessage(data.error, 'error');
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error buying tool:", error);
-                    alert("An error occurred. Please try again later.");
-                });
-        }
+        // Use alertify for confirmation
+        alertify.confirm(
+            "Confirmation",
+            "Are you sure you want to buy this item?",
+            function() {
+                // Send AJAX request if confirmed
+                fetch("buy_tool.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: `tool_id=${toolId}&section=${section}`,
+                    })
+                    .then((response) => response.json()) // Parse the JSON response
+                    .then((data) => {
+                        console.log(data);
+                        if (data.success) {
+                            showPopupMessage(data.success, 'success');
+                            setTimeout(() => window.location.reload(), 2000);
+                        } else {
+                            showPopupMessage(data.error, 'error');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error buying tool:", error);
+                        alertify.error("An error occurred. Please try again later.");
+                    });
+            },
+            function() {
+                // Action if canceled
+                alertify.error("Purchase cancelled.");
+            }
+        ).set("labels", {
+            ok: "Confirm",
+            cancel: "Cancel"
+        });
     }
 });
 </script>

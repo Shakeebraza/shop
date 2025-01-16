@@ -59,7 +59,7 @@ try {
             $insertOrderStmt->execute([$buyer_id, $dump_id, $price, $seller_id]);
 
             $pdo->commit();
-            echo json_encode(['success' => true, 'message' => 'Purchase successful!']);
+            echo json_encode(['success' => true, 'message' => 'Purchase successful. Please visit the My Dumps section view your purchased dumps.']);
         } else {
             $pdo->rollBack();
             echo json_encode(['success' => false, 'message' => 'Not enough balance to complete the purchase.']);

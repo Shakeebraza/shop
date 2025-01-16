@@ -51,7 +51,7 @@ try {
             $pdo->commit();
 
             $response['success'] = true;
-            $response['message'] = 'Purchase successful!';
+            $response['message'] = 'Purchase Successful : Purchase successful. Please visit the My Cards section view your purchased cards.';
         } else {
             $pdo->rollBack();
             $response['message'] = 'Not enough balance to complete the purchase.';
