@@ -615,42 +615,45 @@ endif;
                 <ul class="sdbr-ct32">
                     <li><a href="<?= $urlval?>pages/news/index.php" id="news-nav"><i class="fas fa-newspaper"></i>
                             News</a></li>
-                    <?php if ($visibility['Tools'] === 1): ?>
+                    <?php if ($visibility['Tools'] === 1 && $_SESSION['active'] == 1): ?>
                     <li><a href="<?= $urlval?>pages/tools/index.php" id="tools-nav"><i class="fas fa-wrench"></i>
                             Tools</a></li>
                     <?php endif; ?>
-                    <?php if ($visibility['Leads'] === 1): ?>
+                    <?php if ($visibility['Leads'] === 1 && $_SESSION['active'] == 1): ?>
                     <li><a href="<?= $urlval?>pages/lead/index.php" id="leads-nav"><i class="fas fa-envelope"></i>
                             Leads</a></li>
                     <?php endif; ?>
-                    <?php if ($visibility['Pages'] === 1): ?>
+                    <?php if ($visibility['Pages'] === 1 && $_SESSION['active'] == 1): ?>
                     <li><a href="<?= $urlval?>pages/page/index.php" id="pages-nav"><i class="fas fa-file-alt"></i>
                             Pages</a></li>
                     <?php endif; ?>
-                    <?php if ($visibility['My Orders'] === 1): ?>
+                    <?php if ($visibility['My Orders'] === 1 && $_SESSION['active'] == 1): ?>
                     <li><a href="<?= $urlval?>pages/order/index.php" id="my-orders-nav"><i class="fas fa-box"></i> My
                             Orders</a></li>
                     <?php endif; ?>
-                    <?php if ($visibility['Credit Cards'] === 1): ?>
+                    <?php if ($visibility['Credit Cards'] === 1 && $_SESSION['active'] == 1): ?>
                     <li><a href="<?= $urlval?>pages/cards/index.php" id="credit-cards-nav"><i
                                 class="far fa-credit-card"></i> Credit Cards</a></li>
                     <?php endif; ?>
-                    <?php if ($visibility['Dumps'] === 1): ?>
+                    <?php if ($visibility['Dumps'] === 1 && $_SESSION['active'] == 1): ?>
                     <li><a href="<?= $urlval?>pages/dump/index.php" id="dumps-nav"><i class="far fa-credit-card"></i>
                             Dumps</a></li>
                     <?php endif; ?>
-                    <?php if ($visibility['My Cards'] === 1): ?>
+                    <?php if ($visibility['My Cards'] === 1 && $_SESSION['active'] == 1): ?>
                     <li><a href="<?= $urlval?>pages/cards/my-cards.php" id="my-cards-nav"><i class="fas fa-id-card"></i>
                             My Cards</a></li>
                     <?php endif; ?>
-                    <?php if ($visibility['My Dumps'] === 1): ?>
+                    <?php if ($visibility['My Dumps'] === 1 && $_SESSION['active'] == 1): ?>
                     <li><a href="<?= $urlval?>pages/dump/my-dumps.php" id="my-dumps-nav"><i class="fas fa-id-card"></i>
                             My Dumps</a></li>
                     <?php endif; ?>
                     <li><a href="<?= $urlval?>pages/add-money/index.php" id="add-money-nav"><i
                                 class="fas fa-dollar-sign"></i> Add Money</a></li>
+                    <?php if ($_SESSION['active'] == 1): ?>
                     <li><a href="<?= $urlval?>pages/add-money/rules.php" id="rules-nav"><i class="fas fa-gavel"></i>
                             Rules</a></li>
+                    <?php endif; ?>
+                    <?php if ($_SESSION['active'] == 1): ?>
                     <li>
                         <a href="<?= $urlval?>pages/support/index.php" id="support-link">
                             <i class="fas fa-life-ring"></i> Support
@@ -659,7 +662,8 @@ endif;
                             <?php endif; ?>
                         </a>
                     </li>
-                    <?php if ($user['seller'] == 1): ?>
+                    <?php endif; ?>
+                    <?php if ($user['seller'] == 1 && $_SESSION['active'] == 1): ?>
                     <li><a href="<?= $urlval?>pages/support/seller-stats.php" id="seller-stats-nav"><i
                                 class="fas fa-chart-bar"></i> Seller Stats</a></li>
                     <?php endif; ?>

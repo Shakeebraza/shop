@@ -80,18 +80,18 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['active'])) {
                 dataType: 'json',
                 success: function(response) {
                     if (response.status === 'success') {
-                        if (response.active === 0) {
-                            showRulesPopup(
-                                "<li>Your account is inactive. To activate your account, please top up your balance with at least $20.</li>" +
-                                "<li>Attention: Accounts that remain inactive for more than 15 days will be automatically deleted.</li>"
-                            );
-                            setTimeout(function() {
-                                window.location.reload(); // Reload to allow login
-                            }, response.delay * 1000);
-                        } else {
+                        // if (response.active === 0) {
+                        //     showRulesPopup(
+                        //         "<li>Your account is inactive. To activate your account, please top up your balance with at least $20.</li>" +
+                        //         "<li>Attention: Accounts that remain inactive for more than 15 days will be automatically deleted.</li>"
+                        //     );
+                        //     setTimeout(function() {
+                        //         window.location.reload(); // Reload to allow login
+                        //     }, response.delay * 1000);
+                        // } else {
 
-                            window.location.href = response.redirect;
-                        }
+                        window.location.href = response.redirect;
+                        // }    
                     } else {
                         if (response.active === 0) {
                             showRulesPopup(

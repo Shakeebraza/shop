@@ -77,5 +77,5 @@ if ($stmt->rowCount() === 0) {
 }
 
 
-echo json_encode(['success' => 'Purchase successful!']);
+echo json_encode(['success' => 'Purchase successful! To view your purchased items, please visit the My Orders section.']);
 exit(); 
