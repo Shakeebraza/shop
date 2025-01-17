@@ -12,7 +12,7 @@ $track_pin = isset($_POST['track_pin']) ? trim($_POST['track_pin']) : 'all';
 $start = isset($_POST['start']) ? intval($_POST['start']) : 0;
 $length = isset($_POST['length']) ? intval($_POST['length']) : 10;
 
-$sql = "SELECT id, track1, track2, monthexp, yearexp, pin, card_type, price, country 
+$sql = "SELECT id, track1,code, track2, monthexp, yearexp, pin, card_type, price, country 
         FROM dumps 
         WHERE buyer_id IS NULL AND status = 'unsold'";
 
@@ -100,6 +100,7 @@ foreach ($dumps as $dump) {
         'pin' => !empty($dump['pin']) ? 'Yes' : 'No',
         'track' => !empty($dump['track1']) ? 'Yes' : 'No',
         'country' => htmlspecialchars($dump['country']),
+        'code' => $dump['code'],
         'price' => '$' . htmlspecialchars($dump['price']),
         // 'actions' => '<a href="buy_dump.php?dump_id=' . htmlspecialchars($dump['id']) . '" class="buy-button-dump" style="background-color:#0c182f;" onclick="return confirm(\'Are you sure you want to buy this dump?\');">
         //                 <span class="price">$' . htmlspecialchars($dump['price']) . '</span>

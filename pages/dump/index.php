@@ -238,6 +238,7 @@ form#dump-filters {
                         <th>Type</th>
                         <th>BIN</th>
                         <th>Exp Date</th>
+                        <th>Code</th>
                         <th>PIN</th>
                         <th>Track 1</th>
                         <th>Country</th>
@@ -296,6 +297,7 @@ $(document).ready(function() {
                 d.dump_bin = $('#dump-bin').val();
                 d.dump_country = $('#dump-country').val();
                 d.dump_type = $('#dump-type').val();
+                d.dump_code = $('#dump-code').val();
                 d.dump_pin = $('#dump-pin').val();
                 d.base_name = $('#base_name').val();
                 d.track_pin = $('#track-pin').val();
@@ -309,6 +311,9 @@ $(document).ready(function() {
             },
             {
                 data: 'expiry'
+            },
+            {
+                data: 'code'
             },
             {
                 data: 'pin'

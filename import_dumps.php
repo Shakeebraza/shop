@@ -49,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $price = $_POST['price'];
 
         $pos_track1 = $_POST['pos_track1'];
+        $pos_code = $_POST['pos_code'];
         $pos_track2 = $_POST['pos_track2'];
         $pos_pin = $_POST['pos_pin'];
         $pos_country = $_POST['pos_country'];
@@ -62,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($lines as $line) {
             $details = explode('|', $line);
 
-            if (count($details) >= max($pos_track1, $pos_track2, $pos_pin, $pos_country)) {
+            if (count($details) >= max($pos_track1,$pos_code, $pos_track2, $pos_pin, $pos_country)) {
                 if($details[$pos_track1] == 0){
                     
                     $track1 = NULL;
@@ -71,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $track1 = $details[$pos_track1 - 1] ;
                 }
                 $track2 = $details[$pos_track2 - 1];
+                $code = $details[$pos_code - 1];
                 $pin = isset($details[$pos_pin - 1]) ? $details[$pos_pin - 1] : '0';
                 $country = isset($details[$pos_country - 1]) ? strtoupper(trim(preg_replace('/\s+/', ' ', $details[$pos_country - 1]))) : 'Unknown';
 
@@ -88,10 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $card_type = getCardType($card_number);
 
-                    $query = "INSERT INTO dumps (track1, track2, pin, monthexp, yearexp, seller_id, seller_name, price, status, card_type, country)
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'unsold', ?, ?)";
+                    $query = "INSERT INTO dumps (track1,code, track2, pin, monthexp, yearexp, seller_id, seller_name, price, status, card_type, country)
+                              VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, 'unsold', ?, ?)";
                     $stmt = $pdo->prepare($query);
-                    $stmt->execute([$track1, $track2, $pin, $exp_mm, $exp_yy, $seller_id, $seller_name, $price, $card_type, $country]);
+                    $stmt->execute([$track1,$code, $track2, $pin, $exp_mm, $exp_yy, $seller_id, $seller_name, $price, $card_type, $country]);
                     $importedCount++;
                 }
             } else {
@@ -117,24 +119,28 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Import Dumps</title>
     <link rel="stylesheet" href="css/importer.css"> <!-- Link to external CSS -->
 </head>
+
 <body>
     <div class="container">
         <h2>Import Dumps</h2>
 
         <form action="import_dumps.php" method="POST" enctype="multipart/form-data">
             <!-- File upload for CSV or TXT files -->
-            <textarea name="data" id="data" placeholder="Enter dumps data (Track 1 | Track 2 | PIN | Country)"></textarea>
+            <textarea name="data" id="data"
+                placeholder="Enter dumps data (Track 1 | Track 2 | PIN | Country)"></textarea>
             <input type="file" name="import_file" accept=".csv, .txt">
 
             <!-- Set field positions for data mapping -->
             <div class="grid-container">
                 <input type="number" name="pos_track1" placeholder="Track 1 Pos" required>
+                <input type="number" name="pos_code" placeholder="Code pos" required>
                 <input type="number" name="pos_track2" placeholder="Track 2 Pos" required>
                 <input type="number" name="pos_pin" placeholder="PIN Pos (if available)">
                 <input type="number" name="pos_country" placeholder="Country Pos" required>
@@ -144,7 +150,7 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
             <select name="seller_id" id="seller_id" required>
                 <option value="">Select Seller</option>
                 <?php foreach ($sellers as $seller): ?>
-                    <option value="<?= $seller['id'] ?>"><?= $seller['username'] ?></option>
+                <option value="<?= $seller['id'] ?>"><?= $seller['username'] ?></option>
                 <?php endforeach; ?>
             </select>
 
@@ -152,22 +158,23 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
             <input type="number" name="price" id="price" step="0.01" min="0" placeholder="Price (USD)" required>
 
             <button type="submit" class="import-button">Import Dumps</button><br><br>
-        <a href="panel.php" class="back-button">Back to Selection</a>
+            <a href="panel.php" class="back-button">Back to Selection</a>
         </form>
 
         <!-- Display success and duplicate messages below the button -->
         <?php if ($successMessage): ?>
-            <div class="success-message"><?= $successMessage ?></div>
+        <div class="success-message"><?= $successMessage ?></div>
         <?php endif; ?>
 
         <?php if ($duplicateMessage): ?>
-            <div class="duplicate-message"><?= $duplicateMessage ?></div>
+        <div class="duplicate-message"><?= $duplicateMessage ?></div>
         <?php endif; ?>
 
         <?php if ($errorMessage): ?>
-            <div class="error-message"><?= $errorMessage ?></div>
+        <div class="error-message"><?= $errorMessage ?></div>
         <?php endif; ?>
     </div>
 
 </body>
+
 </html>
