@@ -198,7 +198,7 @@ function removeFromdumps(cardId) {
         .then(data => {
             if (data.success) {
                 console.log(data)
-                updateCartSidebar(data.cardsItems, data.dumpsItems, data.total);
+                updateCartSidebar(data.cartItems, data.dumpsItems, data.total);
                 updateCartCount()
             } else {
                 alert(data.message);
