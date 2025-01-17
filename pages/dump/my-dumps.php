@@ -126,6 +126,72 @@ include_once('../../header.php');
     font-weight: bold;
     color: white;
 }
+
+.ribbon {
+    position: absolute;
+    top: -3px;
+    left: -21px;
+    background: #4CAF50;
+    color: white;
+    padding: 5px 16px;
+    transform: rotate(-45deg);
+    transform-origin: top right;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    border-radius: 8px;
+    animation: swing 2s ease-in-out infinite;
+}
+
+@keyframes swing {
+    0% {
+        transform: rotate(-45deg);
+    }
+
+    25% {
+        transform: rotate(-43deg);
+    }
+
+    50% {
+        transform: rotate(-47deg);
+    }
+
+    75% {
+        transform: rotate(-43deg);
+    }
+
+    100% {
+        transform: rotate(-45deg);
+    }
+}
+
+@keyframes shake-up-down {
+    0% {
+        transform: translateY(0);
+    }
+
+    25% {
+        transform: translateY(-5px);
+    }
+
+    50% {
+        transform: translateY(5px);
+    }
+
+    75% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+
+.shake {
+    animation: shake-up-down 0.5s ease-in-out;
+}
 </style>
 
 <!-- Main Content Area -->
@@ -150,7 +216,15 @@ include_once('../../header.php');
                 <tbody>
                     <?php foreach ($soldDumps as $dump): ?>
                     <tr id="dump-<?php echo htmlspecialchars($dump['id']); ?>" class="dump-item">
-                        <td><?php echo htmlspecialchars($dump['id']); ?></td>
+                        <td style="padding: 10px; position: relative;">
+                            <?php if ($dump['is_view'] == 0): ?>
+                            <span class="ribbon">
+                                New
+                            </span>
+                            <?php endif; ?>
+                            <?php echo htmlspecialchars($dump['id']); ?>
+
+                        </td>
                         <td><?php echo htmlspecialchars(empty($dump['track1']) ? '' : $dump['track1']); ?></td>
                         <td><?php echo htmlspecialchars($dump['track2']); ?></td>
                         <td><?php echo htmlspecialchars($dump['pin'] ?: 'No'); ?></td>
@@ -322,4 +396,17 @@ if (rulesBtn) {
 } else {
     console.error('Button with id "rules-btnnew" not found.');
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('update_dump_isview.php', {
+            method: 'POST',
+        })
+        .then(response => response.json())
+        .then(data => {
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
 </script>

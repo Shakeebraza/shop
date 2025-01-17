@@ -90,7 +90,7 @@ if ($base_name !== 'all') {
 $filteredStmt = $pdo->prepare($filteredSql);
 $filteredStmt->execute($filteredParams);
 $totalFiltered = $filteredStmt->fetchColumn();
-$ative=$_SESSION['active'] === 0 ?'disabled':'';
+$ative=$_SESSION['active'] === 0 ?'disabled':''; 
 $data = [];
 foreach ($dumps as $dump) {
     $data[] = [
