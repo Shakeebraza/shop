@@ -137,43 +137,52 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Import Data</title>
-    <link rel="stylesheet" href="css/importer.css"> 
+    <link rel="stylesheet" href="css/importer.css">
 </head>
+
 <body>
     <div class="container">
         <h2>Import Credit Cards</h2>
 
         <form action="import_cards.php" method="POST" enctype="multipart/form-data">
 
-           
+
             <textarea name="data" id="data" placeholder="Enter data based on the format selected"></textarea>
-            <div style="display: flex; gap: 30px; justify-content: center; align-items: center; padding: 20px; border: 2px dashed gold; border-radius: 12px; background-color: #fff9e6; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);">
-            <label style="display: flex; align-items: center; position: relative; cursor: pointer; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">
-                <input type="radio" name="otherinfo" value="Yes" style="display: none;" <?= isset($otherinfo) && $otherinfo == 'Yes' ? 'checked' : '' ?>>
-                <span style="padding: 12px 24px; border: 2px solid gold; border-radius: 8px; background: linear-gradient(145deg, #f5f5f5, #ffffff); color: gold; transition: all 0.3s ease; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); text-transform: uppercase; display: inline-block;">
-                    Yes
-                </span>
-            </label>
-            <label style="display: flex; align-items: center; position: relative; cursor: pointer; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">
-                <input type="radio" name="otherinfo" value="No" style="display: none;" <?= isset($otherinfo) && $otherinfo == 'No' ? 'checked' : '' ?>>
-                <span style="padding: 12px 24px; border: 2px solid gold; border-radius: 8px; background: linear-gradient(145deg, #f5f5f5, #ffffff); color: gold; transition: all 0.3s ease; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); text-transform: uppercase; display: inline-block;">
-                    No
-                </span>
-            </label>
-        </div>
+            <div
+                style="display: flex; gap: 30px; justify-content: center; align-items: center; padding: 20px; border: 2px dashed gold; border-radius: 12px; background-color: #fff9e6; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);">
+                <label
+                    style="display: flex; align-items: center; position: relative; cursor: pointer; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">
+                    <input type="radio" name="otherinfo" value="Yes" style="display: none;"
+                        <?= isset($otherinfo) && $otherinfo == 'Yes' ? 'checked' : '' ?>>
+                    <span
+                        style="padding: 12px 24px; border: 2px solid gold; border-radius: 8px; background: linear-gradient(145deg, #f5f5f5, #ffffff); color: gold; transition: all 0.3s ease; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); text-transform: uppercase; display: inline-block;">
+                        Yes
+                    </span>
+                </label>
+                <label
+                    style="display: flex; align-items: center; position: relative; cursor: pointer; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">
+                    <input type="radio" name="otherinfo" value="No" style="display: none;"
+                        <?= isset($otherinfo) && $otherinfo == 'No' ? 'checked' : '' ?>>
+                    <span
+                        style="padding: 12px 24px; border: 2px solid gold; border-radius: 8px; background: linear-gradient(145deg, #f5f5f5, #ffffff); color: gold; transition: all 0.3s ease; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); text-transform: uppercase; display: inline-block;">
+                        No
+                    </span>
+                </label>
+            </div>
 
             <input type="file" name="import_file" accept=".csv, .txt">
 
-          
+
             <div class="grid-container">
                 <input type="number" name="pos_card_number" placeholder="Card Number Pos" required>
                 <input type="number" name="pos_exp_month" placeholder="Exp Month Pos" required>
                 <input type="number" name="pos_exp_year" placeholder="Exp Year Pos" required>
-                
+
                 <input type="number" name="pos_cvv" placeholder="CVV Pos" required>
                 <input type="number" name="pos_name_on_card" placeholder="Name on Card Pos" required>
                 <input type="number" name="pos_address" placeholder="Address Pos" required>
@@ -186,14 +195,14 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
                 <input type="number" name="pos_phone_number" placeholder="Phone Number Pos" required>
                 <input type="number" name="pos_dob" placeholder="DOB Pos" required>
                 <!-- <input type="number" name="pos_full_name" placeholder="Full Name Pos" required> -->
-           
+
                 <input type="number" name="pos_mmn" placeholder="MMN Pos">
                 <input type="number" name="pos_account_number" placeholder="Account Number Pos">
                 <input type="number" name="pos_sort_code" placeholder="Sort Code Pos">
-                <input type="base_name" name="base_name" placeholder="Base Name Pos">
-                
+                <input type="base_name" name="base_name" placeholder="Base Pose">
+
             </div>
-     
+
 
             <select name="seller_id" id="seller_id" required>
                 <option value="">Select Seller</option>
@@ -213,26 +222,26 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
             <input type="number" name="price" id="price" step="0.01" min="0" placeholder="Price (USD)" required>
 
             <button type="submit" class="import-button">Import Cards</button><br><br>
-        <a href="panel.php" class="back-button">Back to Selection</a>
+            <a href="panel.php" class="back-button">Back to Selection</a>
         </form>
 
         <!-- Display success and duplicate messages below the button -->
         <?php if ($successMessage): ?>
-            <div class="success-message"><?php echo $successMessage; ?></div>
+        <div class="success-message"><?php echo $successMessage; ?></div>
         <?php endif; ?>
 
         <?php if ($duplicateMessage): ?>
-            <div class="duplicate-message"><?php echo $duplicateMessage; ?></div>
+        <div class="duplicate-message"><?php echo $duplicateMessage; ?></div>
         <?php endif; ?>
 
         <?php if ($errorMessage): ?>
-            <div class="error-message"><?php echo $errorMessage; ?></div>
+        <div class="error-message"><?php echo $errorMessage; ?></div>
         <?php endif; ?>
     </div>
     <script>
     const radios = document.querySelectorAll('input[name="otherinfo"]');
     radios.forEach((radio) => {
-        radio.addEventListener('change', function () {
+        radio.addEventListener('change', function() {
             document.querySelectorAll('span').forEach((span) => {
                 span.style.background = 'linear-gradient(145deg, #f5f5f5, #ffffff)';
                 span.style.color = 'gold';
@@ -244,8 +253,8 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
             label.style.boxShadow = '0px 6px 10px rgba(0, 0, 0, 0.4)';
         });
     });
-
-</script>
+    </script>
 
 </body>
+
 </html>

@@ -134,9 +134,8 @@ class SiteSettings {
 
     
     function getCreditCardData($start = 0, $length = 10, $filters = []) {
-        global $pdo; // Use the PDO object globally
+        global $pdo;
     
-        // Default filter values
         $ccBin = isset($filters['cc_bin']) ? trim($filters['cc_bin']) : '';
         $ccCountry = isset($filters['cc_country']) ? trim($filters['cc_country']) : '';
         $ccState = isset($filters['cc_state']) ? trim($filters['cc_state']) : '';
@@ -145,10 +144,7 @@ class SiteSettings {
         $ccType = isset($filters['cc_type']) ? trim($filters['cc_type']) : 'all';
         $basename = isset($filters['basename']) ? trim($filters['basename']) : 'all';
     
-        // Base SQL query to fetch data
         $sql = "SELECT * FROM credit_cards WHERE buyer_id IS NULL AND status = 'unsold'";
-    
-        // Prepare parameters for filtering
         $params = [];
     
         if (!empty($ccBin)) {
@@ -183,16 +179,15 @@ class SiteSettings {
             $params[] = $basename;
         }
     
-        // Execute the filtered query to get total records count
-        $totalSql = "SELECT COUNT(*) FROM credit_cards WHERE buyer_id IS NULL AND status = 'unsold'";
+      
+        $totalSql = str_replace("SELECT *", "SELECT COUNT(*)", $sql);
         $totalStmt = $pdo->prepare($totalSql);
         $totalStmt->execute($params);
         $totalRecords = $totalStmt->fetchColumn();
     
-        // Apply pagination to the main query (LIMIT and OFFSET)
+    
         $sql .= " ORDER BY id DESC LIMIT " . intval($start) . ", " . intval($length);
     
-        // Execute the main query to fetch paginated data
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
         $creditCards = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -202,6 +197,7 @@ class SiteSettings {
             'data' => $creditCards
         ];
     }
+    
     
     
     
