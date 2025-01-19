@@ -122,7 +122,7 @@ include_once('../../header.php');
 }
 
 .activity-log-table th {
-    background-color: #3b5998;
+    background-color: #0c182f;
     font-weight: bold;
     color: white;
 }
