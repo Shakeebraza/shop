@@ -145,7 +145,15 @@ try {
         unset($_SESSION['cards'], $_SESSION['dumps']); // Clear the session data
 
         $response['success'] = true;
-        $response['message'] = 'Purchase successful!';
+        if (!empty($validCards) && !empty($validDumps)) {
+            $response['message'] = "Purchase successful. Please visit the 'My Cards' and 'My Dumps' sections to view your purchased items.";
+        } elseif (!empty($validCards)) {
+            $response['message'] = "Purchase successful. Please visit the 'My Cards' section to view your purchased cards.";
+        } elseif (!empty($validDumps)) {
+            $response['message'] = "Purchase successful. Please visit the 'My Dumps' section to view your purchased dumps.";
+        } else {
+            $response['message'] = "Purchase successful.";
+        }
     } else {
         $pdo->rollBack();
         $response['message'] = 'Not enough balance to complete the purchase.';
@@ -158,4 +166,3 @@ try {
 
 echo json_encode($response);
 exit();
-

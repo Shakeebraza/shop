@@ -28,7 +28,7 @@ $(document).ready(function() {
     });
 });
 
-function showPopupMessage(type, message) {
+function showPopupMessage(message) {
     const popup = document.getElementById('rules-popup');
     const popupContent = popup.querySelector('.popup-content');
 
@@ -37,7 +37,7 @@ function showPopupMessage(type, message) {
         <span class="close" onclick="closeRulesPopup()">
             <i class="fas fa-times"></i>
         </span>
-        <p class="${type === 'success' ? 'message-success' : 'message-error'}">${message}</p>
+        <p>${message}</p>
     `;
 
     popup.style.display = 'block';
@@ -125,7 +125,7 @@ function updateCartSidebar(cartItems, dumpsItems, total) {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
             cartItem.innerHTML = `
-                <img src="${item.image}" alt="Item Image" style="width: 50px; height: 50px; object-fit: cover;">
+                <img src="${item.image}" alt="Item Image" style="width: 50px; height: 50px; object-fit: contain;">
                 <div class="cart-item-details">
                     <h4>${item.bin}</h4>
                     <p>$${item.price}</p>
@@ -142,7 +142,7 @@ function updateCartSidebar(cartItems, dumpsItems, total) {
             const cartItem = document.createElement('div');
             cartItem.className = 'cart-item';
             cartItem.innerHTML = `
-                <img src="${item.image}" alt="Item Image" style="width: 50px; height: 50px; object-fit: cover;">
+                <img src="${item.image}" alt="Item Image" style="width: 50px; height: 50px; object-fit: contain;">
                 <div class="cart-item-details">
                     <h4>${item.bin}</h4>
                     <p>$${item.price}</p>
@@ -267,14 +267,15 @@ async function proceedToCheckout() {
                     const data = await response.json();
 
                     if (data.success) {
-                        showPopupMessage('success', data.message || 'Purchase successful.');
+                        console.log(data.message);
+                        showPopupMessage(data.message || 'Purchase successful.');
                         removeAllFromCart();
                         // setTimeout(() => {
                         //     window.location.reload();    
                         // }, 2000);
                     } else {
                         removeAllFromCart();
-                        showPopupMessage('error', data.message || 'Purchase failed.');
+                        showPopupMessage(data.message || 'Purchase failed.');
                         // setTimeout(() => {
                         //     window.location.href = '<?= $urlval?>pages/add-money/index.php';
                         // }, 2000);
