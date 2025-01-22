@@ -201,7 +201,7 @@ form#dump-filters {
 
                         <?php
                         $getDumpCodes = $settings->getDumpCode();
-                      
+                      var_dump($getDumpCodes);
                         foreach ($getDumpCodes as $getDumpCode) {
                         
                             if (isset($getDumpCode['base_name']) && $getDumpCode['base_name'] != 'NA') {
