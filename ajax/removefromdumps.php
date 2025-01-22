@@ -16,7 +16,9 @@ if ($cardId) {
         unset($_SESSION['dumps'][$cardId]);
 
       
-        $total = array_sum(array_column($_SESSION['dumps'], 'price'));
+        $totalcard = array_sum(array_column($_SESSION['cards'], 'price'));
+        $totaldumps = array_sum(array_column($_SESSION['dumps'], 'price'));
+        $total =$totalcard+$totaldumps;
 
        
         echo json_encode([
