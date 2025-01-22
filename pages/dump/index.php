@@ -243,7 +243,7 @@ form#dump-filters {
                         <th>Track 1</th>
                         <th>Country</th>
                         <th>Price</th>
-                        <th>Buy</th>
+                        <th style="width: 250px !important;">Buy</th>
                     </tr>
                 </thead>
                 <tbody></tbody>

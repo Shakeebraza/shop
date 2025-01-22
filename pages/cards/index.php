@@ -261,7 +261,7 @@ td {
                         <th style="padding: 10px; border: 1px solid #ddd;">ZIP</th>
                         <th style="padding: 10px; border: 1px solid #ddd;">Price</th>
                         <th style="padding: 10px; border: 1px solid #ddd;">Other Information</th>
-                        <th style="padding: 10px; border: 1px solid #ddd;">Buy</th>
+                        <th style="padding: 10px; border: 1px solid #ddd; width: 250px !important;">Buy</th>
                     </tr>
                 </thead>
 
