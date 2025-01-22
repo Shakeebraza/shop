@@ -177,7 +177,7 @@ form#dump-filters {
                     </select>
                 </div>
 
-                <div class="inpt-dmps-bx">
+                <!-- <div class="inpt-dmps-bx">
                     <label for="base_name">Base name</label>
                     <select name="base_name" id="base_name">
                         <option value="all">All</option>
@@ -193,9 +193,9 @@ form#dump-filters {
                         }
                         ?>
                     </select>
-                </div>
+                </div> -->
                 <div class="inpt-dmps-bx">
-                    <label for="base_name">Code</label>
+                    <label for="base_name"> Base name</label>
                     <select name="base_name" id="base_name">
                         <option value="all">All</option>
 
