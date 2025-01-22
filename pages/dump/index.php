@@ -183,15 +183,32 @@ form#dump-filters {
                         <option value="all">All</option>
 
                         <?php
-        $baseNames = $settings->getDumpBaseNames();
-             
-        foreach ($baseNames as $baseName) {
-            if($baseName['base_name'] != NULL){
+                        $baseNames = $settings->getDumpBaseNames();
+                            
+                        foreach ($baseNames as $baseName) {
+                            if($baseName['base_name'] != NULL){
 
-                echo '<option value="' . htmlspecialchars($baseName['base_name']) . '">' . htmlspecialchars($baseName['base_name']) . '</option>';
-            }
-        }
-        ?>
+                                echo '<option value="' . htmlspecialchars($baseName['base_name']) . '">' . htmlspecialchars($baseName['base_name']) . '</option>';
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="inpt-dmps-bx">
+                    <label for="base_name">Code</label>
+                    <select name="base_name" id="base_name">
+                        <option value="all">All</option>
+
+                        <?php
+                        $getDumpCodes = $settings->getDumpCode();
+                        foreach ($getDumpCodes as $getDumpCode) {
+                        
+                            if (isset($getDumpCode['code']) && $getDumpCode['code'] != NULL) {
+                                echo '<option value="' . htmlspecialchars($getDumpCode['code']) . '">' . htmlspecialchars($getDumpCode['code']) . '</option>';
+                            }
+
+                        }
+                        ?>
                     </select>
                 </div>
 

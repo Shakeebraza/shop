@@ -35,6 +35,14 @@ class SiteSettings {
         return $baseNames;
     }
     
+    function getDumpCode() {
+        $sql = "SELECT code FROM dumps WHERE code != 'NA' AND code IS NOT NULL";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        $baseNames = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $baseNames;
+    }
+    
     public function generateCsrfToken() {
         if (!isset($_SESSION)) {
             session_start();
