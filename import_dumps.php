@@ -140,7 +140,7 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
             <!-- Set field positions for data mapping -->
             <div class="grid-container">
                 <input type="number" name="pos_track1" placeholder="Track 1 Pos" required>
-                <input type="number" name="pos_code" placeholder="Code pos" required>
+                <input type="number" name="pos_code" placeholder="Base POS" required>
                 <input type="number" name="pos_track2" placeholder="Track 2 Pos" required>
                 <input type="number" name="pos_pin" placeholder="PIN Pos (if available)">
                 <input type="number" name="pos_country" placeholder="Country Pos" required>
