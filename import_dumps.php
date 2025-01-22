@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $card_type = getCardType($card_number);
 
-                    $query = "INSERT INTO dumps (track1,code, track2, pin, monthexp, yearexp, seller_id, seller_name, price, status, card_type, country)
+                    $query = "INSERT INTO dumps (track1,base_name, track2, pin, monthexp, yearexp, seller_id, seller_name, price, status, card_type, country)
                               VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, 'unsold', ?, ?)";
                     $stmt = $pdo->prepare($query);
                     $stmt->execute([$track1,$code, $track2, $pin, $exp_mm, $exp_yy, $seller_id, $seller_name, $price, $card_type, $country]);

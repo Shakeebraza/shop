@@ -39,7 +39,7 @@ if ($dumpPin === 'yes') {
     $sql .= " AND pin IS NULL";
 }
 if ($base_name !== 'all') {
-    $sql .= " AND code = ?";
+    $sql .= " AND base_name = ?";
     $params[] = $base_name;
 }
 if ($track_pin !== 'all') {

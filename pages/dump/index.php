@@ -201,10 +201,11 @@ form#dump-filters {
 
                         <?php
                         $getDumpCodes = $settings->getDumpCode();
+                      
                         foreach ($getDumpCodes as $getDumpCode) {
                         
-                            if (isset($getDumpCode['code']) && $getDumpCode['code'] != NULL) {
-                                echo '<option value="' . htmlspecialchars($getDumpCode['code']) . '">' . htmlspecialchars($getDumpCode['code']) . '</option>';
+                            if (isset($getDumpCode['base_name']) && $getDumpCode['base_name'] != 'NA') {
+                                echo '<option value="' . htmlspecialchars($getDumpCode['base_name']) . '">' . htmlspecialchars($getDumpCode['base_name']) . '</option>';
                             }
 
                         }

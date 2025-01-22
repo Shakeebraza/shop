@@ -36,7 +36,7 @@ class SiteSettings {
     }
     
     function getDumpCode() {
-        $sql = "SELECT code FROM dumps WHERE code != 'NA' AND code IS NOT NULL";
+        $sql = "SELECT base_name FROM dumps WHERE base_name != 'NA' AND status != 'sold' AND base_name IS NOT NULL";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         $baseNames = $stmt->fetchAll(PDO::FETCH_ASSOC);
