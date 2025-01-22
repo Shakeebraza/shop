@@ -36,7 +36,8 @@ class SiteSettings {
     }
         
     function getDumpCode() {
-        $sql = "SELECT DISTINCT TRIM(REPLACE(LOWER(base_name), '\n', '')) AS base_name 
+        $sql = "SELECT DISTINCT 
+                       TRIM(REPLACE(REPLACE(LOWER(base_name), '\n', ''), '\r', '')) AS base_name 
                 FROM dumps 
                 WHERE base_name != 'NA' 
                   AND status != 'sold' 
@@ -46,6 +47,7 @@ class SiteSettings {
         $baseNames = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $baseNames;
     }
+    
     
     
     

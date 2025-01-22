@@ -1,22 +1,41 @@
-    function copyCardInfo(cardId) {
-        // Select the card container by ID
-        const cardContainer = document.getElementById(`card-${cardId}`);
-        
-        if (cardContainer) {
-            // Collect text from elements with the "info-field" class only
-            let cardInfo = '';
-            cardContainer.querySelectorAll('.info-field').forEach((element) => {
-                cardInfo += element.innerText + '\n'; // Add each field's text to cardInfo
-            });
+function copyCardInfo(cardId) {
+    const row = document.getElementById(`card-${cardId}`);
 
-            // Copy the formatted information to clipboard
-            navigator.clipboard.writeText(cardInfo.trim()).then(() => {
-                alert("Card information copied to clipboard!");
-            }).catch(err => {
-                alert("Failed to copy: " + err);
-            });
-        }
+    if (!row) {
+        alert('Row not found!');
+        return;
     }
+
+    const cells = row.querySelectorAll('td');
+    let cardDetails = '';
+    cells.forEach((cell, index) => {
+  
+        if (index < cells.length - 1) {
+            cardDetails += cell.textContent.trim();
+            if (index < cells.length - 2) {
+                cardDetails += '|'; 
+            }
+        }
+    });
+
+    console.log('Card Details:', cardDetails);
+
+    if (cardDetails.trim() === '') {
+        alert('No card details to copy!');
+        return;
+    }
+
+
+    navigator.clipboard.writeText(cardDetails)
+        .then(() => {
+            alert('Card details copied to clipboard!');
+        })
+        .catch(err => {
+            console.error('Failed to copy text:', err);
+            alert('Failed to copy card details!');
+        });
+}
+
 
     function copyDumpInfo(dumpId) {
         // Select the dump container by ID

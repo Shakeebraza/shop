@@ -39,8 +39,9 @@ if ($dumpPin === 'yes') {
     $sql .= " AND pin IS NULL";
 }
 if ($base_name !== 'all') {
+    $base_name = trim(preg_replace('/\s+/', ' ', strtolower($base_name)));
     $sql .= " AND TRIM(LOWER(base_name)) LIKE ?";
-    $params[] = strtolower($base_name);
+    $params[] = '%' . $base_name . '%'; 
 }
 if ($track_pin !== 'all') {
     if ($track_pin === 'no') {
