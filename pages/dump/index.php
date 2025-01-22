@@ -255,7 +255,7 @@ form#dump-filters {
                         <th>Type</th>
                         <th>BIN</th>
                         <th>Exp Date</th>
-                        <th>Code</th>
+                        <!-- <th>Code</th> -->
                         <th>PIN</th>
                         <th>Track 1</th>
                         <th>Country</th>
@@ -329,9 +329,7 @@ $(document).ready(function() {
             {
                 data: 'expiry'
             },
-            {
-                data: 'code'
-            },
+
             {
                 data: 'pin'
             },
