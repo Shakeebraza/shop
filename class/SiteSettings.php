@@ -36,12 +36,17 @@ class SiteSettings {
     }
     
     function getDumpCode() {
-        $sql = "SELECT base_name FROM dumps WHERE base_name != 'NA' AND status != 'sold' AND base_name IS NOT NULL";
+        $sql = "SELECT DISTINCT base_name 
+                FROM dumps 
+                WHERE base_name != 'NA' 
+                  AND status != 'sold' 
+                  AND base_name IS NOT NULL";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         $baseNames = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $baseNames;
     }
+    
     
     public function generateCsrfToken() {
         if (!isset($_SESSION)) {
