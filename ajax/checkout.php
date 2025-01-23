@@ -109,10 +109,10 @@ try {
             // Update seller's balance and total_earned
             $updateSellerStmt = $pdo->prepare("
                 UPDATE users 
-                SET credit_cards_balance = credit_cards_balance + ?, total_earned = total_earned + ? 
+                SET credit_cards_balance = credit_cards_balance + ?,credit_cards_total_earned = credit_cards_total_earned + ?, total_earned = total_earned + ? 
                 WHERE id = ?
             ");
-            $updateSellerStmt->execute([$seller_earnings, $seller_earnings, $card['seller_id']]);
+            $updateSellerStmt->execute([$seller_earnings,$seller_earnings, $seller_earnings, $card['seller_id']]);
         }
 
         foreach ($validDumps as $dump) {
@@ -134,10 +134,10 @@ try {
             // Update seller's balance and total_earned for dumps
             $updateSellerStmt = $pdo->prepare("
                 UPDATE users 
-                SET dumps_balance = dumps_balance + ?, total_earned = total_earned + ? 
+                SET dumps_balance = dumps_balance + ?, dumps_total_earned = dumps_total_earned + ?,total_earned = total_earned + ? 
                 WHERE id = ?
             ");
-            $updateSellerStmt->execute([$seller_earnings, $seller_earnings, $dump['seller_id']]);
+            $updateSellerStmt->execute([$seller_earnings,$seller_earnings, $seller_earnings, $dump['seller_id']]);
         }
 
         $pdo->commit(); // Commit the transaction
