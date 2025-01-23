@@ -134,7 +134,7 @@ try {
             // Update seller's balance and total_earned for dumps
             $updateSellerStmt = $pdo->prepare("
                 UPDATE users 
-                SET dumps_total_earned = dumps_total_earned + ?, total_earned = total_earned + ? 
+                SET dumps_balance = dumps_balance + ?, total_earned = total_earned + ? 
                 WHERE id = ?
             ");
             $updateSellerStmt->execute([$seller_earnings, $seller_earnings, $dump['seller_id']]);
