@@ -2,15 +2,15 @@
 session_start();
 require 'config.php';
 
-// Check if admin is logged in, if not redirect to admin login page
+
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: admin_login.php?redirect=panel.php");
     exit();
 }
 
-// Fetch all tickets with messages for the admin view
+
 $stmt = $pdo->prepare("
-    SELECT t.id AS ticket_id, t.created_at AS ticket_created_at, t.status, t.admin_unread,
+    SELECT t.id AS ticket_id, t.created_at AS ticket_created_at,unread, t.status, t.admin_unread,
            u.username AS user_username, m.sender, m.message AS content, m.created_at AS message_created_at
     FROM support_tickets t
     LEFT JOIN users u ON t.user_id = u.id
@@ -18,7 +18,8 @@ $stmt = $pdo->prepare("
     ORDER BY t.created_at DESC, m.created_at ASC
 ");
 $stmt->execute();
-$tickets = $stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC); // Group messages by ticket ID
+$tickets = $stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC); 
+
 ?>
 
 <!DOCTYPE html>
@@ -52,6 +53,11 @@ $tickets = $stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC); // Group messag
                         <?php if (!empty($messages[0]['admin_unread']) && $messages[0]['admin_unread'] == 1): ?>
                         <span style="color: red; font-weight: bold;">(1)</span>
                         <?php endif; ?>
+                        <?php
+                        if($messages[0]['unread'] == 0){
+                            echo'<span style="color: red; font-weight: bold;">(1)</span>';
+                        }
+                        ?>
                     </span>
                 </div>
             </div>
