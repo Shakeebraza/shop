@@ -34,8 +34,12 @@ function getCardType($card_number) {
     return 'N/A';
 }
 
-// Handle file upload and form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $importedCount = 0;
+    $duplicateCount = 0;
+    $duplicateMessage = "";
+    $errorMessage = "";
+
     if (isset($_FILES['import_file']) && $_FILES['import_file']['error'] == 0) {
         $file = $_FILES['import_file']['tmp_name'];
         $data = file_get_contents($file);
@@ -59,22 +63,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pos_country = $_POST['pos_country'];
         $pos_phone_number = $_POST['pos_phone_number'];
         $pos_dob = $_POST['pos_dob'];
-        $pos_full_name = $_POST['pos_full_name'];
         $pos_mmn = $_POST['pos_mmn'];
         $pos_account_number = $_POST['pos_account_number'];
         $pos_sort_code = $_POST['pos_sort_code'];
-        $pos_cardholder_name = $_POST['pos_cardholder_name'];
         $base_name = $_POST['base_name'];
+        $email_address = $_POST['email_address'];
+        $driverslicense = $_POST['driverslicense'];
+        $sinssn = $_POST['sinss'];
+        $pin = $_POST['pin'];
+        $otherinfo = isset($_POST['otherinfo']) ? $_POST['otherinfo'] : 'No';
 
         $stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");
         $stmt->execute([$seller_id]);
         $seller = $stmt->fetch(PDO::FETCH_ASSOC);
-        $seller_name = $seller['username'];
+        $seller_name = $seller['username'] ?? 'Unknown Seller';
 
         $lines = explode("\n", $data);
         foreach ($lines as $line) {
             $details = explode('|', $line);
-            if (count($details) >= max($pos_card_number, $pos_exp_month, $pos_exp_year, $pos_cvv, $pos_name_on_card, $pos_address, $pos_city, $pos_state, $pos_zip, $pos_country, $pos_phone_number, $pos_dob, $pos_full_name)) {
+            if (count($details) >= max($pos_card_number, $pos_exp_month, $pos_exp_year, $pos_cvv)) {
                 $card_number = $pos_card_number ? $details[$pos_card_number - 1] : 'N/A';
                 $mm_exp = $pos_exp_month ? $details[$pos_exp_month - 1] : 'N/A';
                 $yyyy_exp = $pos_exp_year ? $details[$pos_exp_year - 1] : 'N/A';
@@ -84,31 +91,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $city = $pos_city ? $details[$pos_city - 1] : 'N/A';
                 $state = $pos_state ? $details[$pos_state - 1] : 'N/A';
                 $zip = $pos_zip ? $details[$pos_zip - 1] : 'N/A';
-                $mmn = $pos_mmn ? $details[$pos_mmn - 1] : 'N/A';
-                $account_number = $pos_account_number ? $details[$pos_account_number - 1] : 'N/A';
-                $sort_code = $pos_sort_code ? $details[$pos_sort_code - 1] : 'N/A';
-                $cardholder_name = $pos_cardholder_name ? $details[$pos_cardholder_name - 1] : 'N/A';
-                $country = $pos_country ? strtoupper(trim(preg_replace('/\s+/', ' ', $details[$pos_country - 1]))) : 'N/A';
+                $country = $pos_country ? strtoupper(trim($details[$pos_country - 1])) : 'N/A';
                 $phone_number = $pos_phone_number ? $details[$pos_phone_number - 1] : 'N/A';
-                $otherinfo=$_POST['otherinfo'] !== 'No' ?$_POST['otherinfo'] :'NA';
-                $base_nameData=$base_name ? $details[$base_name - 1] : 'N/A';
-                $card_type = getCardType($card_number);
-
-                if (strlen($phone_number) > 20) $phone_number = substr($phone_number, 0, 20);
                 $dob_raw = trim($pos_dob ? $details[$pos_dob - 1] : 'N/A');
                 $dob_obj = DateTime::createFromFormat('d/m/Y', $dob_raw) ?: DateTime::createFromFormat('Y-m-d', $dob_raw);
                 $dob = $dob_obj ? $dob_obj->format('Y-m-d') : null;
-                $full_name = $pos_full_name ? $details[$pos_full_name - 1] : 'N/A';
+                $mmn = $pos_mmn ? $details[$pos_mmn - 1] : 'N/A';
+                $account_number = $pos_account_number ? $details[$pos_account_number - 1] : 'N/A';
+                $sort_code = $pos_sort_code ? $details[$pos_sort_code - 1] : 'N/A';
+                $base_nameData = $base_name ? $details[$base_name - 1] : 'N/A';
+                $email_addressData = $email_address ? $details[$email_address - 1] : 'N/A';
+                $driverslicenseData = $driverslicense ? $details[$driverslicense - 1] : 'N/A';
+                $sinssnData = $sinssn ? $details[$sinssn - 1] : 'N/A';
+                $pinData = $pin ? $details[$pin - 1] : 'N/A';
 
                 $checkQuery = "SELECT card_number FROM credit_cards WHERE card_number = ?";
                 $checkStmt = $pdo->prepare($checkQuery);
                 $checkStmt->execute([$card_number]);
 
                 if ($checkStmt->rowCount() == 0) {
-                    $query = "INSERT INTO $section (mmn,account_number,sort_code,cardholder_name,card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, full_name, seller_id, seller_name, price, section, card_type,otherinfo,base_name)
-                              VALUES (?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
+                    $query = "INSERT INTO $section (mmn, account_number, sort_code, card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, seller_id, seller_name, price, section, base_name, email, sinssn, pin, drivers) 
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     $stmt = $pdo->prepare($query);
-                    $stmt->execute([$mmn,$account_number,$sort_code,$cardholder_name,$card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $full_name, $seller_id, $seller_name, $price, $section, $card_type,$otherinfo,$base_nameData]);
+                    $stmt->execute([$mmn, $account_number, $sort_code, $card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $seller_id, $seller_name, $price, $section, $base_nameData, $email_addressData, $sinssnData, $pinData, $driverslicenseData]);
                     $importedCount++;
                 } else {
                     $duplicateCount++;
@@ -199,7 +204,11 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
                 <input type="number" name="pos_mmn" placeholder="MMN Pos">
                 <input type="number" name="pos_account_number" placeholder="Account Number Pos">
                 <input type="number" name="pos_sort_code" placeholder="Sort Code Pos">
-                <input type="base_name" name="base_name" placeholder="Base Pose">
+                <input type="number" name="base_name" placeholder="Base Pose">
+                <input type="number" name="email_address" placeholder="Email Address">
+                <input type="number" name="driverslicense" placeholder="Drivers License">
+                <input type="number" name="sinss" placeholder="SIN/SSN">
+                <input type="number" name="pin" placeholder="pin">
 
             </div>
 

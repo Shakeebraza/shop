@@ -10,9 +10,10 @@ function formatCardData($creditCards) {
 
     foreach ($creditCards as $card) {
         $otherinfo = (!empty($card['otherinfo']) && $card['otherinfo'] != 'NA') ? 'Yes' : 'No';
-
+        $cardimg=$card['card_type'] ?? 'visa';
         $formattedData[] = [
-            'card_logo' => '<img src="/shop/images/cards/' . strtolower($card['card_type']) . '.png" alt="Card Logo" class="card-logo">',
+            'card_logo' => '<img src="/shop/images/cards/' . strtolower($cardimg) . '.png" alt="Card Logo" class="card-logo">',
+            'email' => htmlspecialchars($card['email'] ?? 'NA'),
             'card_number' => htmlspecialchars(substr($card['card_number'], 0, 6)),
             'expiry' => htmlspecialchars($card['mm_exp']) . '/' . htmlspecialchars($card['yyyy_exp']),
             'country' => htmlspecialchars($card['country']),
