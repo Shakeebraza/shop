@@ -282,7 +282,7 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
         <div class="error-message"><?php echo $errorMessage; ?></div>
         <?php endif; ?>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
     const radios = document.querySelectorAll('input[name="otherinfo"]');
     radios.forEach((radio) => {
