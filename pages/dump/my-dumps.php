@@ -232,11 +232,15 @@ include_once('../../header.php');
                         <td
                             style="padding: 10px;display: flex;justify-content: center;align-content: center;align-items: center;">
                             <button class="copy-button" style="padding: 6px 10px; 
-                        border: none; border-radius: 3px; cursor: pointer; margin-right: 5px;"
-                                onclick="copyCardInfo(<?php echo htmlspecialchars($card['id']); ?>)">Copy</button>
+                                border: none; 
+                                border-radius: 3px; 
+                                cursor: pointer; 
+                                margin-right: 5px;"
+                                onclick="copyDumpInfo(<?php echo htmlspecialchars($dump['id']); ?>)">Copy</button>
+
                             <button class="check-card-button" style="padding: 6px 10px; 
                         border: none; border-radius: 3px; cursor: pointer; margin:0px 5px 0px 0px;"
-                                onclick="checkCard(<?php echo htmlspecialchars($card['id']); ?>)">Check</button>
+                                onclick="checkCard(<?php echo htmlspecialchars($dump['id']); ?>)">Check</button>
                             <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)"
                                 id="clear-btn" class="btn text-center btn-with-icon" style="background-color: #f44336; color: white; padding: 5px 15px; width:70px; border-radius: 4px; border: none; cursor: pointer; 
                                 margin-top: -1px;">

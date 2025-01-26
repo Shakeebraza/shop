@@ -35,6 +35,7 @@ function getCardType($card_number) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     $importedCount = 0;
     $duplicateCount = 0;
     $duplicateMessage = "";
@@ -47,13 +48,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data = $_POST['data'];
     }
 
-    try {
+ 
         $section = 'credit_cards';
         $seller_id = $_POST['seller_id'];
         $price = $_POST['price'];
         $pos_card_number = $_POST['pos_card_number'];
-        $pos_exp_month = $_POST['pos_exp_month'];
-        $pos_exp_year = $_POST['pos_exp_year'];
+        $pos_exp_month = $_POST['pos_exp_month']?? NULL;
+        $pos_exp_year = $_POST['pos_exp_year'] ?? NULL;
+        $use_mm_yyyy = isset($_POST['use_mm_yyyy']) ? true : false;
+     
         $pos_cvv = $_POST['pos_cvv'];
         $pos_name_on_card = $_POST['pos_name_on_card'];
         $pos_address = $_POST['pos_address'];
@@ -83,8 +86,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $details = explode('|', $line);
             if (count($details) >= max($pos_card_number, $pos_exp_month, $pos_exp_year, $pos_cvv)) {
                 $card_number = $pos_card_number ? $details[$pos_card_number - 1] : 'N/A';
-                $mm_exp = $pos_exp_month ? $details[$pos_exp_month - 1] : 'N/A';
-                $yyyy_exp = $pos_exp_year ? $details[$pos_exp_year - 1] : 'N/A';
+                if ($use_mm_yyyy) {
+                    $exp_date = $_POST['pos_exp_mm_yyyy'] ?? 'N/A';
+                    if ($exp_date !== 'N/A') {
+                        [$mm_exp, $yyyy_exp] = explode('/', $exp_date);
+                    } else {
+                        $mm_exp = 'N/A';
+                        $yyyy_exp = 'N/A';
+                    }
+                } else {
+                    $mm_exp = $pos_exp_month ? $details[$pos_exp_month - 1] : 'N/A';
+                    $yyyy_exp = $pos_exp_year ? $details[$pos_exp_year - 1] : 'N/A';
+                }
+
+                
                 $cvv = $pos_cvv ? $details[$pos_cvv - 1] : 'N/A';
                 $name_on_card = $pos_name_on_card ? $details[$pos_name_on_card - 1] : 'N/A';
                 $address = $pos_address ? $details[$pos_address - 1] : 'N/A';
@@ -125,11 +140,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         header("Location: import_cards.php?imported=$importedCount&duplicates=$duplicateCount");
         exit;
-    } catch (Exception $e) {
-        $errorMessage = 'Error importing data: ' . $e->getMessage();
-    }
+ 
 }
-
 if (isset($_GET['imported']) && $_GET['imported'] > 0) {
     $successMessage = $_GET['imported'] . " items were imported successfully.";
 }
@@ -154,7 +166,7 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
     <div class="container">
         <h2>Import Credit Cards</h2>
 
-        <form action="import_cards.php" method="POST" enctype="multipart/form-data">
+        <form action="import_cards.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
 
 
             <textarea name="data" id="data" placeholder="Enter data based on the format selected"></textarea>
@@ -180,13 +192,17 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
                 </label>
             </div>
 
+            <!-- Display error message -->
+            <p id="error-message" style="color: red; text-align: center; font-weight: bold; display: none;">
+                Please select "Yes" or "No" before submitting.
+            </p>
+
             <input type="file" name="import_file" accept=".csv, .txt">
 
 
             <div class="grid-container">
                 <input type="number" name="pos_card_number" placeholder="Card Number Pos" required>
-                <input type="number" name="pos_exp_month" placeholder="Exp Month Pos" required>
-                <input type="number" name="pos_exp_year" placeholder="Exp Year Pos" required>
+
 
                 <input type="number" name="pos_cvv" placeholder="CVV Pos" required>
                 <input type="number" name="pos_name_on_card" placeholder="Name on Card Pos" required>
@@ -209,6 +225,25 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
                 <input type="number" name="driverslicense" placeholder="Drivers License">
                 <input type="number" name="sinss" placeholder="SIN/SSN">
                 <input type="number" name="pin" placeholder="pin">
+                <label
+                    style="font-size: 18px; font-weight: bold; display: flex; align-items: center; margin-bottom: 15px; color: #333;">
+                    <input type="checkbox" id="use_mm_yyyy" name="use_mm_yyyy" value="1"
+                        style="margin-right: 10px; cursor: pointer;">
+                    <span style="color: #555;">Expiration Date Format: mm/yyyy</span>
+                </label>
+
+                <div id="mapping-fields" style="display: flex; flex-direction: column; margin-bottom: 20px;">
+                    <input type="number" name="pos_exp_month" placeholder="Exp Month Pos"
+                        style="width: 100%; padding: 12px; margin-bottom: 12px; border: 2px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: border-color 0.3s;">
+                    <input type="number" name="pos_exp_year" placeholder="Exp Year Pos"
+                        style="width: 100%; padding: 12px; margin-bottom: 12px; border: 2px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: border-color 0.3s;">
+                </div>
+
+                <div id="mm-yyyy-field" style="display: none; flex-direction: column; margin-bottom: 20px;">
+                    <input type="text" name="pos_exp_mm_yyyy" placeholder="Exp Date (mm/yyyy) Pos"
+                        style="width: 100%; padding: 12px; margin-bottom: 12px; border: 2px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: border-color 0.3s;">
+                </div>
+
 
             </div>
 
@@ -247,6 +282,7 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
         <div class="error-message"><?php echo $errorMessage; ?></div>
         <?php endif; ?>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
     const radios = document.querySelectorAll('input[name="otherinfo"]');
     radios.forEach((radio) => {
@@ -262,6 +298,39 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
             label.style.boxShadow = '0px 6px 10px rgba(0, 0, 0, 0.4)';
         });
     });
+
+    document.getElementById('use_mm_yyyy').addEventListener('change', function() {
+        const isChecked = this.checked;
+        const mappingFields = document.getElementById('mapping-fields');
+        const mmYyyyField = document.getElementById('mm-yyyy-field');
+
+
+        mappingFields.style.display = isChecked ? 'none' : 'block';
+        mmYyyyField.style.display = isChecked ? 'block' : 'none';
+
+        const useMmYyyyField = document.querySelector('input[name="pos_exp_mm_yyyy"]');
+        if (isChecked) {
+            useMmYyyyField.setAttribute('required', true);
+            useMmYyyyField.closest('div').style.display = 'block';
+        } else {
+            useMmYyyyField.removeAttribute('required');
+            useMmYyyyField.closest('div').style.display = 'none';
+        }
+    });
+
+
+    function validateForm() {
+        const otherinfo = document.querySelector('input[name="otherinfo"]:checked');
+        const errorMessage = document.getElementById('error-message');
+
+        if (!otherinfo) {
+            errorMessage.style.display = 'block';
+            return false;
+        }
+
+        errorMessage.style.display = 'none';
+        return true;
+    }
     </script>
 
 </body>

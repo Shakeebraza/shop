@@ -57,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
                 $_SESSION['active'] = $user['active'];
+                $_SESSION['secret_code'] = $user['secret_code'];
 
                 $response['status'] = 'success';
                 $response['redirect'] = $urlval . "/pages/news/index.php";
