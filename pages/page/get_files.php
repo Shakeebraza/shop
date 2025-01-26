@@ -3,8 +3,10 @@
 require '../../global.php';
 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$search = isset($_GET['search']) ? $_GET['search'] : ''; // Capture search query
 
-$files = $settings->getFilesBySection('Pages', 12, $page);
+$files = $settings->getFilesBySection2('Pages', 12, $page, $search);
+
 
 header('Content-Type: application/json');
 echo json_encode([

@@ -23,10 +23,21 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
 <script>
 $(document).ready(function() {
-    $('#userDropdownToggle').click(function() {
+    // Toggle dropdown on button click
+    $('#userDropdownToggle').click(function(event) {
         $('#userDropdownMenu').toggle('fast');
+        event.stopPropagation(); // Prevent the click from propagating to the document
+    });
+
+    // Close dropdown if clicked outside
+    $(document).click(function(event) {
+        if (!$(event.target).closest('#userDropdownToggle').length && !$(event.target).closest(
+                '#userDropdownMenu').length) {
+            $('#userDropdownMenu').hide('fast');
+        }
     });
 });
+
 
 function showPopupMessage(message) {
     const popup = document.getElementById('rules-popup');

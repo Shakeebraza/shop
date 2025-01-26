@@ -123,11 +123,24 @@ a.buy-button:hover {
 
 <div class="main-content">
     <div id="leads" class="uuper">
-        <h2>Pages Section</h2>
-        <?php if (empty($files['Pages'])): ?>
+        <h2>Leads Section</h2>
+
+        <!-- Search Bar -->
+        <div
+            style="position: relative; width: 100%; max-width: 400px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+            <input type="text" id="searchBar" placeholder="Search tools..."
+                style="width: 100%; padding: 12px 20px; border-radius: 25px; border: 1px solid #ccc; font-size: 16px; transition: all 0.3s ease-in-out;"
+                onfocus="this.style.borderColor='#007bff';" onblur="this.style.borderColor='#ccc';" />
+            <i class="search-icon fas fa-search"
+                style="position: absolute; right: 15px; color: #aaa; font-size: 20px; cursor: pointer; transition: color 0.3s ease;"
+                onmouseover="this.style.color='#007bff';" onmouseout="this.style.color='#aaa';">
+            </i>
+        </div>
+
+        <?php if (empty($files['Leads'])): ?>
         <p>No files available in the Leads section.</p>
         <?php else: ?>
-        <div class="grid-container" id="file-grid2">
+        <div class="grid-container" id="file-grid">
             <!-- Files will be inserted here -->
         </div>
         <!-- Pagination controls -->
@@ -135,7 +148,6 @@ a.buy-button:hover {
         <?php endif; ?>
     </div>
 </div>
-
 
 
 
@@ -153,8 +165,14 @@ a.buy-button:hover {
 include_once('../../footer.php');
 ?>
 <script>
-function fetchFiles(currentPage = 1) {
-    fetch(`get_files.php?section=Pages&page=${currentPage}`)
+document.getElementById('searchBar').addEventListener('input', function() {
+    let searchQuery = this.value.toLowerCase();
+    fetchFiles(1, searchQuery); // Call fetchFiles with search query
+});
+
+// Fetch files with optional search query
+function fetchFiles(currentPage = 1, searchQuery = '') {
+    fetch(`get_files.php?section=Leads&page=${currentPage}&search=${searchQuery}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch files');
@@ -162,34 +180,32 @@ function fetchFiles(currentPage = 1) {
             return response.json();
         })
         .then(data => {
-            const gridContainers = document.getElementById("file-grid2");
-            gridContainers.innerHTML = '';
-            if (data.files && data.files.length > 0) {
-                // Embed the PHP session value into a JavaScript variable
-                const isActive = <?= json_encode($_SESSION['active'] === 1); ?>;
+            const gridContainer = document.getElementById("file-grid");
+            gridContainer.innerHTML = ''; // Clear existing content
 
+            if (data.files && data.files.length > 0) {
                 data.files.forEach(file => {
                     const price = parseFloat(file.price);
                     const formattedPrice = isNaN(price) ? 'N/A' : `$${price.toFixed(2)}`;
+                    const isActive = <?= json_encode($_SESSION['active'] === 1); ?>;
 
                     const fileItem = `
-                        <div class="tool-item">
-                            <h3>${escapeHtml(file.name)}</h3>
-                            <p>${escapeHtml(file.description).replace(/\n/g, '<br>')}</p>
-                            <p>Price: ${formattedPrice}</p>
-                            <a class="buy-button ${!isActive ? 'disabled' : ''}" 
-                            href="${isActive ? `buy_tool.php?tool_id=${file.id}&section=leads` : 'javascript:void(0);'}" 
-                            data-id="${file.id}" data-section="leads">
-                            <span class="price">${formattedPrice}</span>
-                            <span class="buy-now">Buy Now</span>
-                            </a>
-                        </div>
-                    `;
-                    gridContainers.innerHTML += fileItem;
+                            <div class="tool-item">
+                                <h3>${escapeHtml(file.name)}</h3>
+                                <p>${escapeHtml(file.description).replace(/\n/g, '<br>')}</p>
+                                <p>Price: ${formattedPrice}</p>
+                                <a class="buy-button ${!isActive ? 'disabled' : ''}" href="buy_tool.php?tool_id=${file.id}&section=leads" 
+                                    data-id="${file.id}" data-section="leads">
+                                    <span class="price">${formattedPrice}</span>
+                                    <span class="buy-now">Buy Now</span>
+                                </a>
+                            </div>
+                        `;
+                    gridContainer.innerHTML += fileItem;
                 });
                 createPagination(data.currentPage, data.totalPages);
             } else {
-                gridContainers.innerHTML = '<p>No files available in the Leads section.</p>';
+                gridContainer.innerHTML = '<p>No files found matching your search.</p>';
             }
         })
         .catch(error => {

@@ -124,6 +124,18 @@ a.buy-button:hover {
 <div class="main-content">
     <div id="leads" class="uuper">
         <h2>Tools Section</h2>
+        <div
+            style="position: relative; width: 100%; max-width: 400px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+            <input type="text" id="searchBar" placeholder="Search tools..."
+                style="width: 100%; padding: 12px 20px; border-radius: 25px; border: 1px solid #ccc; font-size: 16px; transition: all 0.3s ease-in-out;"
+                onfocus="this.style.borderColor='#007bff';" onblur="this.style.borderColor='#ccc';" />
+            <i class="search-icon fas fa-search"
+                style="position: absolute; right: 15px; color: #aaa; font-size: 20px; cursor: pointer; transition: color 0.3s ease;"
+                onmouseover="this.style.color='#007bff';" onmouseout="this.style.color='#aaa';">
+            </i>
+        </div>
+
+
         <?php if (empty($files['Tools'])): ?>
         <p>No files available in the Leads section.</p>
         <?php else: ?>
@@ -135,6 +147,7 @@ a.buy-button:hover {
         <?php endif; ?>
     </div>
 </div>
+
 
 
 
@@ -153,8 +166,13 @@ a.buy-button:hover {
 include_once('../../footer.php');
 ?>
 <script>
-function fetchFiles(currentPage = 1) {
-    fetch(`get_files.php?section=tools&page=${currentPage}`)
+document.getElementById("searchBar").addEventListener("input", function() {
+    const searchQuery = this.value;
+    fetchFiles(1, searchQuery); // Reset to first page on search change
+});
+
+function fetchFiles(currentPage = 1, searchQuery = '') {
+    fetch(`get_files.php?section=tools&page=${currentPage}&search=${encodeURIComponent(searchQuery)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch files');

@@ -105,6 +105,38 @@ class SiteSettings {
             'totalPages' => $totalPages
         ];
     }
+    public function getFilesBySection2($section, $limit, $page, $search = '') {
+        $limit = (int)$limit;
+        
+        $offset = ($page - 1) * $limit;
+    
+        // Modify SQL query to filter based on search
+        $sql = "SELECT * FROM uploads WHERE section = :section AND name LIKE :search LIMIT :limit OFFSET :offset";
+        $stmt = $this->pdo->prepare($sql);
+        $searchTerm = '%' . $search . '%'; // Use LIKE for search
+        $stmt->bindParam(':section', $section, PDO::PARAM_STR);
+        $stmt->bindParam(':search', $searchTerm, PDO::PARAM_STR);  
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);  
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);  
+        $stmt->execute();
+    
+        $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        $countSql = "SELECT COUNT(*) FROM uploads WHERE section = :section AND name LIKE :search";
+        $countStmt = $this->pdo->prepare($countSql);
+        $countStmt->bindParam(':section', $section, PDO::PARAM_STR);
+        $countStmt->bindParam(':search', $searchTerm, PDO::PARAM_STR);
+        $countStmt->execute();
+        $totalFiles = $countStmt->fetchColumn();
+    
+        $totalPages = ceil($totalFiles / $limit);
+    
+        return [
+            'files' => $files,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
+        ];
+    }
     
     
     public function fetchOrders($userId, $page = 1, $perPage = 6)

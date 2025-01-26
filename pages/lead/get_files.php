@@ -1,10 +1,10 @@
 <?php
-// File: get_files.php
 require '../../global.php';
 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$search = isset($_GET['search']) ? $_GET['search'] : ''; // Capture search query
 
-$files = $settings->getFilesBySection('Leads', 12, $page);
+$files = $settings->getFilesBySection2('leads', 12, $page, $search);
 
 header('Content-Type: application/json');
 echo json_encode([
@@ -13,5 +13,4 @@ echo json_encode([
     'totalPages' => $files['totalPages']
 ]);
 exit;
-
 ?>
