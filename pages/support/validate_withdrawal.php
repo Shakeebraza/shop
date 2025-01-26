@@ -10,18 +10,18 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Get the POST data
+
 $btc_address = isset($_POST['btcAddress']) ? $_POST['btcAddress'] : '';
 $secret_code = isset($_POST['secretCode']) ? $_POST['secretCode'] : '';
 
-// Validate required fields
+
 if (empty($btc_address) || empty($secret_code)) {
     echo json_encode(["status" => "error", "message" => "BTC Address or Secret Code is missing."]);
     exit;
 }
 
 try {
-    // Fetch the user's secret code from the database to validate
+
     $sql = "SELECT secret_code FROM users WHERE id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(1, $user_id, PDO::PARAM_INT);  // Binding the user_id parameter
@@ -33,15 +33,14 @@ try {
     //     exit;
     // }
 
-    // Step 1: Create a withdrawal ticket
-    $balance_saller = 100.00; // Example, replace with actual balance logic
+    $balance_saller = 100.00;
     $subject = 'Withdrawal Request';
-    $message = "BTC Address: $btc_address\nSecret Code: $secret_code\nAmount: $$balance_saller";
+    $message = "BTC Address: $btc_address\nAmount: $$balance_saller";
     $status = 'open';
     $created_at = date('Y-m-d H:i:s');
     $updated_at = date('Y-m-d H:i:s');
     
-    // Insert into support_tickets table
+  
     $sql_ticket = "INSERT INTO support_tickets (user_id, message, status, created_at, updated_at, subject) 
                    VALUES (?, ?, ?, ?, ?, ?)";
     $stmt_ticket = $pdo->prepare($sql_ticket);
@@ -53,15 +52,15 @@ try {
     $stmt_ticket->bindValue(6, $subject, PDO::PARAM_STR);
     $stmt_ticket->execute();
     
-    // Get the last inserted ticket id
+
     $ticket_id = $pdo->lastInsertId();
     
-    // Step 2: Insert a reply to the support_replies table
-    $sender = 'user';  // Since this is a user submission
-    $reply_message = "BTC Address: $btc_address\nSecret Code: $secret_code\nWithdrawal Amount: $$balance_saller";
+
+    $sender = 'user'; 
+    $reply_message = "BTC Address: $btc_address\nWithdrawal Amount: $$balance_saller";
     $created_at_reply = date('Y-m-d H:i:s');
     
-    // Insert into support_replies table
+
     $sql_reply = "INSERT INTO support_replies (ticket_id, sender, message, created_at) 
                   VALUES (?, ?, ?, ?)";
     $stmt_reply = $pdo->prepare($sql_reply);
@@ -71,7 +70,7 @@ try {
     $stmt_reply->bindValue(4, $created_at_reply, PDO::PARAM_STR);
     $stmt_reply->execute();
 
-    // Return success message
+
     echo json_encode(["status" => "success", "message" => "Your withdrawal request has been submitted. A support ticket has been created."]);
 
 } catch (Exception $e) {
