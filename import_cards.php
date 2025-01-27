@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sinssn = $_POST['sinss'];
         $pin = $_POST['pin'];
         $otherinfo = isset($_POST['otherinfo']) ? $_POST['otherinfo'] : 'No';
-
+      
         $stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");
         $stmt->execute([$seller_id]);
         $seller = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -125,10 +125,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $checkStmt->execute([$card_number]);
 
                 if ($checkStmt->rowCount() == 0) {
-                    $query = "INSERT INTO $section (mmn, account_number, sort_code, card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, seller_id, seller_name, price, section, base_name, email, sinssn, pin, drivers) 
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $query = "INSERT INTO $section (mmn, account_number, sort_code, card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, seller_id, seller_name, price, section, base_name, email, sinssn, pin, drivers,otherinfo) 
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
                     $stmt = $pdo->prepare($query);
-                    $stmt->execute([$mmn, $account_number, $sort_code, $card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $seller_id, $seller_name, $price, $section, $base_nameData, $email_addressData, $sinssnData, $pinData, $driverslicenseData]);
+                    $stmt->execute([$mmn, $account_number, $sort_code, $card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $seller_id, $seller_name, $price, $section, $base_nameData, $email_addressData, $sinssnData, $pinData, $driverslicenseData,$otherinfo]);
                     $importedCount++;
                 } else {
                     $duplicateCount++;
