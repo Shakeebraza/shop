@@ -204,7 +204,8 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
             <div class="grid-container">
                 <input type="number" name="pos_card_number" placeholder="Card Number Pos" required>
 
-
+                <input type="number" name="pos_exp_month" placeholder="Exp Month Pos">
+                <input type="number" name="pos_exp_year" placeholder="Exp Year Pos">
                 <input type="number" name="pos_cvv" placeholder="CVV Pos" required>
                 <input type="number" name="pos_name_on_card" placeholder="Name on Card Pos" required>
                 <input type="number" name="pos_address" placeholder="Address Pos" required>
@@ -226,7 +227,7 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
                 <input type="number" name="driverslicense" placeholder="Drivers License">
                 <input type="number" name="sinss" placeholder="SIN/SSN">
                 <input type="number" name="pin" placeholder="pin">
-                <label
+                <!-- <label
                     style="font-size: 18px; font-weight: bold; display: flex; align-items: center; margin-bottom: 15px; color: #333;">
                     <input type="checkbox" id="use_mm_yyyy" name="use_mm_yyyy" value="1"
                         style="margin-right: 10px; cursor: pointer;">
@@ -243,7 +244,7 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
                 <div id="mm-yyyy-field" style="display: none; flex-direction: column; margin-bottom: 20px;">
                     <input type="text" name="pos_exp_mm_yyyy" placeholder="Exp Date (mm/yyyy) Pos"
                         style="width: 100%; padding: 12px; margin-bottom: 12px; border: 2px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: border-color 0.3s;">
-                </div>
+                </div> -->
 
 
             </div>
