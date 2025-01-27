@@ -14,13 +14,14 @@ function formatCardData($creditCards) {
         $formattedData[] = [
             'card_logo' => '<img src="/shop/images/cards/' . strtolower($cardimg) . '.png" alt="Card Logo" class="card-logo">',
             'email' => htmlspecialchars($card['email'] ?? 'NA'),
-            'card_number' => htmlspecialchars(substr($card['card_number'], 0, 6)),
-            'expiry' => htmlspecialchars($card['mm_exp']) . '/' . htmlspecialchars($card['yyyy_exp']),
-            'country' => htmlspecialchars($card['country']),
-            'state' => htmlspecialchars($card['state']),
-            'city' => htmlspecialchars($card['city']),
-            'zip' => substr($card['zip'], 0, 3) . '****',
-            'price' => '$' . htmlspecialchars($card['price']),
+            'card_number' => htmlspecialchars(substr($card['card_number'] ?? '', 0, 6)),
+            'expiry' => htmlspecialchars($card['mm_exp'] ?? '') . '/' . htmlspecialchars($card['yyyy_exp'] ?? ''),
+            'country' => htmlspecialchars($card['country'] ?? ''),
+            'state' => htmlspecialchars($card['state'] ?? ''),
+            'city' => htmlspecialchars($card['city'] ?? ''),
+            'zip' => substr($card['zip'] ?? '', 0, 3) . '****',
+            'price' => '$' . htmlspecialchars($card['price'] ?? ''),
+
             'otherinfo' => $otherinfo,
             'actions' => '
                 <div class="action-buttons">
