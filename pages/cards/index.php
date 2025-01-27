@@ -250,8 +250,7 @@ td {
                     <tr style="background-color:#0c182f;">
                         <th style="padding: 10px; border: 1px solid #ddd;">Type</th>
                         <th style="padding: 10px; border: 1px solid #ddd;">BIN</th>
-                        <th style="padding: 10px; border: 1px solid #ddd;">Expiry-mm</th>
-                        <th style="padding: 10px; border: 1px solid #ddd;">Expiry-yyyy</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Expiry</th>
                         <th style="padding: 10px; border: 1px solid #ddd;">Country</th>
                         <th style="padding: 10px; border: 1px solid #ddd;">State</th>
                         <th style="padding: 10px; border: 1px solid #ddd;">City</th>
@@ -387,10 +386,7 @@ $(document).ready(function() {
                 data: 'card_number'
             },
             {
-                data: 'expiry-m'
-            },
-            {
-                data: 'expiry-y'
+                data: 'expiry'
             },
             {
                 data: 'country'
