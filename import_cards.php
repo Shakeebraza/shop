@@ -163,7 +163,8 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
 </head>
 
 <body>
-    <div class="container">
+    <div class="container"
+        style="position: relative; max-height: 80vh; overflow-y: auto; border: 1px solid #ccc; padding: 20px; border-radius: 10px;">
         <h2>Import Credit Cards</h2>
 
         <form action="import_cards.php" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
