@@ -170,11 +170,72 @@ table button {
 
 <div class="main-content">
     <div id="my-cards" class="uuper">
-        <h2>My Cards Section</h2>
+        <div style="display:flex;justify-content: space-between;">
+            <h2>My Cards Section</h2>
+            <div style="position: relative; width: 300px; font-family: Arial, sans-serif;">
+                <!-- Button to open the dropdown -->
+                <button id="dropdownBtn" style="
+        width: 100%; 
+        padding: 12px; 
+        background-color: #0c182f;; 
+        border: 1px solidrgb(31, 54, 96);; 
+        border-radius: 5px; 
+        color: white; 
+        text-align: left; 
+        font-size: 14px; 
+        cursor: pointer; 
+        transition: background-color 0.3s ease;">
+                    Select Columns
+                </button>
+                <!-- Dropdown menu -->
+                <div id="dropdownMenu" style="
+        display: none; 
+        position: absolute; 
+        top: 100%; 
+        left: 0; 
+        width: 100%; 
+        background-color: white; 
+        border: 1px solid #ccc; 
+        border-radius: 5px; 
+        padding: 10px; 
+        box-sizing: border-box; 
+        z-index: 999; 
+        max-height: 300px; 
+        overflow-y: auto; 
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); 
+        transition: max-height 0.3s ease;">
+
+                    <!-- Column checkboxes -->
+                    <label><input type="checkbox" value="0" checked> Card Number</label><br>
+                    <label><input type="checkbox" value="1" checked> Expiration</label><br>
+                    <label><input type="checkbox" value="2" checked> CVV</label><br>
+                    <label><input type="checkbox" value="3" checked> Name on Card</label><br>
+                    <label><input type="checkbox" value="4" checked> Address</label><br>
+                    <label><input type="checkbox" value="5" checked> City</label><br>
+                    <label><input type="checkbox" value="6" checked> MNN</label><br>
+                    <label><input type="checkbox" value="7" checked> Account Number</label><br>
+                    <label><input type="checkbox" value="8" checked> Sort Code</label><br>
+                    <label><input type="checkbox" value="9" checked> ZIP</label><br>
+                    <label><input type="checkbox" value="10" checked> Country</label><br>
+                    <label><input type="checkbox" value="11" checked> Phone Number</label><br>
+                    <label><input type="checkbox" value="12" checked> Date of Birth</label><br>
+                    <label><input type="checkbox" value="13" checked> Email</label><br>
+                    <label><input type="checkbox" value="14" checked> SIN/SSN</label><br>
+                    <label><input type="checkbox" value="15" checked> Pin</label><br>
+                    <label><input type="checkbox" value="16" checked> Driver License</label><br>
+                    <label><input type="checkbox" value="17" checked> Actions</label>
+                </div>
+            </div>
+        </div>
         <?php if (empty($soldCards)): ?>
         <p>No purchased cards available.</p>
+
         <?php else: ?>
         <div class="main-tbl321" style="overflow-x: auto; max-width: 100%; border: 1px solid #ddd; margin-top: 20px;">
+
+
+
+
             <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; margin-top: 20px;"
                 id="soldDumpsTable">
                 <thead>
@@ -373,7 +434,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 $(document).ready(function() {
-    $('#soldDumpsTable').DataTable({
+    // Initialize DataTable
+    var table = $('#soldDumpsTable').DataTable({
         "paging": true,
         "searching": false,
         "ordering": false,
@@ -382,7 +444,16 @@ $(document).ready(function() {
         "autoWidth": true,
         "responsive": true
     });
+
+    // Listen for checkbox changes
+    $('#columnSelector input[type="checkbox"]').on('change', function() {
+        var columnIndex = $(this).val(); // Get column index
+        var column = table.column(columnIndex); // Target column
+        column.visible(this.checked); // Show if checked, hide if unchecked
+    });
 });
+
+
 $(document).ready(function() {
     $('#card_activity_log').DataTable({
         "paging": true,
@@ -415,4 +486,25 @@ if (rulesBtn) {
 } else {
     console.error('Button with id "rules-btnnew" not found.');
 }
+
+$(document).ready(function() {
+    // Toggle the dropdown visibility
+    $("#dropdownBtn").click(function() {
+        $("#dropdownMenu").toggle();
+    });
+
+    // Close the dropdown when clicking outside
+    $(document).click(function(event) {
+        if (!$(event.target).closest('#dropdownBtn, #dropdownMenu').length) {
+            $("#dropdownMenu").hide();
+        }
+    });
+
+    // Apply column visibility change when checkbox is clicked
+    $('#dropdownMenu input[type="checkbox"]').change(function() {
+        var columnIndex = $(this).val();
+        var column = $('#soldDumpsTable').DataTable().column(columnIndex);
+        column.visible(this.checked);
+    });
+});
 </script>
