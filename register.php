@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $contactOption = $_POST['contact_option'];
     $contactValue = trim($_POST['contact_value']);
     $encodedSecretCode = trim($_POST['secret_code']);
-    $secretCode = base64_decode(base64_decode($encodedSecretCode));
+    $secretCode = base64_encode(base64_encode($encodedSecretCode));
     $captcha = $_POST['captcha'];
 
     session_start();
@@ -40,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($password !== $confirmPassword) {
         $errors[] = "Passwords do not match. Please enter the same password.";
     }
-    if (!preg_match('/^\d{6}$/', $secretCode)) {
-        $errors[] = "Secret Code must be exactly 6 digits.";
-    }
+    // if (!preg_match('/^\d{6}$/', $secretCode)) {
+    //     $errors[] = "Secret Code must be exactly 6 digits.";
+    // }
     if ($captcha !== $_SESSION['captcha_code']) {
         $errors[] = "Invalid CAPTCHA.";
     }
