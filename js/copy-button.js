@@ -24,14 +24,14 @@ function copyCardInfo(cardId) {
         return;
     }
 
-    // Create a temporary textarea element to hold the text
+
     const tempTextArea = document.createElement('textarea');
     tempTextArea.value = cardDetails;
     document.body.appendChild(tempTextArea);
 
-    // Select the text inside the textarea
+
     tempTextArea.select();
-    tempTextArea.setSelectionRange(0, 99999); // For mobile devices
+    tempTextArea.setSelectionRange(0, 99999);
 
     // Execute the copy command
     try {
@@ -87,9 +87,19 @@ function copyDumpInfo(dumpId) {
         return;
     }
 
-    // Copy the dump details to the clipboard
-    navigator.clipboard.writeText(dumpDetails)
-        .then(() => {
+    // Create a temporary textarea element to hold the text
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = dumpDetails;
+    document.body.appendChild(tempTextArea);
+
+    // Select the text inside the textarea
+    tempTextArea.select();
+    tempTextArea.setSelectionRange(0, 99999); // For mobile devices
+
+    // Execute the copy command
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
             const button = row.querySelector('.copy-button');
             if (button) {
                 // Change button appearance
@@ -105,8 +115,15 @@ function copyDumpInfo(dumpId) {
                     button.textContent = originalText;
                 }, 2000);
             }
-        })
-        .catch(err => {
-            console.error('Failed to copy text:', err);
-        });
+            alertify.success("Dump details copied to clipboard!");
+        } else {
+            alertify.error('Failed to copy dump details.');
+        }
+    } catch (err) {
+        console.error('Failed to execute copy command', err);
+    }
+
+    // Clean up the temporary textarea
+    document.body.removeChild(tempTextArea);
 }
+
