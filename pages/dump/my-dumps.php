@@ -413,4 +413,60 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
         });
 });
+
+
+function deleteRow(id) {
+
+    alertify.confirm(
+        'Confirm Deletion',
+        `Are you sure you want to delete this dump?`,
+        function() {
+
+
+            fetch('delete_dump.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        ticket_id: id
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alertify.success('Dump has been deleted.');
+
+                        // Hide the row by targeting the dump ID (matching the row ID)
+                        var dumpElement = document.getElementById('dump-' + id);
+                        if (dumpElement) {
+                            dumpElement.style.display = 'none'; // Hide the row
+                        } else {
+                            console.error('Dump element not found');
+                        }
+
+                        // Optionally refresh the page after 5 seconds
+                        setTimeout(function() {
+                            location.reload();
+                        }, 5000);
+                    } else {
+                        alertify.error('Error: ' + data.message);
+                        setTimeout(function() {
+                            location.reload();
+                        }, 5000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alertify.error('Something went wrong!');
+                });
+        },
+        function() {
+            alertify.error('Delete cancelled.');
+        }
+    ).set('labels', {
+        ok: 'Confirm',
+        cancel: 'Cancel'
+    });
+}
 </script>

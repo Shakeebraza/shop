@@ -193,8 +193,12 @@ function submitReplyy(event, ticketId) {
                 // Show success popup
                 // showPopupMessage("Reply submitted successfully!", "success");
             } else {
-                console.log('hhhhh')
+
+
                 showPopupMessage(data.message || "Error submitting reply.", "error");
+                setTimeout(function() {
+                    location.reload();
+                }, 5000);
             }
         })
         .catch(error => {

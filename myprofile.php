@@ -235,7 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="submit" value="Update Profile">
         </form>
 
-        <a href="dashboard.php">Back to Dashboard</a>
+        <a href="login.php">Back to Dashboard</a>
     </div>
 
     <script>

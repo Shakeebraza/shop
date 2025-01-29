@@ -293,20 +293,21 @@ table button {
                         <td style="padding: 10px;"><?php echo htmlspecialchars($card['pin'] ?? 'N/A'); ?></td>
                         <td style="padding: 10px;"><?php echo htmlspecialchars($card['drivers'] ?? 'N/A'); ?></td>
                         <td
-                            style="padding: 10px;display: flex;justify-content: center;align-content: center;align-items: center;">
-                            <button class="copy-button" style="padding: 6px 10px; 
-                        border: none; border-radius: 3px; cursor: pointer; margin-right: 5px;"
-                                onclick="copyCardInfo(<?php echo htmlspecialchars($card['id']); ?>)">Copy</button>
-                            <button class="check-card-button" style="padding: 6px 10px; 
-                        border: none; border-radius: 3px; cursor: pointer; margin:0px 5px 0px 0px;"
-                                onclick="checkCard(<?php echo htmlspecialchars($card['id']); ?>)">Check</button>
-                            <a type="button" onclick="deleteRow(<?php echo htmlspecialchars($dump['id']); ?>)"
-                                id="clear-btn" class="btn text-center btn-with-icon" style="background-color: #f44336; color: white; padding: 5px 15px; width:70px; border-radius: 4px; border: none; cursor: pointer; 
-                                margin-top: -1px;">
+                            style="padding: 10px; display: flex; justify-content: center; align-content: center; align-items: center;">
+                            <button class="copy-button"
+                                style="padding: 6px 10px; border: none; border-radius: 3px; cursor: pointer; margin-right: 5px;"
+                                onclick="copyCardInfo(<?php echo json_encode($card['id']); ?>)">Copy</button>
+                            <button class="check-card-button"
+                                style="padding: 6px 10px; border: none; border-radius: 3px; cursor: pointer; margin:0px 5px 0px 0px;"
+                                onclick="checkCard(<?php echo json_encode($card['id']); ?>)">Check</button>
+                            <a type="button" onclick="deleteRow(<?php echo json_encode($card['id']); ?>)" id="clear-btn"
+                                class="btn text-center btn-with-icon"
+                                style="background-color: #f44336; color: white; padding: 5px 15px; width:70px; border-radius: 4px; border: none; cursor: pointer; margin-top: -1px;">
                                 <i class="fa fa-times"></i>
                                 <span class="btn-text" style="text-align:center !important;">Delete</span>
                             </a>
                         </td>
+
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -387,6 +388,44 @@ include_once('../../footer.php');
 
 
 <script>
+function deleteRow(cardId) {
+    alertify.confirm(
+        'Confirm Deletion',
+        `Are you sure you want to delete this card?`,
+        function() {
+            // Use jQuery's $.ajax() to send the request
+            $.ajax({
+                url: 'deleteCard.php', // The URL to send the request to
+                type: 'POST', // The request method (POST)
+                data: {
+                    ticket_id: cardId
+                }, // The data to send (ticket_id)
+                success: function(response) {
+                    // Parse the JSON response
+                    var responseData = JSON.parse(response);
+
+                    if (responseData.success) {
+                        // If deletion is successful, remove the table row
+                        $("#card-" + cardId).remove(); // Remove the row with id card-<cardId>
+                        alertify.success("Record deleted successfully!");
+                    } else {
+                        alertify.error("Failed to delete the record: " + responseData.message);
+                    }
+                },
+                error: function() {
+                    alertify.error("Error in server communication.");
+                }
+            });
+        },
+        function() {
+            alertify.error('Cancel deletion');
+        }
+    ).set('labels', {
+        ok: 'Confirm',
+        cancel: 'Cancel'
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 
     const deletedIds = JSON.parse(localStorage.getItem('deletedRows')) || [];
@@ -400,22 +439,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-function deleteRow(cardId) {
-    if (confirm('Are you sure you want to delete this row?')) {
 
-        const row = document.getElementById(`card-${cardId}`);
-        if (row) {
-            row.style.display = 'none';
-        }
-
-
-        const deletedIds = JSON.parse(localStorage.getItem('deletedRows')) || [];
-        if (!deletedIds.includes(cardId)) {
-            deletedIds.push(cardId);
-            localStorage.setItem('deletedRows', JSON.stringify(deletedIds));
-        }
-    }
-}
 
 document.addEventListener('DOMContentLoaded', function() {
     fetch('update_is_view.php', {

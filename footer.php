@@ -281,15 +281,15 @@ async function proceedToCheckout() {
                         console.log(data.message);
                         showPopupMessage(data.message || 'Purchase successful.');
                         removeAllFromCart();
-                        // setTimeout(() => {
-                        //     window.location.reload();    
-                        // }, 2000);
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
                     } else {
                         removeAllFromCart();
                         showPopupMessage(data.message || 'Purchase failed.');
-                        // setTimeout(() => {
-                        //     window.location.href = '<?= $urlval?>pages/add-money/index.php';
-                        // }, 2000);
+                        setTimeout(() => {
+                            window.location.href = '<?= $urlval?>pages/add-money/index.php';
+                        }, 2000);
                     }
                 } catch (error) {
                     console.error('Error:', error);
