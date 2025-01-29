@@ -70,7 +70,7 @@ foreach ($tickets as $ticket) {
 
                     <?php if ($ticket['status'] === 'open' && $userReplyCount < 3): ?>
                     <form method="POST" action="submit_reply.php" class="reply-section"
-                        onsubmit="submitReply(event, <?php echo htmlspecialchars($ticket['id']); ?>)">
+                        onsubmit="submitReplyy(event, <?php echo htmlspecialchars($ticket['id']); ?>)">
                         <input type="hidden" name="ticket_id" value="<?php echo htmlspecialchars($ticket['id']); ?>">
                         <textarea name="message" id="reply-message-<?php echo htmlspecialchars($ticket['id']); ?>"
                             placeholder="Reply..." rows="2" maxlength="500" required></textarea>
@@ -142,23 +142,22 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function submitReplyy(event, ticketId) {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault();
 
     const form = event.target;
     const textArea = form.querySelector('textarea');
-    const messageText = textArea.value.trim(); // Trim to remove unnecessary spaces
+    const messageText = textArea.value.trim();
     const replyBtn = form.querySelector('button[type="submit"]');
 
-    // Validate input before sending it to the server
+
 
 
     const formData = new FormData(form);
 
-    // Disable button while submitting to prevent multiple clicks
+
     replyBtn.disabled = true;
     replyBtn.innerText = "Sending...";
 
-    // Send AJAX request to submit the reply
     fetch(form.action, {
             method: 'POST',
             body: formData,
@@ -187,6 +186,7 @@ function submitReplyy(event, ticketId) {
                 // Show success popup
                 // showPopupMessage("Reply submitted successfully!", "success");
             } else {
+                console.log('hhhhh')
                 showPopupMessage(data.message || "Error submitting reply.", "error");
             }
         })
