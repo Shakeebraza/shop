@@ -24,29 +24,32 @@ function copyCardInfo(cardId) {
         return;
     }
 
+    // Check if navigator.clipboard is available
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(cardDetails)
+            .then(() => {
+                const button = row.querySelector('button');
+                if (button) {
+                    button.style.backgroundColor = 'green';
+                    button.style.color = 'white';
+                    const originalText = button.textContent;
+                    button.textContent = 'Copied!';
 
-    navigator.clipboard.writeText(cardDetails)
-        .then(() => {
-            const button = row.querySelector('button');
-            if (button) {
-         
-                button.style.backgroundColor = 'green';
-                button.style.color = 'white';
-                const originalText = button.textContent;
-                button.textContent = 'Copied!';
-                
-   
-                setTimeout(() => {
-                    button.style.backgroundColor = '';
-                    button.style.color = '';
-                    button.textContent = originalText;
-                }, 2000);
-            }
-        })
-        .catch(err => {
-            console.error('Failed to copy text:', err);
-        });
+                    setTimeout(() => {
+                        button.style.backgroundColor = '';
+                        button.style.color = '';
+                        button.textContent = originalText;
+                    }, 2000);
+                }
+            })
+            .catch(err => {
+                console.error('Failed to copy text:', err);
+            });
+    } else {
+        console.error('Clipboard API not available. Ensure your site is served over HTTPS.');
+    }
 }
+
 
 
 
