@@ -24,30 +24,42 @@ function copyCardInfo(cardId) {
         return;
     }
 
-    // Check if navigator.clipboard is available
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(cardDetails)
-            .then(() => {
-                const button = row.querySelector('button');
-                if (button) {
-                    button.style.backgroundColor = 'green';
-                    button.style.color = 'white';
-                    const originalText = button.textContent;
-                    button.textContent = 'Copied!';
+    // Create a temporary textarea element to hold the text
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = cardDetails;
+    document.body.appendChild(tempTextArea);
 
-                    setTimeout(() => {
-                        button.style.backgroundColor = '';
-                        button.style.color = '';
-                        button.textContent = originalText;
-                    }, 2000);
-                }
-            })
-            .catch(err => {
-                console.error('Failed to copy text:', err);
-            });
-    } else {
-        console.error('Clipboard API not available. Ensure your site is served over HTTPS.');
+    // Select the text inside the textarea
+    tempTextArea.select();
+    tempTextArea.setSelectionRange(0, 99999); // For mobile devices
+
+    // Execute the copy command
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            const button = row.querySelector('button');
+            if (button) {
+                button.style.backgroundColor = 'green';
+                button.style.color = 'white';
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+
+                setTimeout(() => {
+                    button.style.backgroundColor = '';
+                    button.style.color = '';
+                    button.textContent = originalText;
+                }, 2000);
+            }
+            alertify.success("Card details copied to clipboard!");
+        } else {
+            alertify.error('Failed to copy card details.');
+        }
+    } catch (err) {
+        console.error('Failed to execute copy command', err);
     }
+
+    // Clean up the temporary textarea
+    document.body.removeChild(tempTextArea);
 }
 
 
