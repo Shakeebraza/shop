@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $newPassword = trim($_POST['new_password']);
     $confirmPassword = trim($_POST['confirm_password']);
     $secretCode = trim($_POST['secret_code']);
-
-    if ($user['secret_code'] !== $secretCode) {
+    $usersecret_code =base64_decode(base64_decode($user['secret_code']));
+    if ($usersecret_code !== $secretCode) {
         $errors[] = "Secret Code is incorrect";
     } else {
         $updateFields = [];
@@ -98,151 +98,160 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Profile Message Box Styling */
-        #profileMessageBox {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #d4edda;
-            color: #155724;
-            padding: 20px;
-            border: 1px solid #c3e6cb;
-            border-radius: 8px;
-            font-size: 15px;
-            z-index: 1001;
-            width: 300px;
-            max-width: 80%;
-            text-align: center;
-            opacity: 1;
-            transition: opacity 0.5s ease;
-            box-sizing: border-box;
-        }
-        #profileMessageBox.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border-color: #f5c6cb;
-        }
-        #profileMessageBox.error ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        #profileOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            pointer-events: all;
-        }
-        .popup-message {
-            display: none;
-            position: absolute;
-            background-color: #555;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            width: 250px;
-            top: 30px;
-            left: 0;
-            z-index: 10;
-        }
+    /* Profile Message Box Styling */
+    #profileMessageBox {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #d4edda;
+        color: #155724;
+        padding: 20px;
+        border: 1px solid #c3e6cb;
+        border-radius: 8px;
+        font-size: 15px;
+        z-index: 1001;
+        width: 300px;
+        max-width: 80%;
+        text-align: center;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+        box-sizing: border-box;
+    }
 
-        .popup-message::after {
-            content: "";
-            position: absolute;
-            top: -5px;
-            left: 10px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: transparent transparent #555 transparent;
-        }
+    #profileMessageBox.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-color: #f5c6cb;
+    }
 
-        .help-link {
-            cursor: pointer;
-            color: #007bff;
-            text-decoration: underline;
-            font-size: 0.9em;
-            position: relative;
-        }
+    #profileMessageBox.error ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
 
-        .help-container {
-            position: relative;
-            display: inline-block;
-        }
+    #profileOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        pointer-events: all;
+    }
+
+    .popup-message {
+        display: none;
+        position: absolute;
+        background-color: #555;
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        width: 250px;
+        top: 30px;
+        left: 0;
+        z-index: 10;
+    }
+
+    .popup-message::after {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: 10px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent #555 transparent;
+    }
+
+    .help-link {
+        cursor: pointer;
+        color: #007bff;
+        text-decoration: underline;
+        font-size: 0.9em;
+        position: relative;
+    }
+
+    .help-container {
+        position: relative;
+        display: inline-block;
+    }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h2>My Profile</h2>
+    <div class="container">
+        <h2>My Profile</h2>
 
-    <?php if (!empty($errors)) : ?>
+        <?php if (!empty($errors)) : ?>
         <div id="profileOverlay"></div>
         <div id="profileMessageBox" class="error">
             <ul>
                 <?php foreach ($errors as $error) : ?>
-                    <li><?php echo $error; ?></li>
+                <li><?php echo $error; ?></li>
                 <?php endforeach; ?>
             </ul>
         </div>
-    <?php elseif ($successMessage) : ?>
+        <?php elseif ($successMessage) : ?>
         <div id="profileOverlay"></div>
         <div id="profileMessageBox"><?php echo $successMessage; ?></div>
-    <?php endif; ?>
+        <?php endif; ?>
 
-    <form method="POST" action="myprofile.php">
-        <label for="jabber">Jabber</label>
-        <input type="text" id="jabber" name="jabber" placeholder="" value="<?php echo htmlspecialchars($user['jabber']); ?>">
+        <form method="POST" action="myprofile.php">
+            <label for="jabber">Jabber</label>
+            <input type="text" id="jabber" name="jabber" placeholder=""
+                value="<?php echo htmlspecialchars($user['jabber']); ?>">
 
-        <label for="telegram">Telegram</label>
-        <input type="text" id="telegram" name="telegram" placeholder="" value="<?php echo htmlspecialchars($user['telegram']); ?>">
+            <label for="telegram">Telegram</label>
+            <input type="text" id="telegram" name="telegram" placeholder=""
+                value="<?php echo htmlspecialchars($user['telegram']); ?>">
 
-        <label for="new_password">New Password</label>
-        <input type="password" id="new_password" name="new_password">
+            <label for="new_password">New Password</label>
+            <input type="password" id="new_password" name="new_password">
 
-        <label for="confirm_password">Confirm New Password</label>
-        <input type="password" id="confirm_password" name="confirm_password">
+            <label for="confirm_password">Confirm New Password</label>
+            <input type="password" id="confirm_password" name="confirm_password">
 
-        <label for="secret_code">Secret Code
-            <span class="help-container">
-                <span class="help-link" id="whatsThisLink">What's this?</span>
-                <div class="popup-message" id="popupMessage">
-                    Please enter your secret code you set when registering the account.
-                </div>
-            </span>
-        </label>
-        <input type="text" id="secret_code" placeholder="Required to update your profile" name="secret_code" pattern="\d{6}" maxlength="6" required>
+            <label for="secret_code">Secret Code
+                <span class="help-container">
+                    <span class="help-link" id="whatsThisLink">What's this?</span>
+                    <div class="popup-message" id="popupMessage">
+                        Please enter your secret code you set when registering the account.
+                    </div>
+                </span>
+            </label>
+            <input type="text" id="secret_code" placeholder="Required to update your profile" name="secret_code"
+                pattern="\d{6}" maxlength="6" required>
 
-        <input type="submit" value="Update Profile">
-    </form>
+            <input type="submit" value="Update Profile">
+        </form>
 
-    <a href="dashboard.php">Back to Dashboard</a>
-</div>
+        <a href="dashboard.php">Back to Dashboard</a>
+    </div>
 
-<script>
+    <script>
     // Immediately update the form fields if they were changed
     const newJabberValue = "<?php echo htmlspecialchars($newJabberValue); ?>";
     const newTelegramValue = "<?php echo htmlspecialchars($newTelegramValue); ?>";
 
     <?php if ($jabberUpdated): ?>
-        document.getElementById("jabber").value = newJabberValue;
+    document.getElementById("jabber").value = newJabberValue;
     <?php endif; ?>
 
     <?php if ($telegramUpdated): ?>
-        document.getElementById("telegram").value = newTelegramValue;
+    document.getElementById("telegram").value = newTelegramValue;
     <?php endif; ?>
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const messageBox = document.getElementById("profileMessageBox");
         const overlay = document.getElementById("profileOverlay");
         const logoutAfterUpdate = <?php echo json_encode($logoutAfterUpdate); ?>;
@@ -264,8 +273,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
     });
-</script>
-<script>
+    </script>
+    <script>
     document.addEventListener("DOMContentLoaded", function() {
         const popupMessage = document.getElementById("popupMessage");
         const whatsThisLink = document.getElementById("whatsThisLink");
@@ -276,12 +285,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
 
         document.addEventListener("click", function(event) {
-            if (popupMessage.style.display === "block" && !popupMessage.contains(event.target) && event.target !== whatsThisLink) {
+            if (popupMessage.style.display === "block" && !popupMessage.contains(event.target) && event
+                .target !== whatsThisLink) {
                 popupMessage.style.display = "none";
             }
         });
     });
-</script>
+    </script>
 
 </body>
+
 </html>
