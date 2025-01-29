@@ -33,11 +33,12 @@ if ($cardId && $type) {
         if ($item) {
 
             if ($type == 'dump') {
+                $cardtpe=$item['card_type']??'visa';
                 $itemData = [
                     'id' => $item['id'],
                     'bin' => substr($item['track2'], 0, 6), 
                     'price' => $item['price'],
-                    'image' => '/shop/images/cards/' . strtolower($item['card_type']) . '.png',
+                    'image' => '/shop/images/cards/' . strtolower($cardtpe) . '.png',
                     'type' => 'dump'
                 ];
           
@@ -47,11 +48,12 @@ if ($cardId && $type) {
                     $_SESSION['dumps'][$cardId] = $itemData;
                 }
             } else {
+                $cardtpe=$item['card_type']??'visa';
                 $itemData = [
                     'id' => $item['id'],
                     'bin' => substr($item['card_number'], 0, 6), 
                     'price' => $item['price'],
-                    'image' => '/shop/images/cards/' . strtolower($item['card_type']) . '.png',
+                    'image' => '/shop/images/cards/' . strtolower($cardtpe) . '.png',
                     'type' => 'card'
                 ];
            
