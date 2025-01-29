@@ -657,7 +657,7 @@ endif;
                     <li>
                         <a href="<?= $urlval?>pages/support/index.php" id="support-link">
                             <i class="fas fa-life-ring"></i> Support
-                            <?php if ($unreadCount): ?>
+                            <?php if ($unreadCount != 0): ?>
                             <span class="notification-dot"></span>
                             <?php endif; ?>
                         </a>
