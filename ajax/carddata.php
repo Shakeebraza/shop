@@ -9,7 +9,7 @@ function formatCardData($creditCards) {
     $ative = $_SESSION['active'] === 0 ? 'disabled' : '';
 
     foreach ($creditCards as $card) {
-        $otherinfo = (!empty($card['otherinfo']) && $card['otherinfo'] != 'NA') ? 'Yes' : 'No';
+        $otherinfo = (!empty($card['otherinfo']) && $card['otherinfo'] != 'NA' && $card['otherinfo'] != 'No') ? 'Yes' : 'No';
         $cardimg=$card['card_type'] ?? 'visa';
         $formattedData[] = [
             'card_logo' => '<img src="/shop/images/cards/' . strtolower($cardimg) . '.png" alt="Card Logo" class="card-logo">',
