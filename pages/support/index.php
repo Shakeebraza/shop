@@ -70,7 +70,7 @@ foreach ($tickets as $ticket) {
 
                     <?php if ($ticket['status'] === 'open' && $userReplyCount < 3): ?>
                     <form method="POST" action="submit_reply.php" class="reply-section"
-                        onsubmit="submitReplyy(event, <?php echo htmlspecialchars($ticket['id']); ?>)">
+                        onsubmit="submitReply(event, <?php echo htmlspecialchars($ticket['id']); ?>)">
                         <input type="hidden" name="ticket_id" value="<?php echo htmlspecialchars($ticket['id']); ?>">
                         <textarea name="message" id="reply-message-<?php echo htmlspecialchars($ticket['id']); ?>"
                             placeholder="Reply..." rows="2" maxlength="500" required></textarea>
@@ -78,7 +78,10 @@ foreach ($tickets as $ticket) {
                         <button type="submit"
                             id="reply-btn-<?php echo htmlspecialchars($ticket['id']); ?>">Send</button>
                     </form>
-                    <?php elseif ($userReplyCount >= 3): ?>
+                    <?php elseif ($userReplyCount >= 3 && $ticket['status'] === 'open'): ?>
+                    <p class="disabled-message">You cannot send more than 3 consecutive messages without an admin reply.
+                    </p>
+                    <?php elseif ($ticket['status'] === 'closed'): ?>
                     <p class="disabled-message">The conversation has been closed by the Admin. You may proceed by
                         opening a new ticket if further assistance is required.</p>
                     <?php endif; ?>
