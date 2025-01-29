@@ -7,6 +7,9 @@ foreach ($tickets as $ticket) {
         break;
     }
 }
+
+
+
 ?>
 <!-- Main Content Area -->
 <div class="main-content">
@@ -35,7 +38,7 @@ foreach ($tickets as $ticket) {
             <?php foreach ($tickets as $ticket): ?>
             <div class="ticket-item">
                 <div class="ticket-summary"
-                    onclick="toggleConversation(<?php echo htmlspecialchars($ticket['id']); ?>)">
+                    onclick="handleTicketClick(event, <?php echo htmlspecialchars($ticket['id']); ?>)">
                     <span>Ticket #<?php echo htmlspecialchars($ticket['id']); ?> -
                         <?php echo htmlspecialchars($ticket['created_at']); ?></span>
                     <small>Status: <?php echo ucfirst(htmlspecialchars($ticket['status'])); ?></small>
@@ -46,22 +49,24 @@ foreach ($tickets as $ticket) {
                     <p><?php echo htmlspecialchars($ticket['message']); ?></p>
 
                     <?php
-                        $stmt = $pdo->prepare("SELECT * FROM support_replies WHERE ticket_id = ? ORDER BY created_at ASC");
-                        $stmt->execute([$ticket['id']]);
-                        $replies = $stmt->fetchAll();
+        $stmt = $pdo->prepare("SELECT * FROM support_replies WHERE ticket_id = ? ORDER BY created_at ASC");
+        $stmt->execute([$ticket['id']]);
+        $replies = $stmt->fetchAll();
 
-                        $userReplyCount = 0; // Track consecutive user replies
-                        foreach ($replies as $reply) {
-                            $messageClass = ($reply['sender'] === 'user') ? 'user-message' : 'admin-message';
-                            $senderName = ($reply['sender'] === 'user') ? htmlspecialchars($username) : 'Admin';
+        $userReplyCount = 0; // Initialize the userReplyCount
 
-                            if ($reply['sender'] === 'user') {
-                                $userReplyCount++;
-                            } else {
-                                $userReplyCount = 0; // Reset after admin reply
-                            }
-                        ?>
-                    <div class="<?php echo $messageClass; ?>">
+        foreach ($replies as $reply) {
+            $messageClass = ($reply['sender'] === 'user') ? 'user-message' : 'admin-message';
+            $senderName = ($reply['sender'] === 'user') ? htmlspecialchars($username) : 'Admin';
+
+            if ($reply['sender'] === 'user') {
+                $userReplyCount++;
+            } else {
+                $userReplyCount = 0; // Reset after admin reply
+            }
+            ?>
+                    <div class="<?php echo $messageClass; ?>"
+                        data-reply-id="<?php echo htmlspecialchars($reply['id']); ?>">
                         <p class="message-tag"><strong><?php echo htmlspecialchars($senderName); ?>:</strong></p>
                         <p><?php echo htmlspecialchars($reply['message']); ?></p>
                         <small><?php echo htmlspecialchars($reply['created_at']); ?></small>
@@ -83,10 +88,12 @@ foreach ($tickets as $ticket) {
                     </p>
                     <?php elseif ($ticket['status'] === 'closed'): ?>
                     <p class="disabled-message">The conversation has been closed by the Admin. You may proceed by
-                        opening a new ticket if further assistance is required.</p>
+                        opening a new
+                        ticket if further assistance is required.</p>
                     <?php endif; ?>
                 </div>
             </div>
+
             <?php endforeach; ?>
         </div>
         <?php else: ?>
@@ -199,6 +206,41 @@ function submitReplyy(event, ticketId) {
             replyBtn.disabled = false;
             replyBtn.innerText = "Send";
         });
+}
+
+function handleTicketClick(event, ticketId) {
+    // Prevent the default action if needed
+    event.preventDefault();
+
+    // Call toggleConversation
+    toggleConversation(ticketId);
+
+    // Call markAsRead with the ticketId
+    markAsRead(ticketId);
+}
+// Function to mark a reply as read
+function markAsRead(reply) {
+    console.log(reply)
+    const replyId = reply;
+
+    // Send AJAX request to mark the message as read
+    fetch('mark_as_read.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                reply_id: replyId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Optionally change the style of the message to indicate it has been read
+                reply.style.backgroundColor = '#f0f0f0'; // Change background to indicate it's been read
+            }
+        })
+        .catch(error => console.error('Error:', error));
 }
 
 function closeRulesPopup() {

@@ -224,8 +224,9 @@ $stmt->execute([$user_id]);
 $tickets = $stmt->fetchAll();
 
 // Check if there are any tickets with unread replies from the admin
-$user_id = $_SESSION['user_id'];
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM support_tickets WHERE user_id = ? AND user_unread = 1");
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM support_replies 
+                       WHERE ticket_id IN (SELECT id FROM support_tickets WHERE user_id = ?) 
+                       AND sender = 'admin' AND is_read = 0");
 $stmt->execute([$user_id]);
 $unreadCount = $stmt->fetchColumn();
 
