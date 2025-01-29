@@ -123,8 +123,9 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => response.json())
             .then(data => {
-                showPopupMessage(data.message);
+                // showPopupMessage(data.message);
                 if (data.success) {
+                    window.location.reload();
                     messageInput.value = "";
                 }
             })
