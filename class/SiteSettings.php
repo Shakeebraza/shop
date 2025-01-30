@@ -28,12 +28,18 @@ class SiteSettings {
     }
     
     function getDumpBaseNames() {
-        $sql = "SELECT base_name FROM dumps WHERE base_name != 'NA' AND base_name IS NOT NULL";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        $baseNames = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $baseNames;
+        $sql = "SELECT DISTINCT 
+                TRIM(REPLACE(REPLACE(LOWER(base_name), '\n', ''), '\r', '')) AS base_name 
+                FROM dumps 
+                WHERE base_name != 'NA' 
+                AND status != 'sold' 
+                AND base_name IS NOT NULL";
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute();
+                $baseNames = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $baseNames;
     }
+    
 
         
     function getDumpCode() {

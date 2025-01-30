@@ -201,7 +201,7 @@ form#dump-filters {
                         <option value="all">All</option>
 
                         <?php
-                        $getDumpCodes = $settings->getDumpCode();
+                        $getDumpCodes = $settings->getDumpBaseNames();
                         foreach ($getDumpCodes as $getDumpCode) {
                         
                             if (isset($getDumpCode['base_name']) && $getDumpCode['base_name'] != 'NA') {
