@@ -9,11 +9,21 @@ if (!isset($_SESSION['user_id'])) {
 }
 function validateBTCAddress($address) {
     $api_url = "https://api.blockcypher.com/v1/btc/main/addrs/$address";
-    
-    $response = file_get_contents($api_url);
-    return $response !== false;
-}
 
+    $ch = curl_init($api_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($http_code === 200) {
+        return true;
+    } else {
+        return false; 
+    }
+}
 
 $user_id = $_SESSION['user_id'];
 
@@ -43,7 +53,7 @@ try {
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($secret_code ==$_SESSION['secret_code']) {
+    if ($secret_code != $_SESSION['secret_code']) {
         echo json_encode(["status" => "error", "message" => "Invalid secret code."]);
         exit;
     }

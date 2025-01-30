@@ -258,4 +258,9 @@ document.getElementById("submitBtn").addEventListener("click", function() {
 
     xhr.send("btcAddress=" + btcAddress + "&secretCode=" + secretCode);
 });
+
+function closeRulesPopup() {
+    const popup = document.getElementById('rules-popup');
+    popup.style.display = 'none';
+}
 </script>
