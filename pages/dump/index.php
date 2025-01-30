@@ -184,13 +184,14 @@ form#dump-filters {
 
                         <?php
                         $codes = $settings->getDumpCode();
-                            
-                        foreach ($codes as $code) {
-                            if($code['code'] != NULL){
 
-                                echo '<option value="' . htmlspecialchars($code['code']) . '">' . htmlspecialchars($code['code']) . '</option>';
+                        foreach ($codes as $code) {
+                            if ($code['code'] != NULL) {
+                                // Correct placement of substr() inside the echo statement
+                                echo '<option value="' . htmlspecialchars($code['code']) . '">' . substr($code['code'], 0, 3) . '</option>';
                             }
                         }
+                        
                         ?>
                     </select>
                 </div>

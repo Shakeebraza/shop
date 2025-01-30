@@ -107,7 +107,8 @@ foreach ($dumps as $dump) {
         'pin' => !empty($dump['pin']) ? 'Yes' : 'No',
         'track' => !empty($dump['track1']) ? 'Yes' : 'No',
         'country' => htmlspecialchars($dump['country']),
-        'code' => $dump['code'],
+        'code' => isset($dump['code']) && !is_null($dump['code']) ? substr($dump['code'], 0, 3) : '',
+
         'price' => '$' . htmlspecialchars($dump['price']),
         // 'actions' => '<a href="buy_dump.php?dump_id=' . htmlspecialchars($dump['id']) . '" class="buy-button-dump" style="background-color:#0c182f;" onclick="return confirm(\'Are you sure you want to buy this dump?\');">
         //                 <span class="price">$' . htmlspecialchars($dump['price']) . '</span>
