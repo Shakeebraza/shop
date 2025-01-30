@@ -7,6 +7,13 @@ if (!isset($_SESSION['user_id'])) {
     echo json_encode(["status" => "error", "message" => "User is not logged in."]);
     exit;
 }
+function validateBTCAddress($address) {
+    $api_url = "https://api.blockcypher.com/v1/btc/main/addrs/$address";
+    
+    $response = file_get_contents($api_url);
+    return $response !== false;
+}
+
 
 $user_id = $_SESSION['user_id'];
 
@@ -14,24 +21,32 @@ $user_id = $_SESSION['user_id'];
 $btc_address = isset($_POST['btcAddress']) ? $_POST['btcAddress'] : '';
 $secret_code = isset($_POST['secretCode']) ? $_POST['secretCode'] : '';
 
+if (validateBTCAddress($btc_address)) {
+    // echo "BTC Address is valid!";
+    
+} else {
+    echo json_encode(["status" => "error", "message" => "Invalid BTC Address!"]);
+    exit;
 
+}
 if (empty($btc_address) || empty($secret_code)) {
     echo json_encode(["status" => "error", "message" => "BTC Address or Secret Code is missing."]);
     exit;
 }
 
+
 try {
 
     $sql = "SELECT secret_code FROM users WHERE id = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(1, $user_id, PDO::PARAM_INT);  // Binding the user_id parameter
+    $stmt->bindValue(1, $user_id, PDO::PARAM_INT);  
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // if (!$user || !password_verify($secret_code, $user['secret_code'])) {
-    //     echo json_encode(["status" => "error", "message" => "Invalid secret code."]);
-    //     exit;
-    // }
+    if ($secret_code ==$_SESSION['secret_code']) {
+        echo json_encode(["status" => "error", "message" => "Invalid secret code."]);
+        exit;
+    }
 
     $balance_saller = 100.00;
     $subject = 'Withdrawal Request';
