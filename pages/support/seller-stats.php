@@ -169,7 +169,8 @@ $balance_saller = $user['credit_cards_balance'] + $user['dumps_balance'];
                         <input type="text" class="withdrawal_amount" name="BTC_Address" placeholder="BTC Address"
                             required>
                         <input type="text" class="withdrawal_amount" name="Secret_Code" placeholder="Secret Code"
-                            required>
+                            required maxlength="6" minlength="6" pattern="\d{6}">
+
                         <p class="withdrawal_amount readonly"
                             style="background-color: #f5f5f5; color: #333; font-weight: bold; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
                             Your balance is: $<?php echo number_format($balance_saller, 2); ?>
