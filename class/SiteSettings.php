@@ -34,14 +34,15 @@ class SiteSettings {
         $baseNames = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $baseNames;
     }
+
         
     function getDumpCode() {
         $sql = "SELECT DISTINCT 
-                       TRIM(REPLACE(REPLACE(LOWER(base_name), '\n', ''), '\r', '')) AS base_name 
+                       TRIM(REPLACE(REPLACE(LOWER(code), '\n', ''), '\r', '')) AS code 
                 FROM dumps 
-                WHERE base_name != 'NA' 
+                WHERE code != 'NA' 
                   AND status != 'sold' 
-                  AND base_name IS NOT NULL";
+                  AND code IS NOT NULL";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         $baseNames = $stmt->fetchAll(PDO::FETCH_ASSOC);

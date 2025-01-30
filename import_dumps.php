@@ -83,17 +83,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($count > 0) {
                     $duplicateCount++;
                 } else {
-                    preg_match('/^(\d{16})=(\d{2})(\d{2})/', $track2, $matches);
-                    $card_number = isset($matches[1]) ? $matches[1] : '0';
-                    $exp_yy = isset($matches[2]) ? $matches[2] : '0';
-                    $exp_mm = isset($matches[3]) ? $matches[3] : '0';
+                    $track2 = "411111111211111=mmexp1230000000=yyyyexp=2025=code12345"; // Example string
 
+                    // Updated Regex to match with 'mmexp' and 'yyyyexp' followed by digits
+                    preg_match('/^(\d{15,16})=mmexp(\d{3})0000000=yyyyexp=(\d{4})=code(\d{5})/', $track2, $matches);
+                    
+                    // Check if the regex matched and populated the $matches array
+                    if (count($matches) > 0) {
+                        $card_number = isset($matches[1]) ? $matches[1] : null;
+                        $exp_mm = isset($matches[2]) ? $matches[2] : null;
+                        $exp_yyyy = isset($matches[3]) ? $matches[3] : null;
+                        $codex = isset($matches[4]) ? $matches[4] : null;
+                        
+                    } else {
+                        $card_number =  null;
+                        $exp_mm =  null;
+                        $exp_yyyy =  null;
+                        $codex =  null;
+                    }
+                    
+                    
                     $card_type = getCardType($card_number);
 
-                    $query = "INSERT INTO dumps (track1,base_name, track2, pin, monthexp, yearexp, seller_id, seller_name, price, status, card_type, country)
-                              VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, 'unsold', ?, ?)";
+                    $query = "INSERT INTO dumps (track1,code,base_name, track2, pin, monthexp, yearexp, seller_id, seller_name, price, status, card_type, country)
+                              VALUES (?,?,?, ?, ?, ?, ?, ?, ?, ?, 'unsold', ?, ?)";
                     $stmt = $pdo->prepare($query);
-                    $stmt->execute([$track1,$code, $track2, $pin, $exp_mm, $exp_yy, $seller_id, $seller_name, $price, $card_type, $country]);
+                    $stmt->execute([$track1,$codex,$code, $track2, $pin, $exp_mm, $exp_yy, $seller_id, $seller_name, $price, $card_type, $country]);
                     $importedCount++;
                 }
             } else {

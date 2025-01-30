@@ -6,6 +6,7 @@ $dumpCountry = isset($_POST['dump_country']) ? trim($_POST['dump_country']) : ''
 $dumpType = isset($_POST['dump_type']) ? trim($_POST['dump_type']) : 'all';
 $dumpPin = isset($_POST['dump_pin']) ? trim($_POST['dump_pin']) : 'all';
 $base_name = isset($_POST['base_name']) ? trim($_POST['base_name']) : 'all';
+$codename = isset($_POST['code']) ? trim($_POST['code']) : 'all';
 $track_pin = isset($_POST['track_pin']) ? trim($_POST['track_pin']) : 'all';
 
 
@@ -42,6 +43,11 @@ if ($base_name !== 'all') {
     $base_name = trim(preg_replace('/\s+/', ' ', strtolower($base_name)));
     $sql .= " AND TRIM(LOWER(base_name)) LIKE ?";
     $params[] = '%' . $base_name . '%'; 
+}
+if ($codename !== 'all') {
+    $codename = trim(preg_replace('/\s+/', ' ', strtolower($codename)));
+    $sql .= " AND TRIM(LOWER(code)) LIKE ?";
+    $params[] = '%' . $codename . '%'; 
 }
 if ($track_pin !== 'all') {
     if ($track_pin === 'no') {

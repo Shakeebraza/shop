@@ -177,23 +177,23 @@ form#dump-filters {
                     </select>
                 </div>
 
-                <!-- <div class="inpt-dmps-bx">
-                    <label for="base_name">Base name</label>
-                    <select name="base_name" id="base_name">
+                <div class="inpt-dmps-bx">
+                    <label for="base_name">Code</label>
+                    <select name="code" id="code">
                         <option value="all">All</option>
 
                         <?php
-                        $baseNames = $settings->getDumpBaseNames();
+                        $codes = $settings->getDumpCode();
                             
-                        foreach ($baseNames as $baseName) {
-                            if($baseName['base_name'] != NULL){
+                        foreach ($codes as $code) {
+                            if($code['code'] != NULL){
 
-                                echo '<option value="' . htmlspecialchars($baseName['base_name']) . '">' . htmlspecialchars($baseName['base_name']) . '</option>';
+                                echo '<option value="' . htmlspecialchars($code['code']) . '">' . htmlspecialchars($code['code']) . '</option>';
                             }
                         }
                         ?>
                     </select>
-                </div> -->
+                </div>
                 <div class="inpt-dmps-bx">
                     <label for="base_name"> Base name</label>
                     <select name="base_name" id="base_name">
@@ -255,7 +255,7 @@ form#dump-filters {
                         <th>Type</th>
                         <th>BIN</th>
                         <th>Exp Date</th>
-                        <!-- <th>Code</th> -->
+                        <th>Code</th>
                         <th>PIN</th>
                         <th>Track 1</th>
                         <th>Country</th>
@@ -317,6 +317,7 @@ $(document).ready(function() {
                 d.dump_code = $('#dump-code').val();
                 d.dump_pin = $('#dump-pin').val();
                 d.base_name = $('#base_name').val();
+                d.code = $('#code').val();
                 d.track_pin = $('#track-pin').val();
             }
         },
@@ -328,6 +329,9 @@ $(document).ready(function() {
             },
             {
                 data: 'expiry'
+            },
+            {
+                data: 'code'
             },
 
             {
