@@ -115,6 +115,13 @@ $balance_saller = $user['credit_cards_balance'] + $user['dumps_balance'];
     color: #999;
     cursor: not-allowed;
 }
+
+#error-message {
+    margin-top: 10px;
+    font-size: 14px;
+    color: red;
+    text-align: center;
+}
 </style>
 <!-- Main Content Area -->
 <div class="main-content">
@@ -175,11 +182,18 @@ $balance_saller = $user['credit_cards_balance'] + $user['dumps_balance'];
                             style="background-color: #f5f5f5; color: #333; font-weight: bold; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
                             Your balance is: $<?php echo number_format($balance_saller, 2); ?>
                         </p>
+
+                        <!-- Error message container -->
+                        <div id="error-message" style="color: red; font-size: 14px; text-align: center; display: none;">
+                            Please fill in both BTC Address and Secret Code.
+                        </div>
+
                         <input type="button" value="Submit"
                             class="btw-sbm <?= $balance_saller == 0 ? 'disabled-btn' : '' ?>"
                             <?= $balance_saller == 0 ? 'disabled' : '' ?> id="submitBtn">
                     </div>
                 </form>
+
             </div>
 
 
@@ -221,7 +235,7 @@ document.getElementById("submitBtn").addEventListener("click", function() {
     var secretCode = document.querySelector('input[name="Secret_Code"]').value;
 
     if (!btcAddress || !secretCode) {
-        alert("Please fill in both BTC Address and Secret Code.");
+        document.getElementById("error-message").style.display = 'block';
         return false;
     }
 
