@@ -67,19 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if($details[$pos_track1] == 0){
                     
                     $track1 = NULL;
-                    $mmexp =NULL;
-                    $yyyyexp =NULL;
                 }else{
 
-                    $track1p = $details[$pos_track1 - 1] ;
-                    $parts = explode("=", $track1p);
-
-                 
-                    $track1 = $parts[0]; 
-                    $mmexp = isset($parts[2]) ? substr($parts[2], 0, 3) : null;
-                    $yyyyexp = isset($parts[4]) ? $parts[4] : null; 
+                    $track1 = $details[$pos_track1 - 1] ;
                 }
-           
                 $track2 = $details[$pos_track2 - 1];
                 $code = $details[$pos_code - 1];
                 $pin = isset($details[$pos_pin - 1]) ? $details[$pos_pin - 1] : '0';
@@ -94,15 +85,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     preg_match('/^(\d{16})=(\d{2})(\d{2})/', $track2, $matches);
                     $card_number = isset($matches[1]) ? $matches[1] : '0';
-                    // $exp_yy = isset($matches[2]) ? $matches[2] : '0';
-                    // $exp_mm = isset($matches[3]) ? $matches[3] : '0';
+                    $exp_yy = isset($matches[2]) ? $matches[2] : '0';
+                    $exp_mm = isset($matches[3]) ? $matches[3] : '0';
 
                     $card_type = getCardType($card_number);
 
-                    $query = "INSERT INTO dumps (track1,monthexp,yearexp,base_name, track2, pin, seller_id, seller_name, price, status, card_type, country)
-                              VALUES (?,?,?,?, ?, ?, ?, ?, ?, 'unsold', ?, ?)";
+                    $query = "INSERT INTO dumps (track1,base_name, track2, pin, monthexp, yearexp, seller_id, seller_name, price, status, card_type, country)
+                              VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, 'unsold', ?, ?)";
                     $stmt = $pdo->prepare($query);
-                    $stmt->execute([$track1,$mmexp,$yyyyexp,$code, $track2, $pin, $seller_id, $seller_name, $price, $card_type, $country]);
+                    $stmt->execute([$track1,$code, $track2, $pin, $exp_mm, $exp_yy, $seller_id, $seller_name, $price, $card_type, $country]);
                     $importedCount++;
                 }
             } else {
