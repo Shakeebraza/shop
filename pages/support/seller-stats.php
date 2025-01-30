@@ -1,6 +1,7 @@
 <?php
 include_once('../../header.php');
 $balance_saller = $user['credit_cards_balance'] + $user['dumps_balance'];
+
 ?>
 <style>
 #seller-stats {
@@ -187,7 +188,9 @@ $balance_saller = $user['credit_cards_balance'] + $user['dumps_balance'];
 
 </div>
 </div>
-
+<?php
+include_once('../../footer.php');
+?>
 <script>
 function toggleInputForm(button) {
 
@@ -235,25 +238,24 @@ document.getElementById("submitBtn").addEventListener("click", function() {
                 formData.append("BTC_Address", btcAddress);
                 formData.append("Secret_Code", secretCode);
 
-
-                window.location.href = "<?= $urlval?>pages/support/index.php";
+                showPopupMessage(response.message);
+                setTimeout(function() {
+                    window.location.href = "<?= $urlval?>pages/support/index.php";
+                }, 5000);
 
 
 
                 withdrawalXhr.send(formData);
 
             } else {
-                alert(response.message);
+
+                showPopupMessage(response.message);
             }
         } else {
-            alert("Something went wrong. Please try again.");
+            showPopupMessage("Something went wrong. Please try again.");
         }
     };
 
     xhr.send("btcAddress=" + btcAddress + "&secretCode=" + secretCode);
 });
 </script>
-
-<?php
-include_once('../../footer.php');
-?>
