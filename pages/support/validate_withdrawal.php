@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 function validateBTCAddress($address) {
-    $api_url = "https://api.blockcypher.com/v1/btc/main/addrs/$address";
+    $api_url = "https://blockchain.info/rawaddr/$address";
 
     $ch = curl_init($api_url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -17,7 +17,6 @@ function validateBTCAddress($address) {
     $response = curl_exec($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-
     if ($http_code === 200) {
         return true;
     } else {
