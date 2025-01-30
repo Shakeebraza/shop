@@ -255,7 +255,7 @@ form#dump-filters {
                     <tr>
                         <th>Type</th>
                         <th>BIN</th>
-                        <th>Exp Date</th>
+                        <th>Exp Date </th>
                         <th>Code</th>
                         <th>PIN</th>
                         <th>Track 1</th>

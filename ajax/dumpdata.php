@@ -103,7 +103,7 @@ foreach ($dumps as $dump) {
     $data[] = [
         'card_logo' => '<img src="/shop/images/cards/' . strtolower($dump['card_type']) . '.png" alt="' . htmlspecialchars($dump['card_type']) . '" class="card-logo">',
         'track2' => htmlspecialchars(substr($dump['track2'], 0, 6)),
-        'expiry' => htmlspecialchars( $dump['yearexp']. '/' . $dump['monthexp']),
+        'expiry' => htmlspecialchars( $dump['monthexp']. '/' . $dump['yearexp']),
         'pin' => !empty($dump['pin']) ? 'Yes' : 'No',
         'track' => !empty($dump['track1']) ? 'Yes' : 'No',
         'country' => htmlspecialchars($dump['country']),
