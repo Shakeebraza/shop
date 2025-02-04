@@ -18,9 +18,14 @@ function formatCardData($creditCards) {
     foreach ($creditCards as $card) {
         $otherinfo = (!empty($card['otherinfo']) && $card['otherinfo'] != 'NA' && $card['otherinfo'] != 'No') ? 'Yes' : 'No';
     
-        // Get card type dynamically based on the card number
+      if(is_null($card['card_type'])){
         $cardType = getCardType($card['card_number'] ?? '');
-        $cardimg = strtolower($cardType); // Convert to lowercase for filename matching
+        $cardimg = strtolower($cardType);
+    }else{
+        
+        $cardimg = $card['card_type'];
+      }
+     
     
         $formattedData[] = [
             'card_logo' => '<img src="/shop/images/cards/' . $cardimg . '.png" alt="Card Logo" class="card-logo">',
