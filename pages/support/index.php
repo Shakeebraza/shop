@@ -37,12 +37,14 @@ foreach ($tickets as $ticket) {
         <?php if (!empty($tickets)): ?>
         <div class="ticket-list">
             <?php foreach ($tickets as $ticket): ?>
+            <?php $status_style= $ticket['status'] == 'open'? 'green':'red' ?>
             <div class="ticket-item">
                 <div class="ticket-summary"
                     onclick="handleTicketClick(event, <?php echo htmlspecialchars($ticket['id']); ?>)">
                     <span>Ticket #<?php echo htmlspecialchars($ticket['id']); ?> -
                         <?php echo htmlspecialchars($ticket['created_at']); ?></span>
-                    <small>Status: <?php echo ucfirst(htmlspecialchars($ticket['status'])); ?></small>
+                    Status:<small style="color:<?=$status_style?>;">
+                        <?php echo ucfirst(htmlspecialchars($ticket['status'])); ?></small>
                 </div>
 
                 <div id="conversation-<?php echo htmlspecialchars($ticket['id']); ?>" class="conversation-details"
