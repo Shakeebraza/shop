@@ -2,7 +2,14 @@
 include_once('../global.php'); 
 session_start();
 
-
+function getCardType($card_number) {
+    $card_number = preg_replace('/\D/', '', $card_number);
+    if (preg_match('/^4[0-9]{12}(?:[0-9]{3})?$/', $card_number)) return 'Visa';
+    if (preg_match('/^5[1-5][0-9]{14}$/', $card_number) || preg_match('/^2(2[2-9]|[3-6][0-9]|7[01])[0-9]{12}$/', $card_number)) return 'Mastercard';
+    if (preg_match('/^3[47][0-9]{13}$/', $card_number)) return 'Amex';
+    if (preg_match('/^6(?:011|5[0-9]{2}|4[4-9][0-9]|22[1-9][0-9]|622[1-9][0-9]{1,2})[0-9]{12}$/', $card_number)) return 'Discover';
+    return 'visa';
+}
 
 function formatCardData($creditCards) {
     $formattedData = [];
@@ -10,9 +17,13 @@ function formatCardData($creditCards) {
 
     foreach ($creditCards as $card) {
         $otherinfo = (!empty($card['otherinfo']) && $card['otherinfo'] != 'NA' && $card['otherinfo'] != 'No') ? 'Yes' : 'No';
-        $cardimg=$card['card_type'] ?? 'visa';
+    
+        // Get card type dynamically based on the card number
+        $cardType = getCardType($card['card_number'] ?? '');
+        $cardimg = strtolower($cardType); // Convert to lowercase for filename matching
+    
         $formattedData[] = [
-            'card_logo' => '<img src="/shop/images/cards/' . strtolower($cardimg) . '.png" alt="Card Logo" class="card-logo">',
+            'card_logo' => '<img src="/shop/images/cards/' . $cardimg . '.png" alt="Card Logo" class="card-logo">',
             'email' => htmlspecialchars($card['email'] ?? 'NA'),
             'card_number' => htmlspecialchars(substr($card['card_number'] ?? '', 0, 6)),
             'expiry' => htmlspecialchars($card['mm_exp'] ?? '') . '/' . htmlspecialchars($card['yyyy_exp'] ?? ''),
@@ -21,7 +32,6 @@ function formatCardData($creditCards) {
             'city' => htmlspecialchars($card['city'] ?? ''),
             'zip' => substr($card['zip'] ?? '', 0, 3) . '****',
             'price' => '$' . htmlspecialchars($card['price'] ?? ''),
-
             'otherinfo' => $otherinfo,
             'actions' => '
                 <div class="action-buttons">
@@ -37,6 +47,7 @@ function formatCardData($creditCards) {
                 </div>'
         ];
     }
+    
 
     return $formattedData;
 }
