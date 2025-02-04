@@ -127,9 +127,12 @@ function fetchOrders(page = 1) {
                                 <p>${escapeHtml(order.description).replace(/\n/g, '<br>')}</p>
                                 <p>Price: $${parseFloat(order.price).toFixed(2)}</p>
                                 <a href="download_tool.php?tool_id=${order.tool_id}" class="download-button">Download</a>
-                                <a href="delete_order.php?tool_id=${order.tool_id}&section=my-orders" 
-                                   onclick="return confirm('Are you sure you want to delete this item?');" 
-                                   class="delete-button">Delete</a>
+                                <a href="javascript:void(0);" 
+                                onclick="confirmDeleteOrder('${order.tool_id}', 'my-orders');" 
+                                class="delete-button">
+                                Delete
+                                </a>
+
                             </div>
                         `;
                     ordersContainer.innerHTML += orderItem;
@@ -157,5 +160,36 @@ function escapeHtml(text) {
         "'": '&#039;'
     };
     return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+
+function confirmDeleteOrder(tool_id, section) {
+    alertify.confirm(
+        'Confirm Deletion',
+        'Are you sure you want to delete this item?',
+        function() {
+            // User confirmed the deletion
+            $.ajax({
+                url: 'delete_order.php',
+                type: 'POST',
+                data: {
+                    tool_id: tool_id,
+                    section: section
+                },
+                success: function(response) {
+                    showPopupMessage('The tool has been successfully removed from your orders.');
+                },
+                error: function() {
+                    alertify.error('Error deleting the item.');
+                }
+            });
+        },
+        function() {
+            console.log('Deletion canceled');
+        }
+    ).set('labels', {
+        ok: 'Confirm',
+        cancel: 'Cancel'
+    });
 }
 </script>

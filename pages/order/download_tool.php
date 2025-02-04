@@ -1,5 +1,5 @@
 <?php
-require 'config.php';
+require '../../global.php';
 session_start();
 
 // Check if user is logged in, if not redirect to login page
