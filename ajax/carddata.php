@@ -21,9 +21,9 @@ function formatCardData($creditCards) {
       if(is_null($card['card_type'])){
         $cardType = getCardType($card['card_number'] ?? '');
         $cardimg = strtolower($cardType);
-    }else{
+    }else{ 
         
-        $cardimg = $card['card_type'];
+        $cardimg = strtolower($card['card_type']);
       }
      
     
