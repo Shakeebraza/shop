@@ -10,7 +10,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 
 $stmt = $pdo->prepare("
-    SELECT t.id AS ticket_id, t.created_at AS ticket_created_at,unread, t.status, t.admin_unread,
+    SELECT t.id AS ticket_id, t.created_at AS ticket_created_at, t.unread, t.status, t.admin_unread,
            u.username AS user_username, m.sender, m.message AS content, m.created_at AS message_created_at
     FROM support_tickets t
     LEFT JOIN users u ON t.user_id = u.id
@@ -18,7 +18,21 @@ $stmt = $pdo->prepare("
     ORDER BY t.created_at DESC, m.created_at ASC
 ");
 $stmt->execute();
-$tickets = $stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC); 
+$rawTickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$tickets = [];
+foreach ($rawTickets as $row) {
+    $ticketId = $row['ticket_id'];
+
+    if (!isset($tickets[$ticketId])) {
+        $tickets[$ticketId] = [];
+    }
+    
+    $tickets[$ticketId][] = $row;
+}
+
+
+
 
 ?>
 
@@ -120,12 +134,12 @@ $tickets = $stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC);
         <div class="ticket-grid">
             <?php if (!empty($tickets)): ?>
             <?php
-// Sort the tickets array
-usort($tickets, function ($a, $b) {
-    // Sort by admin_unread (1 comes first)
-    return $b[0]['admin_unread'] <=> $a[0]['admin_unread'];
-});
-
+// // Sort the tickets array
+// usort($tickets, function ($a, $b) {
+//     // Sort by admin_unread (1 comes first)
+//     return $b[0]['admin_unread'] <=> $a[0]['admin_unread'];
+// });
+// var_dump($tickets);
 // Now loop through the sorted tickets
 foreach ($tickets as $ticketId => $messages): ?>
             <div class="ticket-wrapper">
@@ -137,7 +151,7 @@ foreach ($tickets as $ticketId => $messages): ?>
                         <span class="status-closed">CLOSED</span>
                         <?php endif; ?>
                         <?php if (!empty($messages[0]['admin_unread']) && $messages[0]['admin_unread'] == 1): ?>
-                        <span class="unread-notification" style="color:red;">(1) Unread</span>
+                        <span class="unread-notification" style="color:red;">(1) Unreadd</span>
                         <?php endif; ?>
                         <?php if ($messages[0]['unread'] == 0): ?>
                         <span class="unread-notification" style="color:red;">(1) Unread</span>
