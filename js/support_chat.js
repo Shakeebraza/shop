@@ -14,17 +14,27 @@ document.addEventListener("DOMContentLoaded", function() {
 function toggleConversation(ticketId) {
     console.log(`Toggling conversation for ticket ID: ${ticketId}`); // Debug log
     const conversation = document.getElementById(`conversation-${ticketId}`);
-    if (conversation) {
-        conversation.classList.toggle("open");
 
-        // Mark the ticket as read for the admin when opening the conversation
-        if (conversation.classList.contains("open")) {
-            markAdminTicketAsRead(ticketId);
+    if (conversation) {
+        // Close all other open conversations first
+        document.querySelectorAll(".ticket-conversation").forEach(conv => {
+            if (conv.id !== `conversation-${ticketId}`) {
+                conv.style.display = "none";
+            }
+        });
+
+        // Toggle current conversation
+        if (conversation.style.display === "none" || conversation.style.display === "") {
+            conversation.style.display = "block";
+            markAdminTicketAsRead(ticketId); // Mark ticket as read when opened
+        } else {
+            conversation.style.display = "none";
         }
     } else {
         console.error(`Conversation element not found for ticket ID: ${ticketId}`);
     }
 }
+
 
 // Function to validate input before submission
 function validateInput(inputText) {

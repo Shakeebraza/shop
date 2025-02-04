@@ -31,74 +31,167 @@ $tickets = $stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC);
     <title>Admin Support Chat</title>
     <link rel="stylesheet" href="css/support_chat.css">
 </head>
+<style>
+/* Ticket grid - 3 columns layout */
+.ticket-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    width: 100%;
+}
+
+/* Ticket wrapper */
+.ticket-wrapper {
+    position: relative;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.ticket-wrapper:hover {
+    transform: translateY(-2px);
+}
+
+/* Ticket card */
+.card {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.01);
+}
+
+/* Ticket conversation */
+.ticket-conversation {
+    display: none;
+    grid-column: span 3;
+    /* Ensure conversation spans full width */
+    position: relative;
+    width: 94%;
+    margin-top: 5px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    max-height: 300px;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .ticket-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .ticket-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 
 <body>
     <div id="support-chat">
         <h2>Support Tickets</h2>
 
-        <div class="ticket-list">
+        <div class="ticket-grid">
             <?php if (!empty($tickets)): ?>
-            <?php foreach ($tickets as $ticketId => $messages): ?>
-            <!-- Individual ticket-summary div for each ticket -->
-            <div class="ticket-summary" data-ticket-id="<?php echo htmlspecialchars($ticketId); ?>"
-                onclick="toggleConversation(<?php echo htmlspecialchars($ticketId); ?>)">
-                <div class="ticket-item">
-                    <span>
-                        Ticket #<?php echo htmlspecialchars($ticketId); ?> -
-                        <?php echo htmlspecialchars($messages[0]['ticket_created_at']); ?> -
-                        User: <?php echo htmlspecialchars($messages[0]['user_username']); ?>
+            <?php
+// Sort the tickets array
+usort($tickets, function ($a, $b) {
+    // Sort by admin_unread (1 comes first)
+    return $b[0]['admin_unread'] <=> $a[0]['admin_unread'];
+});
+
+// Now loop through the sorted tickets
+foreach ($tickets as $ticketId => $messages): ?>
+            <div class="ticket-wrapper">
+                <!-- Ticket Card -->
+                <div class="ticket-summary card" data-ticket-id="<?php echo htmlspecialchars($ticketId); ?>"
+                    onclick="toggleConversation(<?php echo htmlspecialchars($ticketId); ?>)">
+                    <div class="card-content">
                         <?php if (strtolower($messages[0]['status']) === 'closed'): ?>
-                        <span style="color: red; font-weight: bold;"> - CLOSED</span>
+                        <span class="status-closed">CLOSED</span>
                         <?php endif; ?>
                         <?php if (!empty($messages[0]['admin_unread']) && $messages[0]['admin_unread'] == 1): ?>
-                        <span style="color: red; font-weight: bold;">(1)</span>
+                        <span class="unread-notification" style="color:red;">(1) Unread</span>
                         <?php endif; ?>
-                        <?php
-                        if($messages[0]['unread'] == 0){
-                            echo'<span style="color: red; font-weight: bold;">(1)</span>';
-                        }
-                        ?>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Conversation section for each ticket (initially hidden) -->
-            <div class="ticket-conversation" id="conversation-<?php echo htmlspecialchars($ticketId); ?>"
-                style="display: none;">
-                <?php foreach ($messages as $message): ?>
-                <div class="<?php echo $message['sender'] === 'admin' ? 'admin-message' : 'user-message'; ?>">
-                    <p class="message-tag">
-                        <strong>
-                            <?php echo ucfirst($message['sender'] === 'user' ? htmlspecialchars($messages[0]['user_username']) : 'Admin'); ?>:
-                        </strong>
-                    </p>
-                    <p><?php echo nl2br(htmlspecialchars($message['content'])); ?></p>
-                    <small><?php echo htmlspecialchars($message['message_created_at']); ?></small>
-                </div>
-                <?php endforeach; ?>
-
-
-
-                <!-- Reply and Control Row -->
-                <div class="reply-control-row">
-                    <?php if ($messages[0]['status'] === 'open'): ?>
-                    <!-- Left Side: Reply Form (only if ticket is open) -->
-                    <form method="POST" action="admin_reply.php" class="reply-form">
-                        <input type="hidden" name="ticket_id" value="<?php echo htmlspecialchars($ticketId); ?>">
-                        <textarea name="message" placeholder="Type your reply here..." rows="3" maxlength="500"
-                            required></textarea>
-                        <button type="submit">Send Reply</button>
-                    </form>
-                    <?php endif; ?>
-
-                    <!-- Right Side: Admin Controls -->
-                    <div class="admin-controls">
-                        <?php if ($messages[0]['status'] === 'open'): ?>
-                        <button onclick="closeTicket(<?php echo htmlspecialchars($ticketId); ?>)"
-                            class="close-ticket">Close Ticket</button>
+                        <?php if ($messages[0]['unread'] == 0): ?>
+                        <span class="unread-notification" style="color:red;">(1) Unread</span>
                         <?php endif; ?>
-                        <button onclick="deleteTicket(<?php echo htmlspecialchars($ticketId); ?>)"
-                            class="delete-ticket">Delete Ticket</button>
+                        <h3 class="ticket-title">
+                            Ticket #<?php echo htmlspecialchars($ticketId); ?>
+                        </h3>
+                        <p class="ticket-user">
+                            <strong>User Name:</strong> <span
+                                style="color:green;"><?php echo htmlspecialchars($messages[0]['user_username']); ?>
+                            </span>
+                        </p>
+                        <p class="ticket-date">
+                            <?php echo htmlspecialchars($messages[0]['ticket_created_at']); ?>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Ticket Conversation -->
+                <div class="ticket-conversation card" id="conversation-<?php echo htmlspecialchars($ticketId); ?>"
+                    style="display: none;">
+                    <div class="card-content">
+                        <?php foreach ($messages as $message): ?>
+                        <div class="<?php echo $message['sender'] === 'admin' ? 'admin-message' : 'user-message'; ?>">
+                            <p class="message-tag">
+                                <strong>
+                                    <?php echo ucfirst($message['sender'] === 'user' ? htmlspecialchars($messages[0]['user_username']) : 'Admin'); ?>:
+                                </strong>
+                            </p>
+                            <p><?php echo nl2br(htmlspecialchars($message['content'])); ?></p>
+                            <small><?php echo htmlspecialchars($message['message_created_at']); ?></small>
+                        </div>
+                        <?php endforeach; ?>
+
+                        <div class="reply-control-row">
+                            <?php if ($messages[0]['status'] === 'open'): ?>
+                            <form method="POST" action="admin_reply.php" class="reply-form">
+                                <input type="hidden" name="ticket_id"
+                                    value="<?php echo htmlspecialchars($ticketId); ?>">
+                                <textarea name="message" placeholder="Type your reply here..." rows="3" maxlength="500"
+                                    required></textarea>
+                                <button type="submit">Send Reply</button>
+                            </form>
+                            <?php endif; ?>
+
+                            <div class="admin-controls">
+                                <?php if ($messages[0]['status'] === 'open'): ?>
+                                <button onclick="closeTicket(<?php echo htmlspecialchars($ticketId); ?>)"
+                                    class="close-ticket">Close Ticket</button>
+                                <?php endif; ?>
+                                <button onclick="deleteTicket(<?php echo htmlspecialchars($ticketId); ?>)"
+                                    class="delete-ticket">Delete Ticket</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -110,9 +203,9 @@ $tickets = $stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC);
             <?php endif; ?>
         </div>
 
-        <!-- Back Button to go to panel.php, placed after the last ticket -->
         <center><a href="panel.php" class="back-button">Back to Selection</a></center>
     </div>
+
 
     <script src="js/support_chat.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
