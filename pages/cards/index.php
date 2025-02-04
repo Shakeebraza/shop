@@ -100,6 +100,10 @@ a.buy-button:hover {
         font-size: 14px;
     }
 
+    .main-content {
+        overflow: scroll !important;
+    }
+
     td,
     th {
         padding: 8px 15px;
@@ -133,7 +137,7 @@ td {
     border: 1px solid #ddd;
 }
 </style>
-
+    
 
 <div class="main-content">
     <div id="credit-cards" class="uuper">

@@ -24,7 +24,8 @@ foreach ($tickets as $ticket) {
                 <textarea name="message" id="ticket-message" placeholder="Describe your issue..." rows="4"
                     maxlength="500" required <?php echo $hasOpenTicket ? 'disabled' : ''; ?>></textarea>
                 <small id="ticket-char-count">0/500</small>
-                <button type="submit" <?php echo $hasOpenTicket ? 'disabled' : ''; ?> id="submit-ticket-btn">Submit
+                <button type="submit" style="background-color: #0c182f;" <?php echo $hasOpenTicket ? 'disabled' : ''; ?>
+                    id="submit-ticket-btn">Submit
                     Ticket</button>
             </form>
             <?php if ($hasOpenTicket): ?>
@@ -80,7 +81,7 @@ foreach ($tickets as $ticket) {
                         <textarea name="message" id="reply-message-<?php echo htmlspecialchars($ticket['id']); ?>"
                             placeholder="Reply..." rows="2" maxlength="500" required></textarea>
                         <small id="reply-char-count-<?php echo htmlspecialchars($ticket['id']); ?>">0/500</small>
-                        <button type="submit"
+                        <button type="submit" style="background-color: #0c182f; color:white;"
                             id="reply-btn-<?php echo htmlspecialchars($ticket['id']); ?>">Send</button>
                     </form>
                     <?php elseif ($userReplyCount >= 3 && $ticket['status'] === 'open'): ?>
