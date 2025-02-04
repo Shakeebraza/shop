@@ -46,7 +46,7 @@ if (empty($btc_address) || empty($secret_code)) {
 
 try {
 
-    $sql = "SELECT secret_code FROM users WHERE id = ?";
+    $sql = "SELECT secret_code,credit_cards_balance,dumps_balance FROM users WHERE id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(1, $user_id, PDO::PARAM_INT);  
     $stmt->execute();
@@ -57,7 +57,7 @@ try {
         exit;
     }
 
-    $balance_saller = 100.00;
+    $balance_saller = $user['credit_cards_balance'] + $user['dumps_balance'];
     $subject = 'Withdrawal Request';
     $message = "BTC Address: $btc_address\nAmount: $$balance_saller";
     $status = 'open';
