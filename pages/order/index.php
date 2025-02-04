@@ -162,6 +162,10 @@ function escapeHtml(text) {
     return text.replace(/[&<>"']/g, m => map[m]);
 }
 
+function closeRulesPopup() {
+    const popup = document.getElementById('rules-popup');
+    popup.style.display = 'none';
+}
 
 function confirmDeleteOrder(tool_id, section) {
     alertify.confirm(
@@ -177,7 +181,13 @@ function confirmDeleteOrder(tool_id, section) {
                     section: section
                 },
                 success: function(response) {
+                    // Show the success popup message
                     showPopupMessage('The tool has been successfully removed from your orders.');
+
+                    // Delay page refresh by 4 seconds (4000 milliseconds)
+                    setTimeout(function() {
+                        location.reload(); // This will reload the page after 4 seconds
+                    }, 4000);
                 },
                 error: function() {
                     alertify.error('Error deleting the item.');

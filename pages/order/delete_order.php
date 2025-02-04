@@ -15,5 +15,5 @@ $section = isset($_POST['section']) ? $_POST['section'] : 'my-orders';
 $stmt = $pdo->prepare("DELETE FROM orders WHERE user_id = ? AND tool_id = ?");
 $stmt->execute([$user_id, $tool_id]);
 
-echo json_encode(["status" => "success", "message" => "The tool has been successfully removed from your orders."]);
+echo json_encode(["status" => "success", "message" => "successfully removed from your orders."]);
 exit();
