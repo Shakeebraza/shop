@@ -47,15 +47,12 @@ a.buy-button:hover {
     cursor: pointer;
 }
 
-.card-logo {
-    height: 20px;
-    vertical-align: middle;
-}
+
 
 .card-logo {
-    height: 30px !important;
+    width: 45px;
+    height: auto;
     vertical-align: middle;
-    object-fit: contain !important;
 }
 
 .filter-container-dumps {
