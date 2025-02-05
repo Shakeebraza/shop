@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ticket_id'], $_POST['
     $message = $_POST['message'];
 
     // Insert admin reply into the support_replies table with is_read set to 0
-    $stmt = $pdo->prepare("INSERT INTO support_replies (ticket_id, sender, message, is_read) VALUES (?, 'admin', ?, 1)");
+    $stmt = $pdo->prepare("INSERT INTO support_replies (ticket_id, sender, message, is_read) VALUES (?, 'admin', ?, 0)");
     $stmt->execute([$ticket_id, $message]);
 
     // Update the ticket to mark it as unread for the user

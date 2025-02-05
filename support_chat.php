@@ -11,11 +11,11 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 $stmt = $pdo->prepare("
     SELECT t.id AS ticket_id, t.created_at AS ticket_created_at, t.unread, t.status, t.admin_unread,
-           u.username AS user_username, m.sender, m.message AS content, m.created_at AS message_created_at
+           u.username AS user_username, m.sender,m.is_read, m.message AS content, m.created_at AS message_created_at
     FROM support_tickets t
     LEFT JOIN users u ON t.user_id = u.id
     LEFT JOIN support_replies m ON t.id = m.ticket_id
-    ORDER BY t.created_at DESC, m.created_at ASC
+    ORDER BY m.created_at DESC
 ");
 $stmt->execute();
 $rawTickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -30,6 +30,7 @@ foreach ($rawTickets as $row) {
     
     $tickets[$ticketId][] = $row;
 }
+
 
 
 
@@ -150,12 +151,25 @@ foreach ($tickets as $ticketId => $messages): ?>
                         <?php if (strtolower($messages[0]['status']) === 'closed'): ?>
                         <span class="status-closed">CLOSED</span>
                         <?php endif; ?>
-                        <?php if (!empty($messages[0]['admin_unread']) && $messages[0]['admin_unread'] == 1): ?>
+
+
+                        <?php if (!empty($messages[0]['admin_unread']) && $messages[0]['admin_unread'] == 0): ?>
                         <span class="unread-notification" style="color:red;">(1) Unreadd</span>
                         <?php endif; ?>
-                        <?php if ($messages[0]['unread'] == 0): ?>
+                        <?php
+                         
+                            if (!empty($messages)) {
+                            
+                                $lastMessage = $messages[1];
+
+                                if ($lastMessage['sender'] == "user" && $lastMessage['is_read'] == 0) {
+                                    ?>
                         <span class="unread-notification" style="color:red;">(1) Unread</span>
-                        <?php endif; ?>
+                        <?php
+                                }
+                            }
+                            ?>
+
                         <h3 class="ticket-title">
                             Ticket #<?php echo htmlspecialchars($ticketId); ?>
                         </h3>
