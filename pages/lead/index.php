@@ -126,6 +126,9 @@ a.buy-button:hover {
         <h2>Leads Section</h2>
 
         <!-- Search Bar -->
+        <div style="text-align: center; margin-bottom: 10px;">
+            <h3 style="margin: 0; font-size: 18px; color: #333;">Search for leads</h3>
+        </div>
         <div
             style="position: relative; width: 100%; max-width: 400px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
             <input type="text" id="searchBar" placeholder="Search tools..."
@@ -136,6 +139,7 @@ a.buy-button:hover {
                 onmouseover="this.style.color='#007bff';" onmouseout="this.style.color='#aaa';">
             </i>
         </div>
+
 
         <?php if (empty($files['Leads'])): ?>
         <p>No files available in the Leads section.</p>

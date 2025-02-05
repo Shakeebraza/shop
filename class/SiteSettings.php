@@ -114,11 +114,14 @@ class SiteSettings {
     }
     public function getFilesBySection2($section, $limit, $page, $search = '') {
         $limit = (int)$limit;
-        
         $offset = ($page - 1) * $limit;
     
-        // Modify SQL query to filter based on search
-        $sql = "SELECT * FROM uploads WHERE section = :section AND name LIKE :search LIMIT :limit OFFSET :offset";
+        // Modify SQL query to filter based on search and order by descending
+        $sql = "SELECT * FROM uploads 
+                WHERE section = :section AND name LIKE :search 
+                ORDER BY id DESC 
+                LIMIT :limit OFFSET :offset";
+        
         $stmt = $this->pdo->prepare($sql);
         $searchTerm = '%' . $search . '%'; // Use LIKE for search
         $stmt->bindParam(':section', $section, PDO::PARAM_STR);
@@ -144,6 +147,7 @@ class SiteSettings {
             'totalPages' => $totalPages
         ];
     }
+    
     
     
     public function fetchOrders($userId, $page = 1, $perPage = 6)
