@@ -131,7 +131,7 @@ a.buy-button:hover {
         </div>
         <div
             style="position: relative; width: 100%; max-width: 400px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-            <input type="text" id="searchBar" placeholder="Search tools..."
+            <input type="text" id="searchBar" placeholder="Search pages..."
                 style="width: 100%; padding: 12px 20px; border-radius: 25px; border: 1px solid #ccc; font-size: 16px; transition: all 0.3s ease-in-out;"
                 onfocus="this.style.borderColor='#007bff';" onblur="this.style.borderColor='#ccc';" />
             <i class="search-icon fas fa-search"
