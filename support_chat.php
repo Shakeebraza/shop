@@ -160,7 +160,7 @@ foreach ($tickets as $ticketId => $messages): ?>
                          
                             if (!empty($messages)) {
                             
-                                $lastMessage = $messages[1];
+                                $lastMessage = $messages[0];
 
                                 if ($lastMessage['sender'] == "user" && $lastMessage['is_read'] == 0) {
                                     ?>
