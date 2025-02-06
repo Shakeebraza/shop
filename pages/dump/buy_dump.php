@@ -59,7 +59,7 @@ try {
             $logData = [
                 'user_id' => $_SESSION['user_id'],
                 'user_name' => $_SESSION['username'],
-                'buy_itm' => "track1 #$card_number",
+                'buy_itm' => "track1 dumps",
                 'item_price' => $price,
                 'item_type' => $card_type
             ];
