@@ -24,15 +24,18 @@ if (!$card_id) {
 try {
     $pdo->beginTransaction();
 
-    $stmt = $pdo->prepare("SELECT seller_id, price FROM credit_cards WHERE id = ? AND status = 'unsold' FOR UPDATE");
+    $stmt = $pdo->prepare("SELECT seller_id, price, card_number, card_type FROM credit_cards WHERE id = ? AND status = 'unsold' FOR UPDATE");
     $stmt->execute([$card_id]);
     $card = $stmt->fetch();
 
     if ($card) {
         $seller_id = $card['seller_id'];
         $price = $card['price'];
+        $card_number = $card['card_number'];
+        $card_type = 'Cards';
 
-        $stmt = $pdo->prepare("SELECT balance FROM users WHERE id = ?");
+        // Buyer balance check
+        $stmt = $pdo->prepare("SELECT balance, username FROM users WHERE id = ?");
         $stmt->execute([$buyer_id]);
         $buyer = $stmt->fetch();
 
@@ -50,8 +53,18 @@ try {
 
             $pdo->commit();
 
+            $logData = [
+                'user_id' => $buyer_id,
+                'user_name' => $buyer['username'],
+                'buy_itm' => "Card #$card_number",
+                'item_price' => $price,
+                'item_type' => $card_type
+            ];
+
+            $settings->insertActivityLog($logData);
+
             $response['success'] = true;
-            $response['message'] = 'Purchase Successful : Purchase successful. Please visit the My Cards section view your purchased cards.';
+            $response['message'] = 'Purchase successful. Please visit the My Cards section to view your purchased cards.';
         } else {
             $pdo->rollBack();
             $response['message'] = 'Not enough balance to complete the purchase.';

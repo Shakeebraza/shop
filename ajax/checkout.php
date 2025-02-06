@@ -28,18 +28,17 @@ if (empty($items)) {
 }
 
 try {
-    $pdo->beginTransaction(); // Start the transaction
+    $pdo->beginTransaction(); 
 
     $totalPrice = 0;
     $validCards = [];
     $validDumps = [];
 
-    // Process cards
+
     foreach ($sessionCards as $card) {
-        // Assuming $card contains card data, use $card['id'] instead of $cardId
-        $cardId = $card['id']; // Access card id from the array
+        
+        $cardId = $card['id'];
     
-        // Fetch the card details from the database
         $stmt = $pdo->prepare("SELECT seller_id, price FROM credit_cards WHERE id = ? AND status = 'unsold' FOR UPDATE");
         $stmt->execute([$cardId]);
         $cardData = $stmt->fetch();
@@ -59,9 +58,8 @@ try {
         }
     }
 
-    // Process dumps
     foreach ($sessionDumps as $dump) {
-        // Access the 'id' from the current dump item
+
         $dumpId = $dump['id'];
     
         $stmt = $pdo->prepare("SELECT seller_id, price FROM dumps WHERE id = ? AND buyer_id IS NULL FOR UPDATE");
@@ -83,66 +81,81 @@ try {
         }
     }
 
-    // Check buyer balance
+
     $stmt = $pdo->prepare("SELECT balance FROM users WHERE id = ?");
     $stmt->execute([$buyer_id]);
     $buyer = $stmt->fetch();
 
     if ($buyer && $buyer['balance'] >= $totalPrice) {
-        // Update buyer's balance and process cards and dumps
+
         foreach ($validCards as $card) {
-            // Update buyer's balance
+  
             $updateBuyerStmt = $pdo->prepare("UPDATE users SET balance = balance - ? WHERE id = ?");
             $updateBuyerStmt->execute([$card['price'], $buyer_id]);
+        
 
-            // Update card status and buyer_id
             $updateCardStmt = $pdo->prepare("UPDATE credit_cards SET buyer_id = ?, status = 'sold', created_at = NOW() WHERE id = ?");
             $updateCardStmt->execute([$buyer_id, $card['id']]);
+        
 
-            // Update seller's balance
             $sellerPercentageStmt = $pdo->prepare("SELECT seller_percentage FROM users WHERE id = ?");
             $sellerPercentageStmt->execute([$card['seller_id']]);
             $seller = $sellerPercentageStmt->fetch();
             $seller_percentage = $seller['seller_percentage'] ?? 100;
             $seller_earnings = ($card['price'] * $seller_percentage) / 100;
-
-            // Update seller's balance and total_earned
+        
+         
             $updateSellerStmt = $pdo->prepare("
                 UPDATE users 
-                SET credit_cards_balance = credit_cards_balance + ?,credit_cards_total_earned = credit_cards_total_earned + ?, total_earned = total_earned + ? 
+                SET credit_cards_balance = credit_cards_balance + ?, credit_cards_total_earned = credit_cards_total_earned + ?, total_earned = total_earned + ? 
                 WHERE id = ?
             ");
-            $updateSellerStmt->execute([$seller_earnings,$seller_earnings, $seller_earnings, $card['seller_id']]);
+            $updateSellerStmt->execute([$seller_earnings, $seller_earnings, $seller_earnings, $card['seller_id']]);
+        
+         
+            $insertActivityLogStmt = $pdo->prepare("
+                INSERT INTO activity_log (user_id, user_name, buy_itm, item_price, item_type, created_at) 
+                VALUES (?, ?, ?, ?, 'Cards', NOW())
+            ");
+            $insertActivityLogStmt->execute([$buyer_id, $_SESSION['username'], 'Card' . $card['id'], $card['price']]);
         }
+        
 
         foreach ($validDumps as $dump) {
-            // Update buyer's balance for dumps
+       
             $updateBuyerStmt = $pdo->prepare("UPDATE users SET balance = balance - ? WHERE id = ?");
             $updateBuyerStmt->execute([$dump['price'], $buyer_id]);
-
-            // Update dump status and buyer_id
+        
+         
             $updateDumpStmt = $pdo->prepare("UPDATE dumps SET buyer_id = ?, status = 'sold' WHERE id = ?");
             $updateDumpStmt->execute([$buyer_id, $dump['id']]);
-
-            // Update seller's balance for dumps
+        
+     
             $sellerPercentageStmt = $pdo->prepare("SELECT seller_percentage FROM users WHERE id = ?");
             $sellerPercentageStmt->execute([$dump['seller_id']]);
             $seller = $sellerPercentageStmt->fetch();
             $seller_percentage = $seller['seller_percentage'] ?? 100;
             $seller_earnings = ($dump['price'] * $seller_percentage) / 100;
-
-            // Update seller's balance and total_earned for dumps
+        
+      
             $updateSellerStmt = $pdo->prepare("
                 UPDATE users 
-                SET dumps_balance = dumps_balance + ?, dumps_total_earned = dumps_total_earned + ?,total_earned = total_earned + ? 
+                SET dumps_balance = dumps_balance + ?, dumps_total_earned = dumps_total_earned + ?, total_earned = total_earned + ? 
                 WHERE id = ?
             ");
-            $updateSellerStmt->execute([$seller_earnings,$seller_earnings, $seller_earnings, $dump['seller_id']]);
+            $updateSellerStmt->execute([$seller_earnings, $seller_earnings, $seller_earnings, $dump['seller_id']]);
+        
+            $insertActivityLogStmt = $pdo->prepare("
+                INSERT INTO activity_log (user_id, user_name, buy_itm, item_price, item_type, created_at) 
+                VALUES (?, ?, ?, ?, 'Dumps', NOW())
+            ");
+            $insertActivityLogStmt->execute([$buyer_id, $_SESSION['username'], 'Dump ' . $dump['id'], $dump['price']]);
         }
+        
 
-        $pdo->commit(); // Commit the transaction
+        $pdo->commit(); 
 
-        unset($_SESSION['cards'], $_SESSION['dumps']); // Clear the session data
+        unset($_SESSION['cards'], $_SESSION['dumps']); 
 
         $response['success'] = true;
         if (!empty($validCards) && !empty($validDumps)) {

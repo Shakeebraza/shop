@@ -20,13 +20,15 @@ if (!$dump_id) {
 try {
     $pdo->beginTransaction();
 
-    $stmt = $pdo->prepare("SELECT seller_id, price FROM dumps WHERE id = ? AND buyer_id IS NULL FOR UPDATE");
+    $stmt = $pdo->prepare("SELECT track1,card_type,seller_id, price FROM dumps WHERE id = ? AND buyer_id IS NULL FOR UPDATE");
     $stmt->execute([$dump_id]);
     $dump = $stmt->fetch();
 
     if ($dump) {
         $seller_id = $dump['seller_id'];
         $price = $dump['price'];
+        $card_number = $dump['track1'];
+        $card_type = 'Dumps';
 
         $stmt = $pdo->prepare("SELECT seller_percentage FROM users WHERE id = ?");
         $stmt->execute([$seller_id]);
@@ -52,13 +54,17 @@ try {
             ");
             $updateSellerStmt->execute([$seller_earnings, $seller_earnings, $seller_id]);
 
-            $insertOrderStmt = $pdo->prepare("
-                INSERT INTO dump_orders (user_id, dump_id, price, seller_id, created_at) 
-                VALUES (?, ?, ?, ?, NOW())
-            ");
-            $insertOrderStmt->execute([$buyer_id, $dump_id, $price, $seller_id]);
 
             $pdo->commit();
+            $logData = [
+                'user_id' => $_SESSION['user_id'],
+                'user_name' => $_SESSION['username'],
+                'buy_itm' => "track1 #$card_number",
+                'item_price' => $price,
+                'item_type' => $card_type
+            ];
+
+            $settings->insertActivityLog($logData);
             echo json_encode(['success' => true, 'message' => 'Purchase successful. Please visit the My Dumps section view your purchased dumps.']);
         } else {
             $pdo->rollBack();
@@ -71,6 +77,6 @@ try {
 } catch (Exception $e) {
     $pdo->rollBack();
     error_log('Transaction error in buy_dumps.php: ' . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Transaction failed. Please try again.']);
+    echo json_encode(['success' => false, 'message' => 'Transaction failed. Please try again.'. $e->getMessage()]);
 }
 exit();
