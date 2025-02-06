@@ -78,6 +78,7 @@ if ($stmt->rowCount() === 0) {
     $logData = [
         "user_id"    => $_SESSION['user_id'], 
         "user_name"  => $_SESSION['username'], 
+        "item_id"    => $tool_id, 
         "buy_itm"    => $tool['name'], 
         "item_price" => $tool['price'], 
         "item_type"  => $tool['section'] 
