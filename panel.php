@@ -118,6 +118,7 @@ $unread_count = $result['unread_count'] ?? 0;
             <button class="import-button support" onclick="window.location.href='support_chat.php'">Support
                 Chat<?php echo " ". $unread_count . " unread"?></button>
 
+            <button class="import-button cards" onclick="window.location.href='activitylog.php'">Activity log</button>
             <button class="import-button dumps"
                 onclick="window.location.href='<?= $urlval ?>admin/setting/setting.php'">Setting</button>
 
