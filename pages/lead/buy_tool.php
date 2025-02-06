@@ -74,6 +74,17 @@ $stmt->execute([$user_id, $tool_id]);
 if ($stmt->rowCount() === 0) {
     echo json_encode(['error' => 'Failed to add order. Please try again.']);
     exit();
+}else{
+    $logData = [
+        "user_id"    => $_SESSION['user_id'], 
+        "user_name"  => $_SESSION['username'], 
+        "buy_itm"    => $tool['name'], 
+        "item_price" => $tool['price'], 
+        "item_type"  => $tool['section'] 
+    ];
+
+ 
+   $settings->insertActivityLog($logData);
 }
 
 

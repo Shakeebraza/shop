@@ -259,7 +259,35 @@ class SiteSettings {
     }
     
     
-    
+    public function insertActivityLog($data) {
+        try {
+        
+            $sql = "INSERT INTO activity_log (user_id, user_name, buy_itm, item_price, item_type) 
+                    VALUES (:user_id, :user_name, :buy_itm, :item_price, :item_type)";
+
+            $stmt = $this->pdo->prepare($sql);
+            
+            
+            if (isset($data[0]) && is_array($data[0])) {
+                $dataArray = $data;
+            } else {
+                $dataArray = [$data]; 
+            }
+
+            foreach ($dataArray as $row) {
+                $stmt->bindParam(':user_id', $row['user_id'], PDO::PARAM_INT);
+                $stmt->bindParam(':user_name', $row['user_name'], PDO::PARAM_STR);
+                $stmt->bindParam(':buy_itm', $row['buy_itm'], PDO::PARAM_STR);
+                $stmt->bindParam(':item_price', $row['item_price'], PDO::PARAM_STR);
+                $stmt->bindParam(':item_type', $row['item_type'], PDO::PARAM_STR);
+                $stmt->execute();
+            }
+
+            return count($dataArray) . " record(s) inserted successfully!";
+        } catch (PDOException $e) {
+            return "Error: " . $e->getMessage();
+        }
+    }
     
     
     
