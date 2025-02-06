@@ -24,7 +24,7 @@ if (!$card_id) {
 try {
     $pdo->beginTransaction();
 
-    $stmt = $pdo->prepare("SELECT seller_id, price, card_number, card_type FROM credit_cards WHERE id = ? AND status = 'unsold' FOR UPDATE");
+    $stmt = $pdo->prepare("SELECT id,seller_id, price, card_number, card_type FROM credit_cards WHERE id = ? AND status = 'unsold' FOR UPDATE");
     $stmt->execute([$card_id]);
     $card = $stmt->fetch();
 
@@ -32,6 +32,7 @@ try {
         $seller_id = $card['seller_id'];
         $price = $card['price'];
         $card_number = $card['card_number'];
+        $card_id = $card['id'];
         $card_type = 'Cards';
 
         // Buyer balance check
@@ -56,7 +57,7 @@ try {
             $logData = [
                 'user_id' => $buyer_id,
                 'user_name' => $buyer['username'],
-                'buy_itm' => "Card #$card_number",
+                'buy_itm' => "Card_id :$card_id",
                 'item_price' => $price,
                 'item_type' => $card_type
             ];

@@ -117,7 +117,7 @@ try {
                 INSERT INTO activity_log (user_id, user_name, buy_itm, item_price, item_type, created_at) 
                 VALUES (?, ?, ?, ?, 'Cards', NOW())
             ");
-            $insertActivityLogStmt->execute([$buyer_id, $_SESSION['username'], 'Card' . $card['id'], $card['price']]);
+            $insertActivityLogStmt->execute([$buyer_id, $_SESSION['username'], 'Card_id=' . $card['id'], $card['price']]);
         }
         
 
@@ -149,7 +149,7 @@ try {
                 INSERT INTO activity_log (user_id, user_name, buy_itm, item_price, item_type, created_at) 
                 VALUES (?, ?, ?, ?, 'Dumps', NOW())
             ");
-            $insertActivityLogStmt->execute([$buyer_id, $_SESSION['username'], 'Dump ' . $dump['id'], $dump['price']]);
+            $insertActivityLogStmt->execute([$buyer_id, $_SESSION['username'], 'Dump_id=' . $dump['id'], $dump['price']]);
         }
         
 

@@ -20,7 +20,7 @@ if (!$dump_id) {
 try {
     $pdo->beginTransaction();
 
-    $stmt = $pdo->prepare("SELECT track1,card_type,seller_id, price FROM dumps WHERE id = ? AND buyer_id IS NULL FOR UPDATE");
+    $stmt = $pdo->prepare("SELECT id,track1,card_type,seller_id, price FROM dumps WHERE id = ? AND buyer_id IS NULL FOR UPDATE");
     $stmt->execute([$dump_id]);
     $dump = $stmt->fetch();
 
@@ -28,6 +28,7 @@ try {
         $seller_id = $dump['seller_id'];
         $price = $dump['price'];
         $card_number = $dump['track1'];
+        $card_id = $dump['id'];
         $card_type = 'Dumps';
 
         $stmt = $pdo->prepare("SELECT seller_percentage FROM users WHERE id = ?");
@@ -59,7 +60,7 @@ try {
             $logData = [
                 'user_id' => $_SESSION['user_id'],
                 'user_name' => $_SESSION['username'],
-                'buy_itm' => "track1 dumps",
+                'buy_itm' => "dump_id".$card_id,
                 'item_price' => $price,
                 'item_type' => $card_type
             ];
