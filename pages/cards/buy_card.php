@@ -57,6 +57,7 @@ try {
             $logData = [
                 'user_id' => $buyer_id,
                 'user_name' => $buyer['username'],
+                'item_id' => $card_id,
                 'buy_itm' => "Card_id :$card_id",
                 'item_price' => $price,
                 'item_type' => $card_type

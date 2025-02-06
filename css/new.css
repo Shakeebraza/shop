@@ -28,6 +28,25 @@ body {
     z-index: 1000;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Smaller, smoother white line */
 }
+.card-logo-wrapper {
+    width: 60px;               /* Set a fixed size for the wrapper */
+    height: 60px;              /* Set a fixed size for the wrapper */
+    overflow: hidden;           /* Ensures the image fits within the container */
+       /* Makes the wrapper rounded */
+    border: 2px solid #fff;     /* Optional: Add a border around the wrapper */
+    display: flex;              /* Flexbox for centering */
+    align-items: center;        /* Vertically center the image */
+    justify-content: center;    /* Horizontally center the image */
+    background-color: #f4f4f4;  /* Optional: Background color for the wrapper */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Shadow for a floating effect */
+}
+
+.card-logo {
+    width: 90%;                 /* Image size relative to the wrapper */
+    height: 90%;                /* Image size relative to the wrapper */
+    object-fit: contain;          /* Ensures the image fills the wrapper without distortion */
+          /* Keeps the image inside a rounded shape */
+}
 
 .top-navbar .logo {
     font-family: 'Pacifico', cursive; /* Hand-written font for logo */

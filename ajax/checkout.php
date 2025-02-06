@@ -114,10 +114,10 @@ try {
         
          
             $insertActivityLogStmt = $pdo->prepare("
-                INSERT INTO activity_log (user_id, user_name, buy_itm, item_price, item_type, created_at) 
-                VALUES (?, ?, ?, ?, 'Cards', NOW())
+                INSERT INTO activity_log (user_id, user_name,item_id ,buy_itm, item_price, item_type, created_at) 
+                VALUES (?, ?,?, ?, ?, 'Cards', NOW())
             ");
-            $insertActivityLogStmt->execute([$buyer_id, $_SESSION['username'], 'Card_id=' . $card['id'], $card['price']]);
+            $insertActivityLogStmt->execute([$buyer_id, $_SESSION['username'], $card['id'],'Card_id=' . $card['id'], $card['price']]);
         }
         
 
@@ -146,10 +146,10 @@ try {
             $updateSellerStmt->execute([$seller_earnings, $seller_earnings, $seller_earnings, $dump['seller_id']]);
         
             $insertActivityLogStmt = $pdo->prepare("
-                INSERT INTO activity_log (user_id, user_name, buy_itm, item_price, item_type, created_at) 
-                VALUES (?, ?, ?, ?, 'Dumps', NOW())
+                INSERT INTO activity_log (user_id, user_name,item_id, buy_itm, item_price, item_type, created_at) 
+                VALUES (?, ?,?, ?, ?, 'Dumps', NOW())
             ");
-            $insertActivityLogStmt->execute([$buyer_id, $_SESSION['username'], 'Dump_id=' . $dump['id'], $dump['price']]);
+            $insertActivityLogStmt->execute([$buyer_id, $_SESSION['username'],$dump['id'], 'Dump_id=' . $dump['id'], $dump['price']]);
         }
         
 

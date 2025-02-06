@@ -60,6 +60,7 @@ try {
             $logData = [
                 'user_id' => $_SESSION['user_id'],
                 'user_name' => $_SESSION['username'],
+                'item_id' => $card_id,
                 'buy_itm' => "dump_id".$card_id,
                 'item_price' => $price,
                 'item_type' => $card_type

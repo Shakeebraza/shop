@@ -28,7 +28,7 @@ function formatCardData($creditCards) {
      
     
         $formattedData[] = [
-            'card_logo' => '<img src="/shop/images/cards/' . $cardimg . '.png" alt="Card Logo" class="card-logo">',
+            'card_logo' => '<div class="card-logo-wrapper"><img src="/shop/images/cards/' . $cardimg . '.png" alt="Card Logo" class="card-logo"></div>',
             'email' => htmlspecialchars($card['email'] ?? 'NA'),
             'card_number' => htmlspecialchars(substr($card['card_number'] ?? '', 0, 6)),
             'expiry' => htmlspecialchars($card['mm_exp'] ?? '') . '/' . htmlspecialchars($card['yyyy_exp'] ?? ''),
