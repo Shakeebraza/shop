@@ -49,7 +49,7 @@ foreach ($tickets as $ticket) {
 
                 <div id="conversation-<?php echo htmlspecialchars($ticket['id']); ?>" class="conversation-details"
                     style="display: none;">
-                    <p><?php echo htmlspecialchars($ticket['message']); ?></p>
+                   
 
                     <?php
         $stmt = $pdo->prepare("SELECT * FROM support_replies WHERE ticket_id = ? ORDER BY created_at ASC");
