@@ -104,20 +104,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $dob = $dob_obj ? $dob_obj->format('Y-m-d') : null;
                 $full_name = $pos_full_name ? $details[$pos_full_name - 1] : 'N/A';
 
-                $checkQuery = "SELECT card_number FROM credit_cards WHERE card_number = ?";
-                $checkStmt = $pdo->prepare($checkQuery);
-                $checkStmt->execute([$card_number]);
+                    $checkQuery = "SELECT card_number, mm_exp, yyyy_exp FROM credit_cards WHERE card_number = ? AND mm_exp = ? AND yyyy_exp = ?";
+                    $checkStmt = $pdo->prepare($checkQuery);
+                    $checkStmt->execute([$card_number, $mm_exp, $yyyy_exp]);
 
-                if ($checkStmt->rowCount() == 0) {
-                    $query = "INSERT INTO $section (card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, full_name, seller_id, seller_name, price, section, card_type)
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    $stmt = $pdo->prepare($query);
-                    $stmt->execute([$card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $full_name, $seller_id, $seller_name, $price, $section, $card_type]);
-                    $importedCount++;
-                } else {
-                    $duplicateCount++;
-                    $duplicateMessage .= "<p class='duplicate-message'>Card with number $card_number already exists and was ignored.</p>";
-                }
+                    if ($checkStmt->rowCount() == 0) {
+                        $query = "INSERT INTO $section (card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, full_name, seller_id, seller_name, price, section, card_type)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->execute([$card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $full_name, $seller_id, $seller_name, $price, $section, $card_type]);
+                        $importedCount++;
+                    } else {
+                        $duplicateCount++;
+                        $duplicateMessage .= "<p class='duplicate-message'>Card with number $card_number already exists and was ignored.</p>";
+                    }
             } else {
                 $errorMessage = 'Data format incorrect, please check the format and try again.';
             }
@@ -163,9 +163,9 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
                 <label
                     style="display: flex; align-items: center; position: relative; cursor: pointer; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold;">
                     <input type="radio" name="otherinfo" value="Yes" style="display: none;"
-                        <?= isset($otherinfo) && $otherinfo == 'Yes' ? 'checked' : '' ?>>
+                        <?= (isset($otherinfo) && $otherinfo == 'Yes') || !isset($otherinfo) ? 'checked' : '' ?>>
                     <span
-                        style="padding: 12px 24px; border: 2px solid gold; border-radius: 8px; background: linear-gradient(145deg, #f5f5f5, #ffffff); color: gold; transition: all 0.3s ease; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); text-transform: uppercase; display: inline-block;">
+                        style="padding: 12px 24px; border: 2px solid gold; border-radius: 8px; background: gold; color: white; transition: 0.3s; box-shadow: rgba(0, 0, 0, 0.4) 0px 6px 10px; text-transform: uppercase; display: inline-block;">
                         Yes
                     </span>
                 </label>
@@ -179,6 +179,7 @@ if (isset($_GET['duplicates']) && $_GET['duplicates'] > 0) {
                     </span>
                 </label>
             </div>
+
 
             <!-- Display error message -->
             <p id="error-message" style="color: red; text-align: center; font-weight: bold; display: none;">
