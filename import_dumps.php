@@ -27,11 +27,25 @@ try {
 
 // Function to determine card type based on card number
 function getCardType($card_number) {
-    $card_number = preg_replace('/\D/', '', $card_number);
-    if (preg_match('/^4[0-9]{12}(?:[0-9]{3})?$/', $card_number)) return 'Visa';
-    if (preg_match('/^5[1-5][0-9]{14}$/', $card_number) || preg_match('/^2(2[2-9]|[3-6][0-9]|7[01])[0-9]{12}$/', $card_number)) return 'Mastercard';
-    if (preg_match('/^3[47][0-9]{13}$/', $card_number)) return 'Amex';
-    if (preg_match('/^6(?:011|5[0-9]{2}|4[4-9][0-9]|22[1-9][0-9]|622[1-9][0-9]{1,2})[0-9]{12}$/', $card_number)) return 'Discover';
+    $card_number = preg_replace('/\D/', '', $card_number); // Remove non-numeric characters
+
+    $patterns = [
+        'Visa' => '/^4\d{12,18}$/',
+        'mastercard' => '/^(5[1-5]\d{14}|222[1-9]\d{12}|22[3-9]\d{13}|2[3-6]\d{14}|27[01]\d{13}|2720\d{12})$/',
+        'amex' => '/^3[47]\d{13}$/', // 15 digits
+        'discover' => '/^(6011\d{12}|65\d{14}|64[4-9]\d{13}|6221[2-9]\d{10}|622[2-8]\d{10}|6229[01]\d{10}|62292[0-5]\d{10})$/',
+        'jcb' => '/^35(2[89]|[3-8]\d)\d{12}$/',
+        'diners' => '/^(3[0689]\d{12}|30[0-5]\d{11})$/',
+        'unionpay' => '/^62\d{14,18}$/',
+        'maestro' => '/^(50|56|57|58|59|6[0-9])\d{10,16}$/'
+    ];
+
+    foreach ($patterns as $type => $pattern) {
+        if (preg_match($pattern, $card_number)) {
+            return $type;
+        }
+    }
+
     return 'N/A';
 }
 
@@ -88,8 +102,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $card_number = isset($matches[1]) ? $matches[1] : '0';  
                     $exp_mm = isset($matches[2]) ? $matches[2] : '0';       
                     $exp_yy = isset($matches[3]) ? $matches[3] : '0';        
-                    $codex = isset($matches[4]) ? $matches[4] : '0';         
-                    $card_type = getCardType($card_number);
+                    $codex = isset($matches[4]) ? $matches[4] : '0'; 
+                    $card_numberww = explode("^", $track1)[0];
+
+                    
+                    
+                    $card_type = getCardType($card_numberww);
                  
                     $query = "INSERT INTO dumps (track1,code,base_name, track2, pin, monthexp, yearexp, seller_id, seller_name, price, status, card_type, country)
                               VALUES (?,?,?, ?, ?, ?, ?, ?, ?, ?, 'unsold', ?, ?)";
