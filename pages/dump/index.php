@@ -148,13 +148,14 @@ form#dump-filters {
                 </div>
 
                 <div class="inpt-dmps-bx">
+
+                    <?php $cardTypes = $settings->getDistinctCardTypes(); ?>
                     <label for="dump-type">Type</label>
                     <select name="dump_type" id="dump-type">
                         <option value="all">All</option>
-                        <option value="visa">Visa</option>
-                        <option value="mastercard">Mastercard</option>
-                        <option value="amex">Amex</option>
-                        <option value="discover">Discover</option>
+                        <?php foreach ($cardTypes as $type): ?>
+                        <option value="<?= htmlspecialchars($type) ?>"><?= ucfirst($type) ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 

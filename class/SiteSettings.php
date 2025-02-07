@@ -291,6 +291,18 @@ class SiteSettings {
     }
     
     
-    
+    public function getDistinctCardTypes() {
+        $sql = "SELECT DISTINCT card_type FROM dumps WHERE card_type IS NOT NULL AND card_type != ''";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN); 
+    }
+
+    public function getDistinctCardTypes2() {
+        $sql = "SELECT DISTINCT card_type FROM credit_cards WHERE card_type IS NOT NULL AND card_type != ''";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN); 
+    }
 }
 ?>

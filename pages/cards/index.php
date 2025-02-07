@@ -137,7 +137,7 @@ td {
     border: 1px solid #ddd;
 }
 </style>
-    
+
 
 <div class="main-content">
     <div id="credit-cards" class="uuper">
@@ -180,13 +180,13 @@ td {
                 </div>
 
                 <div class="inpt-dmps-bx">
+                    <?php $cardTypes = $settings->getDistinctCardTypes2(); ?>
                     <label for="type">Type</label>
                     <select name="cc_type" id="type">
                         <option value="all">All</option>
-                        <option value="visa">Visa</option>
-                        <option value="mastercard">Mastercard</option>
-                        <option value="amex">Amex</option>
-                        <option value="discover">Discover</option>
+                        <?php foreach ($cardTypes as $type): ?>
+                        <option value="<?= htmlspecialchars($type) ?>"><?= ucfirst($type) ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 
