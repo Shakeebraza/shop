@@ -101,7 +101,7 @@ $ative=$_SESSION['active'] === 0 ?'disabled':'';
 $data = [];
 foreach ($dumps as $dump) {
     $data[] = [
-        'card_logo' => '<img src="/shop/images/cards/' . strtolower($dump['card_type']) . '.png" alt="' . htmlspecialchars($dump['card_type']) . '" class="card-logo">',
+        'card_logo' => '<div class="card-logo-wrapper"><img src="/shop/images/cards/' . strtolower($dump['card_type']) . '.png" alt="' . htmlspecialchars($dump['card_type']) . '" class="card-logo"></div>',
         'track2' => htmlspecialchars(substr($dump['track2'], 0, 6)),
         'expiry' => htmlspecialchars( $dump['monthexp']. '/' . $dump['yearexp']),
         'pin' => !empty($dump['pin']) ? 'Yes' : 'No',
