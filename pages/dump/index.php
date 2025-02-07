@@ -11,6 +11,7 @@ include_once('../../header.php');
     margin: 20px 0;
     font-size: 16px;
     text-align: left;
+    background-color: white;
 }
 
 .dumps-table thead {
