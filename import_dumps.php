@@ -83,9 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $track1 = NULL;
                 }else{
 
-                    $track1 = $details[$pos_track1 - 1] ;
+                    @$track1 = $details[$pos_track1 - 1] ;
                 }
-                $track2 = $details[$pos_track2 - 1];
+                $track2 = $details[$pos_track2 - 1]?? "";
                 $code = $details[$pos_code - 1]?? 'NA';
                 $pin = isset($details[$pos_pin - 1]) ? $details[$pos_pin - 1] : '0';
                 $country = isset($details[$pos_country - 1]) ? strtoupper(trim(preg_replace('/\s+/', ' ', $details[$pos_country - 1]))) : 'Unknown';
@@ -103,11 +103,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $exp_mm = isset($matches[2]) ? $matches[2] : '0';       
                     $exp_yy = isset($matches[3]) ? $matches[3] : '0';        
                     $codex = isset($matches[4]) ? $matches[4] : '0'; 
-                    $card_numberww = explode("^", $track1)[0];
+                    if(!empty($track1) && $track1 != NULL){
+                        echo 1;
+                        $card_numberww = explode("^", $track1)[0];
+                    }else{
+                        $card_numberww = explode("=", $track2)[0];
+
+                    }
 
                     
                     
                     $card_type = getCardType($card_numberww);
+                    
                  
                     $query = "INSERT INTO dumps (track1,code,base_name, track2, pin, monthexp, yearexp, seller_id, seller_name, price, status, card_type, country)
                               VALUES (?,?,?, ?, ?, ?, ?, ?, ?, ?, 'unsold', ?, ?)";
