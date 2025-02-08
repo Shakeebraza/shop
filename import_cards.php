@@ -76,6 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pos_full_name = $_POST['pos_full_name'];
         $base_name = $_POST['base_name'];
         $otherinfo = $_POST['otherinfo'];
+        $pos_mmn = $_POST['pos_mmn'];
+        $pos_account_number = $_POST['pos_account_number'];
+        $email = $_POST['email_address'];
+        $sinssn = $_POST['sinss'];
+        $pin = $_POST['pin'];
+        $driverslicense = $_POST['driverslicense'];
    
         $stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");
         $stmt->execute([$seller_id]);
@@ -94,8 +100,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $address = $pos_address ? $details[$pos_address - 1] : 'N/A';
                 $city = $pos_city ? $details[$pos_city - 1] : 'N/A';
                 $base_name_pos = $base_name ? $details[$base_name - 1] : 'N/A';
+                $pos_mmn_pos = $pos_mmn ? $details[$pos_mmn - 1] : 'N/A';
+                $pos_account_number_pos = $pos_account_number ? $details[$pos_account_number - 1] : 'N/A';
                 $state = $pos_state ? $details[$pos_state - 1] : 'N/A';
                 $zip = $pos_zip ? $details[$pos_zip - 1] : 'N/A';
+                $email_pos = $email ? $details[$email - 1] : 'N/A';
+                $sinssn_pos = $sinssn ? $details[$sinssn - 1] : 'N/A';
+                $pin_pos = $pin ? $details[$pin - 1] : 'N/A';
+                $driverslicense_pos = $driverslicense ? $details[$driverslicense - 1] : 'N/A';
                 $country = $pos_country ? strtoupper(trim(preg_replace('/\s+/', ' ', $details[$pos_country - 1]))) : 'N/A';
                 $phone_number = $pos_phone_number ? $details[$pos_phone_number - 1] : 'N/A';
                 $card_type = getCardType($card_number);
@@ -112,10 +124,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $checkStmt->execute([$card_number, $mm_exp, $yyyy_exp]);
 
                     if ($checkStmt->rowCount() == 0) {
-                        $query = "INSERT INTO $section (card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, full_name, seller_id, seller_name, price, section, card_type,base_name,otherinfo)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
+                        $query = "INSERT INTO $section (card_number, mm_exp, yyyy_exp, cvv, name_on_card, address, city, state, zip, country, phone_number, date_of_birth, full_name, seller_id, seller_name, price, section, card_type, base_name, otherinfo, mmn, account_number, email, sinssn, pin, drivers)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         $stmt = $pdo->prepare($query);
-                        $stmt->execute([$card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $full_name, $seller_id, $seller_name, $price, $section, $card_type,$base_name_pos,$otherinfo]);
+                        $stmt->execute([$card_number, $mm_exp, $yyyy_exp, $cvv, $name_on_card, $address, $city, $state, $zip, $country, $phone_number, $dob, $full_name, $seller_id, $seller_name, $price, $section, $card_type,$base_name_pos,$otherinfo,$pos_mmn_pos,$pos_account_number_pos,$email_pos,$sinssn_pos,$pin_pos,$driverslicense_pos]);
                         $importedCount++;
                     } else {
                         $duplicateCount++;
