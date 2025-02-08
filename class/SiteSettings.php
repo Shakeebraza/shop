@@ -304,5 +304,80 @@ class SiteSettings {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_COLUMN); 
     }
+
+    function fetchFilteredData($filters, $start, $length) {
+        global $pdo;
+    
+        $sqlBase = " FROM dumps WHERE buyer_id IS NULL AND status = 'unsold'";
+        $params = [];
+    
+        // Apply filters dynamically
+        if (!empty($filters['dump_bin'])) {
+            $bins = array_map('trim', explode(',', $filters['dump_bin']));
+            $sqlBase .= " AND (" . implode(" OR ", array_fill(0, count($bins), "track2 LIKE ?")) . ")";
+            foreach ($bins as $bin) {
+                $params[] = $bin . '%';
+            }
+        }
+    
+        if (!empty($filters['dump_country'])) {
+            $sqlBase .= " AND UPPER(TRIM(country)) = ?";
+            $params[] = strtoupper(trim($filters['dump_country']));
+        }
+    
+        if (!empty($filters['dump_type']) && $filters['dump_type'] !== 'all') {
+            $sqlBase .= " AND card_type = ?";
+            $params[] = $filters['dump_type'];
+        }
+    
+        if (isset($filters['dump_pin'])) {
+            if ($filters['dump_pin'] === 'yes') {
+                $sqlBase .= " AND pin IS NOT NULL";
+            } elseif ($filters['dump_pin'] === 'no') {
+                $sqlBase .= " AND pin IS NULL";
+            }
+        }
+    
+        if (!empty($filters['base_name']) && $filters['base_name'] !== 'all') {
+            $base_name = trim(preg_replace('/\s+/', ' ', strtolower($filters['base_name'])));
+            $sqlBase .= " AND TRIM(LOWER(base_name)) LIKE ?";
+            $params[] = '%' . $base_name . '%';
+        }
+    
+        if (!empty($filters['code']) && $filters['code'] !== 'all') {
+            $sqlBase .= " AND code = ?";
+            $params[] = $filters['code'];
+        }
+    
+        if (!empty($filters['track_pin'])) {
+            if ($filters['track_pin'] === 'no') {
+                $sqlBase .= " AND track1 IS NULL";
+            } elseif ($filters['track_pin'] === 'yes') {
+                $sqlBase .= " AND (track1 IS NOT NULL AND track1 != '')";
+            }
+        }
+    
+        // Get total record count
+        $totalSql = "SELECT COUNT(*)" . $sqlBase;
+        $totalStmt = $pdo->prepare($totalSql);
+        $totalStmt->execute($params);
+        $totalRecords = $totalStmt->fetchColumn();
+    
+        // Fetch filtered data (Corrected SQL without LIMIT parameters)
+        $dataSql = "SELECT id, track1, code, track2, monthexp, yearexp, pin, card_type, price, country" . 
+                   $sqlBase . " ORDER BY id DESC LIMIT " . (int)$start . ", " . (int)$length;
+    
+        $dataStmt = $pdo->prepare($dataSql);
+        $dataStmt->execute($params);
+        $data = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        return [
+            'totalRecords' => $totalRecords,
+            'data' => $data
+        ];
+    }
+    
+    
+    
 }
 ?>
