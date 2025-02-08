@@ -66,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pos_code = $_POST['pos_code'];
         $pos_track2 = $_POST['pos_track2'];
         $pos_pin = $_POST['pos_pin'];
+      
         $pos_country = $_POST['pos_country'];
 
         $stmt = $pdo->prepare("SELECT username FROM users WHERE id = ?");

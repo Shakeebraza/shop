@@ -44,7 +44,7 @@ if ($base_name !== 'all') {
     $sql .= " AND TRIM(LOWER(base_name)) LIKE ?";
     $params[] = '%' . $base_name . '%'; 
 }
-if ($codename !== 'all') {
+if ($codename !== 0) {
     $codename = trim(preg_replace('/\s+/', ' ', strtolower($codename)));
     $sql .= " AND TRIM(LOWER(code)) LIKE ?";
     $params[] = '%' . $codename . '%'; 
